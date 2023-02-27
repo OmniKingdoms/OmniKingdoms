@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CssBaseline, AppBar, Box, Toolbar, Typography, IconButton, Menu, Container, Button, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CastleIcon from '@mui/icons-material/Castle';
@@ -21,6 +21,12 @@ const ResponsiveAppBar = (props) => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const [account, setAccount] = useState();
+  
+  useEffect(() => {
+    setAccount(props.account);
+  }, [props.account])
 
   return (
     <>
@@ -120,9 +126,9 @@ const ResponsiveAppBar = (props) => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            { props.account ? (
+            { account ? (
                 // <Link 
-                //     href={`https://etherscan.io/address/${props.account}`}
+                //     href={`https://etherscan.io/address/${account}`}
                 //     target="_blank"
                 //     rel="noopener noreferrer"
                 // >
@@ -137,7 +143,7 @@ const ResponsiveAppBar = (props) => {
                         }
                       }}
                     >
-                      { props.account.slice(0, 5) + '...' + props.account.slice(38, 42) }
+                      { account.slice(0, 5) + '...' + account.slice(38, 42) }
                     </Button>
                 // </Link>
             ) : (
