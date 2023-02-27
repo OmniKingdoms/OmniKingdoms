@@ -16,7 +16,6 @@ contract NFTArena is ERC1155 {
     bool public arenaOpen;
     Arena public arena = Arena(true, 0, payable(msg.sender));
 
-    //mapping(address => uint) public profiles;
     mapping(uint => Player) public players;
     mapping(uint => Quest) public quests;
     mapping(uint => Train) public trainings;
@@ -71,6 +70,7 @@ contract NFTArena is ERC1155 {
         players[playerCount] = Player(10, 1, Status.idle);
         quests[playerCount] = Quest(0);
         trainings[playerCount] = Train(0);
+        addressToPlayers[msg.sender].push(playerCount);
     }
 
     function uri(uint256 _id) public view override returns (string memory) {
@@ -79,6 +79,10 @@ contract NFTArena is ERC1155 {
             abi.encodePacked(baseURI, Strings.toString(URIs[_id]), ".png")
         );
         return s;
+    }
+
+    function getPlayers(address _address) public view returns (uint256[] memory) {
+        return addressToPlayers[_address];
     }
 
     function setIdle(uint256 _tokenId) internal {
