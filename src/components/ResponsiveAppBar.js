@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CssBaseline, AppBar, Box, Toolbar, Typography, IconButton, Menu, Container, Button, MenuItem } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, IconButton, Menu, Container, Button, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CastleIcon from '@mui/icons-material/Castle';
 import Link from '@mui/material/Link';
@@ -30,7 +30,6 @@ const ResponsiveAppBar = (props) => {
 
   return (
     <>
-    <CssBaseline />
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
