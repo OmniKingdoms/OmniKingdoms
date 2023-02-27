@@ -40,7 +40,6 @@ const Action = ({contract, account}) => {
                     <Button variant="primary" className="button-train" size="sm">TRAIN</Button>
                     <Button variant="primary" className="button-arena" size="sm">ARENA</Button>
                     <Button variant="primary" className="button-quest" size="sm">QUEST</Button>
-                    <Button variant="primary" className="button-bridge" size="sm">BRIDGE</Button>
                 </div>
 
             </div>

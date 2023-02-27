@@ -20,26 +20,21 @@ img {
     /* width: 80%; */
 }
 
-.button-train, .button-arena, .button-quest, .button-bridge {
+.button-train, .button-arena, .button-quest {
     position: absolute;
 }
 .button-train {
     top: 50%;
-    left: 20%;
-    transform: translate(-50%, -20%);
+    left: 30%;
+    transform: translate(-50%, -30%);
 }
 .button-arena {
     top: 28%;
-    left: 30%;
-    transform: translate(-28%, -30%);
+    left: 50%;
+    transform: translate(-28%, -50%);
 }
 .button-quest {
     top: 35%;
-    left: 80%;
-    transform: translate(-35%, -80%);
-}
-.button-bridge {
-    top: 58%;
-    left: 90%;
-    transform: translate(-58%, -90%);
+    left: 85%;
+    transform: translate(-35%, -85%);
 }
