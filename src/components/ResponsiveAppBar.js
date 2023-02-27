@@ -6,9 +6,9 @@ import Link from '@mui/material/Link';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 const pages = [
-    { name: 'Play', slug: '' }, 
-    { name: 'Mint', slug: 'mint' }, 
-    { name: 'About', slug: 'about' }, 
+    { name: 'Play', slug: '/' }, 
+    { name: 'Mint', slug: '/#/mint' }, 
+    { name: 'About', slug: 'https://scroll-kingdoms.gitbook.io/docs/', external: true }, 
 ];
 
 const ResponsiveAppBar = (props) => {
@@ -81,12 +81,20 @@ const ResponsiveAppBar = (props) => {
               }}
             >
               {pages.map((page) => (
-                <Link href={`/#/${page.slug}`} underline="none">
-                    <MenuItem key={page.slug} onClick={handleCloseNavMenu}>
+                page.external ? (
+                  <Link href={page.slug} underline="none" target="_blank" 
+                  rel="noopener noreferrer">
+                    <MenuItem key={page.name} onClick={handleCloseNavMenu} >
                         <Typography textAlign="center">{page.name}</Typography>
                     </MenuItem>
                 </Link>
-                
+                ) : (
+                  <Link href={page.slug} underline="none">
+                    <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                        <Typography textAlign="center">{page.name}</Typography>
+                    </MenuItem>
+                </Link>
+                )
               ))}
             </Menu>
           </Box>
@@ -110,17 +118,27 @@ const ResponsiveAppBar = (props) => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-                
-                    <Button
-                        key={page.slug}
-                        onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                        href={`/#/${page.slug}`}
-                    >
-                        
-                            {page.name}
-                    </Button>
-              
+              page.external ? (
+                <Button
+                  key={page.name}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  href={page.slug}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >  
+                  {page.name}
+                </Button>
+              ) : (
+                <Button
+                  key={page.name}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  href={page.slug}
+                >  
+                  {page.name}
+                </Button>
+              )         
             ))}
           </Box>
 
