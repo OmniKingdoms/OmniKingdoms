@@ -11,6 +11,7 @@ import React, { useState, useEffect } from 'react';
 
 import Action from './game/action';
 import Mint from './game/mint';
+import StickyFooter from './components/StickyFooter';
 
 import { ethers } from "ethers";
 import { Spinner, Navbar, Nav, Button, Container } from 'react-bootstrap';
@@ -95,6 +96,9 @@ function App() {
               } />
             </Routes>
           )}
+        </div>
+        <div>
+          <StickyFooter />
         </div>
       </div>
     </HashRouter>
