@@ -3,6 +3,7 @@ import { CssBaseline, AppBar, Box, Toolbar, Typography, IconButton, Menu, Contai
 import MenuIcon from '@mui/icons-material/Menu';
 import CastleIcon from '@mui/icons-material/Castle';
 import Link from '@mui/material/Link';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 const pages = [
     { name: 'Play', slug: '' }, 
@@ -130,7 +131,7 @@ const ResponsiveAppBar = (props) => {
                     </Button>
                 // </Link>
             ) : (
-                <Button variant="contained" color="primary" onClick={props.login} sx={{ p: "0.5rem" }}>Connect Wallet</Button>
+                <Button startIcon={<AccountBalanceWalletIcon />} variant="contained" color="primary" onClick={props.login} sx={{ p: "0.5rem 1.5rem" }}>Connect Wallet</Button>
             ) }
           </Box>
 
