@@ -1,0 +1,15 @@
+.action-container {
+    padding-top: 2%;
+    text-align: center;
+}
+
+.game-map-container {
+    position: absolute;
+    
+}
+
+.train-button-container {
+    position: relative;
+    padding-top: 38%;
+    padding-right: 65%;
+}
