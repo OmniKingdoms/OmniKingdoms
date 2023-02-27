@@ -8,8 +8,10 @@ import React, { useState, useEffect } from 'react';
 
 import Action from './game/action';
 import Mint from './game/mint';
+
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 import StickyFooter from './components/StickyFooter';
+import Contract from './contracts/data/scroll.json'
 
 import { ethers } from "ethers";
 import { Spinner } from 'react-bootstrap';
@@ -20,6 +22,7 @@ function App() {
 
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState(null);
+  const [contract, setContract] = useState(null);
 
   const web3Handler = async () => {
     let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -36,14 +39,22 @@ function App() {
     // Get provider from Metamask
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Get signer
-    // const signer = provider.getSigner()
-    // loadContract(signer)
+    const signer = provider.getSigner()
+    loadContract(signer)
   };
 
   useEffect(() => {
     web3Handler();
   }, []);
 
+
+  const loadContract = async (signer) => {
+
+    const gameContract = await new ethers.Contract(Contract.address, Contract.abi, signer)
+
+    setContract(gameContract)
+    setLoading(false)
+  }
 
 
   return (
@@ -65,7 +76,7 @@ function App() {
                 <Action />
               } />
               <Route path="/mint" element={
-                <Mint />
+                <Mint contract={contract}/>
               } />
             </Routes>
           )}
