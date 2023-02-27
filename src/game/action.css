@@ -11,6 +11,11 @@
     position: absolute;
     padding: 1rem;
     margin: 0.5rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 1000px;
 }
 
 img {
