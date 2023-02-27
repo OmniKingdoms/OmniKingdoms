@@ -1,14 +1,39 @@
-import React, { useState} from "react";
+import React, { useState, useEffect, useCallback} from "react";
 import { Button } from 'react-bootstrap';
 import map from "../images/game-map.jpeg"
 import './action.css'
 
-const Action = () => {
+const Action = ({contract, account}) => {
+
+    const [loading, setLoading] = useState(false);
+    const [players, setPlayers] = useState([]);
+
+    
+    const getPlayers = async() => {
+        const tmp = await contract.getPlayers(account);
+        console.log('frog')
+        setPlayers(tmp.map(val => val.toNumber()));
+        
+    };
+
+    useEffect(() => {
+        getPlayers();
+    },[]);
+
+    
+
+    
+
+
 
 
     return (
         <React.Fragment>
             <div className="action-container">
+
+            <div>
+                {players.length}
+            </div>
 
                 <div className="game-map-container">
                     <img src={map} alt="game map" width="100%" />
@@ -19,6 +44,9 @@ const Action = () => {
                 </div>
 
             </div>
+
+
+            
 
 
         </React.Fragment>

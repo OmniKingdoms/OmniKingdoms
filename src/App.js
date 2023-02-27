@@ -40,7 +40,7 @@ function App() {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Get signer
     const signer = provider.getSigner()
-    loadContract(signer)
+    loadContract(signer);
   };
 
   useEffect(() => {
@@ -73,7 +73,7 @@ function App() {
           ) : (         
             <Routes>
               <Route path="/" element={
-                <Action />
+                <Action contract={contract} account={account}/>
               } />
               <Route path="/mint" element={
                 <Mint contract={contract}/>
