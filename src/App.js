@@ -55,6 +55,7 @@ function App() {
           <Navbar expand="lg" bg="secondary" variant="dark">
             <Container>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+              <Navbar.Brand href="/">Scroll Kingdoms</Navbar.Brand>
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
                   <Nav.Link as={Link} to="/">Home</Nav.Link>
