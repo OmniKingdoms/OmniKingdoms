@@ -126,12 +126,37 @@ const ResponsiveAppBar = (props) => {
                 //     target="_blank"
                 //     rel="noopener noreferrer"
                 // >
-                    <Button variant="contained">
-                        { props.account.slice(0, 5) + '...' + props.account.slice(38, 42) }
+                    <Button 
+                      variant="contained" 
+                      sx={{ 
+                        p: "0.5rem 1.5rem", 
+                        backgroundColor: "#f6851b",
+                        "&:hover": {
+                          backgroundColor: "white",
+                          color: "#f6851b",
+                        }
+                      }}
+                    >
+                      { props.account.slice(0, 5) + '...' + props.account.slice(38, 42) }
                     </Button>
                 // </Link>
             ) : (
-                <Button startIcon={<AccountBalanceWalletIcon />} variant="contained" color="primary" onClick={props.login} sx={{ p: "0.5rem 1.5rem" }}>Connect Wallet</Button>
+                <Button 
+                  startIcon={<AccountBalanceWalletIcon />} 
+                  variant="contained" 
+                  color="primary" 
+                  onClick={props.login} 
+                  sx={{ 
+                    p: "0.5rem 1.5rem", 
+                    backgroundColor: "#f6851b",
+                    "&:hover": {
+                      backgroundColor: "white",
+                      color: "#f6851b",
+                    }
+                  }}
+                >
+                  Connect Wallet
+                </Button>
             ) }
           </Box>
 
