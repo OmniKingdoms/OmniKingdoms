@@ -20,7 +20,7 @@ const Action = ({contract, account}) => {
         getPlayers();
     },[]);
 
-    
+
 
     
 
@@ -31,9 +31,9 @@ const Action = ({contract, account}) => {
         <React.Fragment>
             <div className="action-container">
 
-            <div>
+            {/* <div>
                 {players.length}
-            </div>
+            </div> */}
 
                 <div className="game-map-container">
                     <img src={map} alt="game map" width="100%" />
