@@ -3,11 +3,13 @@
 }
 
 .player-image {
-    max-height: 150px;
-    padding-top: 5%;
+    max-height: 100px;
+    margin-top: 0.6rem;
+    border-radius: 10%;
 }
 
 ul{
+    font-size: 0.75rem;
     list-style-type:none;
     align-items: flex-start;
     text-align: left;
@@ -16,6 +18,7 @@ ul{
 .selector {
     background-color: white;
     padding: 0.3rem 0;
+    border-radius: 0 0 10px 10px;
 }
 .selector:hover {
     background-color: #eee;

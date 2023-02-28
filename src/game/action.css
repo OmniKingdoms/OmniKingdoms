@@ -50,6 +50,7 @@ img {
     transform: translate(-5%, -4%);
     background-color: aqua;
     width: 20%;
+    border-radius: 10px;
 }
 
 
