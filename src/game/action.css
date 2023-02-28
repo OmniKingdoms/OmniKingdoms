@@ -25,7 +25,7 @@ img {
     /* width: 80%; */
 }
 
-.button-train, .button-arena, .button-quest {
+.button-train, .button-arena, .button-quest, .player-card-container {
     position: absolute;
 }
 .button-train {
@@ -42,4 +42,11 @@ img {
     top: 35%;
     left: 85%;
     transform: translate(-35%, -85%);
+}
+.player-card-container {
+    border: solid;
+    top: 5%;
+    left: 4%;
+    transform: translate(-5%, -4%);
+    background-color: aqua;
 }

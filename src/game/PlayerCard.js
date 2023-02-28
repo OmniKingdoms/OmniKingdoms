@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback} from "react";
-
+import './PlayerCard.css';
 
 const PlayerCard = ({contract, account}) => {
 
@@ -13,6 +13,9 @@ const PlayerCard = ({contract, account}) => {
         image: ''
     })
 
+    const statusMap = {
+        0: 'idle'
+    }
 
     const getPlayers = useCallback(async() => {
         const tmp = await contract.getPlayers(account);
@@ -21,6 +24,7 @@ const PlayerCard = ({contract, account}) => {
         getPlayerData()
     });
 
+
     const nextPlayer = async() => {
 
     }
@@ -28,7 +32,6 @@ const PlayerCard = ({contract, account}) => {
     const getPlayerData = async() => {
         const response = await contract.players(currentPlayer);
         const uri = await contract.uri(currentPlayer);
-        const uriResponse = await fetch(uri);
     
         const player = {
             id: currentPlayer,
@@ -43,20 +46,27 @@ const PlayerCard = ({contract, account}) => {
 
     useEffect(() => {
         getPlayers();
-    },[]);
+    },[getPlayers]);
 
     return (
-        <div>
+        <div className="card-container">
             
+            <img className="player-image" src={playerData.image} alt="" />
             <div>
-                {playerData.status}
-                {playerData.attack}
-                {playerData.hp}
+                <ul>
+                    <li className="list-item">
+                        Status: {statusMap[playerData.status]}
+                    </li>
+                    <li>
+                        Attack: {playerData.attack}
+                    </li>
+                    <li>
+                        HP: {playerData.hp}
+                    </li>
+                </ul>
             </div>
 
-            {/* <img src={playerData.image} alt="" /> */}
     
-            <p>this is the player card</p>
         </div>
     );
 

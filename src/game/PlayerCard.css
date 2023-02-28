@@ -1,0 +1,15 @@
+.card-container {
+    max-height: 10%;
+}
+
+.player-image {
+    max-height: 150px;
+    padding-top: 5%;
+}
+
+ul{
+    list-style-type:none;
+    align-items: flex-start;
+    text-align: left;
+}
+
