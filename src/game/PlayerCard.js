@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback} from "react";
 import './PlayerCard.css';
-import preview from '../images/nft-preview.gif'
+import preview from '../images/nft-preview.gif';
+import rightArrow from '../images/right-arrow.png'
 
 const PlayerCard = (props) => {
     const [players, setPlayers] = useState([]);
+    const [playerIndex, setPlayerIndex] = useState(0);
     const [playerData, setPlayerData] = useState({
         id: '...',
         attack: '...',
@@ -14,7 +16,7 @@ const PlayerCard = (props) => {
 
     const statusMap = {
         99: '...',
-        0: 'idle',
+        0: 'Idle',
         1: 'Questing',
         2: 'Training'
     }
@@ -22,13 +24,21 @@ const PlayerCard = (props) => {
     const getPlayers = useCallback(async() => {
         const tmp = await props.contract.getPlayers(props.account);
         setPlayers(tmp.map(val => val.toNumber()));
-        props.setCurrentPlayer(players[0]);
+        props.setCurrentPlayer(players[playerIndex]);
         getPlayerData()
     });
 
 
     const nextPlayer = async() => {
-
+        if (playerIndex < players.length) {
+            let newIndex = playerIndex + 1;
+            console.log(newIndex)
+            setPlayerIndex(newIndex);
+        } else {
+            setPlayerIndex(0);
+        }
+        props.setCurrentPlayer(players[playerIndex]);
+        getPlayerData()
     }
 
     const getPlayerData = async() => {
@@ -67,6 +77,9 @@ const PlayerCard = (props) => {
                         HP: {playerData.hp}
                     </li>
                 </ul>
+            </div>
+            <div onClick={nextPlayer}>
+                <img className="right-arrow"  src={rightArrow} alt="" />
             </div>
 
     
