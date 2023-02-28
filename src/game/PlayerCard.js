@@ -38,7 +38,7 @@ const PlayerCard = (props) => {
         }
         props.setCurrentPlayer(players[playerIndex]);
         getPlayerData()
-    }
+    };
 
     const getPlayerData = async() => {
         if (props.currentPlayer) {
@@ -54,7 +54,7 @@ const PlayerCard = (props) => {
             };
             setPlayerData(player);
         }
-    }
+    };
 
     useEffect(() => {
         getPlayers();

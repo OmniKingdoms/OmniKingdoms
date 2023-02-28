@@ -53,5 +53,14 @@ img {
     border-radius: 10px;
 }
 
+.gold-container {
+    border: solid;
+    width: 15%;
+    background-color: aqua;
+    position: absolute;
+    left: 95%;
+    top: 8%;
+    transform: translate(-95%, -8%);
+}
 
 

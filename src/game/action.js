@@ -5,6 +5,7 @@ import PlayerCard from "./PlayerCard";
 import Backdrop from "../components/modal/Backdrop";
 import Train from "../components/modal/Train";
 import Quest from "../components/modal/Quest";
+import Arena from '../components/modal/Arena';
 import './action.css';
 
 const Action = ({contract, account}) => {
@@ -12,14 +13,17 @@ const Action = ({contract, account}) => {
     const [loading, setLoading] = useState(false);
     const [showTrain, setShowTrain] = useState(false);
     const [showQuest, setShowQuest] = useState(false);
+    const [showArena, setShowArena] = useState(false);
     const [backdrop, setbackdrop] = useState(false);
     const [currentPlayer, setCurrentPlayer] = useState(null);
+    const [gold, setGold] = useState();
 
- 
+
     const backdropHandler = () => {
         setbackdrop(!backdrop);
         setShowTrain(false);
         setShowQuest(false);
+        setShowArena(false);
     }
 
     const trainHandler = () => {
@@ -32,7 +36,19 @@ const Action = ({contract, account}) => {
         setbackdrop(!backdrop);
     };
 
+    const arenaHandler = () => {
+        setShowArena(!showArena);
+        setbackdrop(!backdrop);
+    };
 
+    const getGold = async() => {
+        const response = await contract.balanceOf(account, 1);
+        setGold(response.toNumber())
+    }
+
+    useEffect(() => {
+        getGold();
+    }, [getGold])
 
 
     return (
@@ -43,7 +59,7 @@ const Action = ({contract, account}) => {
                     <img src={map} alt="game map" width="100%" />
 
                     <Button variant="primary" className="button-train" size="sm" onClick={trainHandler}>TRAIN</Button>
-                    <Button variant="primary" className="button-arena" size="sm">ARENA</Button>
+                    <Button variant="primary" className="button-arena" size="sm" onClick={arenaHandler}>ARENA</Button>
                     <Button variant="primary" className="button-quest" size="sm" onClick={questHandler}>QUEST</Button>
                     <div className="player-card-container">
                         <PlayerCard contract={contract} account={account}
@@ -55,14 +71,19 @@ const Action = ({contract, account}) => {
                 {showTrain && 
                     <Train contract={contract} currentPlayer={currentPlayer}/>
                 }
-                
                 {showQuest && 
                     <Quest contract={contract} currentPlayer={currentPlayer}/>
                 }
-
-
+                {showArena && 
+                    <Arena contract={contract} currentPlayer={currentPlayer}/>
+                }
 
                 <Backdrop show={backdrop} onClick={backdropHandler}/>
+
+
+                <div className='gold-container'>
+                    <div>Gold: {gold}</div>
+                </div>
 
             </div>
 
