@@ -1,4 +1,5 @@
 import React from "react";
+import preview from "../images/nft-preview.gif"
 
 const Mint = ({contract}) => {
 
@@ -13,7 +14,10 @@ const Mint = ({contract}) => {
     return (
         <React.Fragment>
             <div className="mint-container">
-                <p>this is the mint page</p>
+                <p>Mint a Charachter</p>
+                <div>
+                <img src={preview} alt="preview" width="100%" />
+                </div>
                 <div>
                     <button onClick={simpleMint}>Mint</button>
                 </div>
