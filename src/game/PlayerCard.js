@@ -1,26 +1,28 @@
 import React, { useState, useEffect, useCallback} from "react";
 import './PlayerCard.css';
+import preview from '../images/nft-preview.gif'
 
-const PlayerCard = ({contract, account}) => {
-
+const PlayerCard = (props) => {
     const [players, setPlayers] = useState([]);
-    const [currentPlayer, setCurrentPlayer] = useState(null);
     const [playerData, setPlayerData] = useState({
-        id: '',
-        attack: '',
-        hp: '',
-        status: '',
-        image: ''
+        id: '...',
+        attack: '...',
+        hp: '...',
+        status: 'NA',
+        image: preview
     })
 
     const statusMap = {
-        0: 'idle'
+        99: '...',
+        0: 'idle',
+        1: 'Questing',
+        2: 'Training'
     }
 
     const getPlayers = useCallback(async() => {
-        const tmp = await contract.getPlayers(account);
+        const tmp = await props.contract.getPlayers(props.account);
         setPlayers(tmp.map(val => val.toNumber()));
-        setCurrentPlayer(players[0]);
+        props.setCurrentPlayer(players[0]);
         getPlayerData()
     });
 
@@ -30,19 +32,20 @@ const PlayerCard = ({contract, account}) => {
     }
 
     const getPlayerData = async() => {
-        const response = await contract.players(currentPlayer);
-        const uri = await contract.uri(currentPlayer);
-    
-        const player = {
-            id: currentPlayer,
-            attack: response.attack.toNumber(),
-            hp: response.hp.toNumber(),
-            status: response.status,
-            image: uri
-        };
-        setPlayerData(player);
+        if (props.currentPlayer) {
+            const response = await props.contract.players(props.currentPlayer);
+            const uri = await props.contract.uri(props.currentPlayer);
+        
+            const player = {
+                id: props.currentPlayer,
+                attack: response.attack.toNumber(),
+                hp: response.hp.toNumber(),
+                status: response.status,
+                image: uri
+            };
+            setPlayerData(player);
+        }
     }
-    
 
     useEffect(() => {
         getPlayers();
