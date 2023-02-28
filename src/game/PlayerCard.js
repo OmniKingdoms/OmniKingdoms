@@ -77,7 +77,7 @@ const PlayerCard = (props) => {
                     </li>
                 </ul>
             </div>
-            <div onClick={nextPlayer}>
+            <div onClick={nextPlayer} className="selector">
                 <img className="right-arrow"  src={rightArrow} alt="" />
             </div>
 

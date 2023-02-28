@@ -13,6 +13,14 @@ ul{
     text-align: left;
 }
 
+.selector {
+    background-color: white;
+    padding: 0.3rem 0;
+}
+.selector:hover {
+    background-color: #eee;
+}
+
 .right-arrow {
     height: 25px;
 }
