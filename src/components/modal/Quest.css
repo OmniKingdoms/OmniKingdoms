@@ -1,0 +1,10 @@
+.quest-container {
+    border: solid;
+    position: absolute;
+    left: 25%;
+    top: 15%;
+    background-color: lightblue;
+    z-index: 11;
+    height: 70%;
+    width: 70%;
+}

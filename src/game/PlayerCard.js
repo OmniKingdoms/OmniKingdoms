@@ -30,9 +30,8 @@ const PlayerCard = (props) => {
 
 
     const nextPlayer = async() => {
-        if (playerIndex < players.length) {
+        if (playerIndex < players.length-1) {
             let newIndex = playerIndex + 1;
-            console.log(newIndex)
             setPlayerIndex(newIndex);
         } else {
             setPlayerIndex(0);
