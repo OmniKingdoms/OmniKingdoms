@@ -1,0 +1,16 @@
+.mint-container {
+    padding: 1rem;
+    margin: 0.5rem;
+}
+
+.mint-image {
+    margin: 1rem 0;
+}
+.mint-image img {
+    max-width: 360px;
+    max-height: 360px;
+}
+
+.mint-button {
+    margin: 1rem 0;
+}
