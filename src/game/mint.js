@@ -1,5 +1,6 @@
 import React from "react";
 import preview from "../images/nft-preview.gif"
+import sword from '../images/sword.png'
 import './mint.css';
 import { Button } from '@mui/material';
 
@@ -29,6 +30,7 @@ const Mint = ({contract}) => {
                         Mint
                     </Button>
                 </div>
+                <img className="sword" src={sword} alt="" />
             </div>
         </React.Fragment>
     )
