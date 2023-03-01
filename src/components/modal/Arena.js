@@ -48,7 +48,7 @@ const Arena = (props) => {
         <div className="arena-container">
             <div>Welcome to the Arena page</div>
             <Button onClick={enterArena}>Enter Arena</Button>
-            <Button onClick={challengeArena}>Exit Arena</Button>
+            <Button onClick={challengeArena}>Challenge Arena</Button>
         </div>
     )
 
