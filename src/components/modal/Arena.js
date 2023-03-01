@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './Arena.css'
-import { Button } from "react-bootstrap";
+import { Button } from '@mui/material';
 import preview from '../../images/nft-preview.gif'
 
 
@@ -45,10 +44,9 @@ const Arena = (props) => {
 
 
     return (
-        <div className="arena-container">
-            <div>Welcome to the Arena page</div>
-            <Button onClick={enterArena}>Enter Arena</Button>
-            <Button onClick={challengeArena}>Challenge Arena</Button>
+        <div>
+            <Button onClick={enterArena} variant="contained" sx={{ m: "0.5rem" }}>Enter Arena</Button>
+            <Button onClick={challengeArena} variant="contained" color="success">Exit Arena</Button>
         </div>
     )
 

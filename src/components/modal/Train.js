@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './Train.css'
-import { Button } from "react-bootstrap";
+import { Button } from '@mui/material';
 import preview from '../../images/nft-preview.gif'
 
 
@@ -45,10 +44,9 @@ const Train = (props) => {
 
 
     return (
-        <div className="training-container">
-            <div>Welcome to the training page</div>
-            <Button onClick={startTraining}>Begin Training</Button>
-            <Button onClick={endTraining}>Finish Training</Button>
+        <div>
+            <Button onClick={startTraining} variant="contained" sx={{ m: "0.5rem" }}>Begin Training</Button>
+            <Button onClick={endTraining} variant="contained" color="success">Finish Training</Button>
         </div>
     )
 

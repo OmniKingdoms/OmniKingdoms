@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useDebugValue } from "react";
-import './Train.css'
-import { Button } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Button } from '@mui/material';
 import preview from '../../images/nft-preview.gif';
-import './Quest.css'
 
 const Quest = (props) => {
 
@@ -44,10 +42,9 @@ const Quest = (props) => {
     },[getPlayerData]);
 
     return (
-        <div className="quest-container">
-            <div>Welcome to the questing page</div>
-            <Button onClick={startQuesting}>Begin Quest</Button>
-            <Button onClick={endQuesting}>Finish Quest</Button>
+        <div>
+            <Button onClick={startQuesting} variant="contained" sx={{ m: "0.5rem" }}>Begin Quest</Button>
+            <Button onClick={endQuesting} variant="contained" color="success">Finish Quest</Button>
         </div>
     )
 
