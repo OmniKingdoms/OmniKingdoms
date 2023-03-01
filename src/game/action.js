@@ -8,7 +8,7 @@ import Arena from '../components/modal/Arena';
 import './action.css';
 import { Box, Typography, Modal } from '@mui/material';
 
-const style = {
+const modalStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -60,7 +60,7 @@ const Action = ({contract, account}) => {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            <Box sx={style}>
+                            <Box sx={modalStyle}>
                                 <Typography id="modal-modal-title" variant="h6" component="h2">
                                     Train to increase your attack!
                                 </Typography>
@@ -83,7 +83,7 @@ const Action = ({contract, account}) => {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            <Box sx={style}>
+                            <Box sx={modalStyle}>
                                 <Typography id="modal-modal-title" variant="h6" component="h2">
                                     Quest to earn Gold!
                                 </Typography>
@@ -106,7 +106,7 @@ const Action = ({contract, account}) => {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            <Box sx={style}>
+                            <Box sx={modalStyle}>
                                 <Typography id="modal-modal-title" variant="h6" component="h2">
                                     Battle other players & win Gold!
                                 </Typography>
@@ -126,18 +126,12 @@ const Action = ({contract, account}) => {
                             currentPlayer={currentPlayer} setCurrentPlayer={setCurrentPlayer}
                         />
                     </div>
-                </div>
 
-                <div className='gold-container'>
-                    <div>Gold: {gold}</div>
+                    <div className='gold-container'>
+                        <div>Gold: {gold}</div>
+                    </div>
                 </div>
-
             </div>
-
-
-            
-
-
         </React.Fragment>
     )
 

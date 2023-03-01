@@ -45,22 +45,24 @@ img {
 }
 .player-card-container {
     border: solid;
-    top: 5%;
-    left: 4%;
-    transform: translate(-5%, -4%);
-    background-color: aqua;
+    top: 7%;
+    left: 4.5%;
+    transform: translate(-7%, -4%);
+    background-color: rgba(255,255,255,0.6);
     width: 20%;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .gold-container {
     border: solid;
     width: 15%;
-    background-color: aqua;
+    background-color: rgba(255,255,255,0.6);
     position: absolute;
     left: 95%;
-    top: 8%;
-    transform: translate(-95%, -8%);
+    top: 7%;
+    transform: translate(-95%, -7%);
+    border-radius: 5px;
+
 }
 
 

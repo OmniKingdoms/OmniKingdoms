@@ -62,8 +62,8 @@ const PlayerCard = (props) => {
 
     return (
         <div className="card-container">
+            <h6>Hero #{playerData.id}</h6>
             <img className="player-image" src={playerData.image} alt="" />
-            <div>Hero #{playerData.id}</div>
             <div>
                 <ul>
                     <li className="list-item">
