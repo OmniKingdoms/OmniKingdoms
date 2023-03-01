@@ -15,6 +15,9 @@ const Train = (props) => {
     })
 
     const getPlayerData = async() => {
+
+        //const tmp = props.contract
+
         if (props.currentPlayer) {
             const response = await props.contract.players(props.currentPlayer);
             const uri = await props.contract.uri(props.currentPlayer);
@@ -40,7 +43,8 @@ const Train = (props) => {
 
     useEffect(() => {
         getPlayerData();
-    },[getPlayerData]);
+
+    },[props.contract]);
 
 
     return (

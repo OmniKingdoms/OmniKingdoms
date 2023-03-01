@@ -1,6 +1,7 @@
 .mint-container {
     padding: 1rem;
     margin: 0.5rem;
+    position: relative;
 }
 
 .mint-image {
@@ -19,5 +20,5 @@
     position: absolute;
     height: 150px;
     top: 37%;
-    left: 57%
+    left: 55%
 }

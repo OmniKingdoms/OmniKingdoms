@@ -5,7 +5,8 @@ import preview from '../../images/nft-preview.gif'
 
 const Arena = (props) => {
     
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState(false);
+    const [host, setHost] = useState(null);
     const [playerData, setPlayerData] = useState({
         id: '...',
         attack: '...',
@@ -15,10 +16,16 @@ const Arena = (props) => {
     })
 
     const getPlayerData = async() => {
-        if (props.currentPlayer) {
-            const response = await props.contract.players(props.currentPlayer);
-            const uri = await props.contract.uri(props.currentPlayer);
-        
+
+        const tmp = await props.contract.arena();
+        const open = tmp.open;
+        if (!open) {
+            const id = tmp.hostId.toNumber();
+            setHost(id);
+            setStatus(true);
+            const response = await props.contract.players(id);
+            const uri = await props.contract.uri(id)
+
             const player = {
                 id: props.currentPlayer,
                 attack: response.attack.toNumber(),
@@ -27,6 +34,8 @@ const Arena = (props) => {
                 image: uri
             };
             setPlayerData(player);
+        } else {
+            setStatus(false);
         }
     }
 
@@ -40,13 +49,21 @@ const Arena = (props) => {
 
     useEffect(() => {
         getPlayerData();
-    },[getPlayerData]);
+
+    },[props.contract]);
 
 
     return (
         <div>
-            <Button onClick={enterArena} variant="contained" sx={{ m: "0.5rem" }}>Create Challenge</Button>
-            <Button onClick={challengeArena} variant="contained" color="success">Accept Challenge</Button>
+            {status &&
+                <React.Fragment>
+                    <div>Current Host Hero #{host}</div>
+                    <img className="player-image" src={playerData.image} alt="" />
+                </React.Fragment>
+
+            }
+            <Button onClick={enterArena} variant="contained" sx={{ m: "0.5rem" }} disabled={status}>Create Challenge</Button>
+            <Button onClick={challengeArena} variant="contained" color="success" disabled={!status}>Accept Challenge</Button>
         </div>
     )
 

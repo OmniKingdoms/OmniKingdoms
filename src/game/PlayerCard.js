@@ -11,6 +11,7 @@ const PlayerCard = (props) => {
         attack: '...',
         hp: '...',
         status: 'NA',
+        wins: '',
         image: preview
     })
 
@@ -18,7 +19,8 @@ const PlayerCard = (props) => {
         99: '...',
         0: 'Idle',
         1: 'Questing',
-        2: 'Training'
+        2: 'Training',
+        3: 'Arena'
     }
 
     const getPlayers = useCallback(async() => {
@@ -50,6 +52,7 @@ const PlayerCard = (props) => {
                 attack: response.attack.toNumber(),
                 hp: response.hp.toNumber(),
                 status: response.status,
+                wins: response.wins.toNumber(),
                 image: uri
             };
             setPlayerData(player);
@@ -74,6 +77,9 @@ const PlayerCard = (props) => {
                     </li>
                     <li>
                         HP: {playerData.hp}
+                    </li>
+                    <li>
+                        Wins: {playerData.wins}
                     </li>
                 </ul>
                 
