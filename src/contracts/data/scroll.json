@@ -1,5 +1,5 @@
 {
-    "address": "0xc915379803A709997487570aED6A051fb01d5456",
+    "address": "0xC54561B8D106A9801a19c60473E50359F5fc2cd3",
     "abi": [
         {
             "inputs": [],
@@ -435,19 +435,6 @@
             "inputs": [
                 {
                     "internalType": "address",
-                    "name": "_address",
-                    "type": "address"
-                }
-            ],
-            "name": "joinLeaderBoard",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
                     "name": "",
                     "type": "address"
                 },
@@ -520,6 +507,32 @@
                 }
             ],
             "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "openArena",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "owner",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
             "type": "function"
         },
         {

@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 
 import Action from './game/action';
 import Mint from './game/mint';
+import LeaderBoard from "./game/LeaderBoard";
 
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 import StickyFooter from './components/StickyFooter';
@@ -77,6 +78,9 @@ function App() {
               } />
               <Route path="/mint" element={
                 <Mint contract={contract}/>
+              } />
+              <Route path="/leaderboard" element={
+                <LeaderBoard contract={contract} account={account}/>
               } />
             </Routes>
           )}

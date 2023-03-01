@@ -45,8 +45,8 @@ const Arena = (props) => {
 
     return (
         <div>
-            <Button onClick={enterArena} variant="contained" sx={{ m: "0.5rem" }}>Enter Arena</Button>
-            <Button onClick={challengeArena} variant="contained" color="success">Exit Arena</Button>
+            <Button onClick={enterArena} variant="contained" sx={{ m: "0.5rem" }}>Create Challenge</Button>
+            <Button onClick={challengeArena} variant="contained" color="success">Accept Challenge</Button>
         </div>
     )
 
