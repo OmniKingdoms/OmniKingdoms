@@ -7,8 +7,8 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 const pages = [
     { name: 'Play', slug: '/' }, 
-    { name: 'Mint', slug: '/#/mint' }, 
     { name: 'Leaderboard', slug: '/#/leaderboard' }, 
+    { name: 'Mint', slug: '/#/mint' }, 
     { name: 'About', slug: 'https://scroll-kingdoms.gitbook.io/docs/', external: true }, 
 ];
 
