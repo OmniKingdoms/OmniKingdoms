@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PlayerItem from "../components/PlayerItem";
 import { Button, Box, CircularProgress } from '@mui/material';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import './LeaderBoard.css';
 
 const LeaderBoard = (props) => {
@@ -65,9 +66,9 @@ const LeaderBoard = (props) => {
                 Welcome to The Leaderboard
             </h1>
             <div className="sorting">
-                <Button variant="contained" disabled>SORT BY:</Button>
+                <Button variant="outlined" startIcon={<FilterListIcon />}>SORT BY:</Button>
                 <Button onClick={sortByWins} variant="contained">Wins</Button>
-                <Button onClick={sortByAttack} variant="contained">Attacks</Button>
+                <Button onClick={sortByAttack} variant="contained">Attack</Button>
             </div>
             {loading && (
                 <div className="spinner">

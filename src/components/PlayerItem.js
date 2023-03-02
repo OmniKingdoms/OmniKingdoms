@@ -11,7 +11,8 @@ const PlayerItem = (props) => {
                 <img className="player-image" src={props.image} alt="" />
             </div>
             <div className="player-info">
-                <div>wins: {props.wins}</div>
+                <div>Wins: {props.wins}</div>
+                <div>Attack: {props.attack}</div>
             </div>
         </div>
     )
