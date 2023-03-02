@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import PlayerItem from "../components/PlayerItem";
-import { Button } from "react-bootstrap";
+import { Button, Box, CircularProgress } from '@mui/material';
+import './LeaderBoard.css';
 
 const LeaderBoard = (props) => {
 
     const [players, setPlayers] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const getPlayers = async() => {
+        setLoading(true);
         const tmp = await props.contract.playerCount();
         const playerCount = tmp.toNumber();
         let hold = []
@@ -29,6 +32,7 @@ const LeaderBoard = (props) => {
         );
 
         setPlayers(sorted);
+        setLoading(false);
     }
 
 
@@ -56,12 +60,23 @@ const LeaderBoard = (props) => {
 
 
     return (
-        <div>
+        <div className="board-container">
             <h1>
-                Welcome to The Leader board
+                Welcome to The Leaderboard
             </h1>
-            <Button onClick={sortByWins}>Sort by Wins</Button>
-            <Button onClick={sortByAttack}>Sort by Attack</Button>
+            <div className="sorting">
+                <Button variant="contained" disabled>SORT BY:</Button>
+                <Button onClick={sortByWins} variant="contained">Wins</Button>
+                <Button onClick={sortByAttack} variant="contained">Attacks</Button>
+            </div>
+            {loading && (
+                <div className="spinner">
+                    <Box sx={{ display: 'flex' }}>
+                        <CircularProgress />
+                    </Box>
+                    <br />
+                </div>
+            )}
             <ul className="users-list">
                 {players.map(nft => (
                     <PlayerItem 
