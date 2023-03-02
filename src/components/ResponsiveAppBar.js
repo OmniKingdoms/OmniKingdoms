@@ -81,16 +81,16 @@ const ResponsiveAppBar = (props) => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
+              {pages.map((page, i) => (
                 page.external ? (
-                  <Link href={page.slug} underline="none" target="_blank" 
+                  <Link key={i} href={page.slug} underline="none" target="_blank" 
                   rel="noopener noreferrer">
                     <MenuItem key={page.name} onClick={handleCloseNavMenu} >
                         <Typography textAlign="center">{page.name}</Typography>
                     </MenuItem>
                 </Link>
                 ) : (
-                  <Link href={page.slug} underline="none">
+                  <Link key={i} href={page.slug} underline="none">
                     <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                         <Typography textAlign="center">{page.name}</Typography>
                     </MenuItem>
@@ -118,10 +118,10 @@ const ResponsiveAppBar = (props) => {
             Scroll Kingdoms
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {pages.map((page, i) => (
               page.external ? (
                 <Button
-                  key={page.name}
+                  key={i}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                   href={page.slug}
@@ -132,7 +132,7 @@ const ResponsiveAppBar = (props) => {
                 </Button>
               ) : (
                 <Button
-                  key={page.name}
+                  key={i}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                   href={page.slug}
