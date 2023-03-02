@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PlayerItem from "../components/PlayerItem";
+import { Button } from "react-bootstrap";
 
 const LeaderBoard = (props) => {
 
@@ -30,6 +31,24 @@ const LeaderBoard = (props) => {
         setPlayers(sorted);
     }
 
+
+    const sortByAttack = async() => {
+        let tmp = players;
+        let sorted = tmp.sort(
+            (a,b) => (b.attack - a.attack)
+        );
+        setPlayers(sorted);
+    };
+
+    const sortByWins = async() => {
+        let tmp = players;
+        let sorted = tmp.sort(
+            (a,b) => (b.wins - a.wins)
+        );
+        setPlayers(sorted);
+    };
+
+
     useEffect(() => {
         getPlayers()
 
@@ -38,7 +57,11 @@ const LeaderBoard = (props) => {
 
     return (
         <div>
-            this is the leader board
+            <h1>
+                Welcome to The Leader board
+            </h1>
+            <Button onClick={sortByWins}>Sort by Wins</Button>
+            <Button onClick={sortByAttack}>Sort by Attack</Button>
             <ul className="users-list">
                 {players.map(nft => (
                     <PlayerItem 

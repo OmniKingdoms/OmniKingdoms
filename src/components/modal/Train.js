@@ -6,6 +6,7 @@ import preview from '../../images/nft-preview.gif'
 const Train = (props) => {
     
     const [status, setStatus] = useState('');
+    const [isTraining, setIsTraining] = useState(false);
     const [playerData, setPlayerData] = useState({
         id: '...',
         attack: '...',
@@ -30,7 +31,11 @@ const Train = (props) => {
                 image: uri
             };
             setPlayerData(player);
-        }
+
+            if (response.status == 2) {
+                
+            };
+        };
     }
 
     const startTraining = async() => {
