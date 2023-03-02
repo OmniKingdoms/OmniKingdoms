@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import PlayerItem from "../components/PlayerItem";
-import { Button, Box, CircularProgress } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import { Box, CircularProgress } from '@mui/material';
 import './LeaderBoard.css';
+import EnhancedTable from "../components/PlayerTable";
 
 const LeaderBoard = (props) => {
 
@@ -36,24 +35,6 @@ const LeaderBoard = (props) => {
         setLoading(false);
     }
 
-
-    const sortByAttack = async() => {
-        let tmp = players;
-        let sorted = tmp.sort(
-            (a,b) => (b.attack - a.attack)
-        );
-        setPlayers(sorted);
-    };
-
-    const sortByWins = async() => {
-        let tmp = players;
-        let sorted = tmp.sort(
-            (a,b) => (b.wins - a.wins)
-        );
-        setPlayers(sorted);
-    };
-
-
     useEffect(() => {
         getPlayers()
 
@@ -62,14 +43,7 @@ const LeaderBoard = (props) => {
 
     return (
         <div className="board-container">
-            <h1>
-                Welcome to The Leaderboard
-            </h1>
-            <div className="sorting">
-                <Button variant="outlined" startIcon={<FilterListIcon />}>SORT BY:</Button>
-                <Button onClick={sortByWins} variant="contained">Wins</Button>
-                <Button onClick={sortByAttack} variant="contained">Attack</Button>
-            </div>
+            <EnhancedTable players={players} />
             {loading && (
                 <div className="spinner">
                     <Box sx={{ display: 'flex' }}>
@@ -78,16 +52,6 @@ const LeaderBoard = (props) => {
                     <br />
                 </div>
             )}
-            <ul className="users-list">
-                {players.map(nft => (
-                    <PlayerItem 
-                        id={nft.id} 
-                        attack={nft.attack}
-                        wins={nft.wins}
-                        image={nft.image} 
-                />
-                ))}
-            </ul>
         </div>
     )
 
