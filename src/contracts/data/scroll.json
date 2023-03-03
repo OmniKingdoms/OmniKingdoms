@@ -1,5 +1,5 @@
 {
-    "address": "0xC54561B8D106A9801a19c60473E50359F5fc2cd3",
+    "address": "0xaC07EE38FA79d3Cc8d27E3e765f059b3b5D0dD8a",
     "abi": [
         {
             "inputs": [],
@@ -240,6 +240,30 @@
             "type": "function"
         },
         {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "addressToSwords",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
             "inputs": [],
             "name": "arena",
             "outputs": [
@@ -381,11 +405,42 @@
                     "internalType": "uint256",
                     "name": "_tokenId",
                     "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "_swordId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "equipSword",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_tokenId",
+                    "type": "uint256"
                 }
             ],
             "name": "fightArena",
             "outputs": [],
             "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getBlocktime",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
             "type": "function"
         },
         {
@@ -397,6 +452,25 @@
                 }
             ],
             "name": "getPlayers",
+            "outputs": [
+                {
+                    "internalType": "uint256[]",
+                    "name": "",
+                    "type": "uint256[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_address",
+                    "type": "address"
+                }
+            ],
+            "name": "getSwords",
             "outputs": [
                 {
                     "internalType": "uint256[]",
@@ -596,6 +670,11 @@
                     "internalType": "uint256",
                     "name": "wins",
                     "type": "uint256"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "item",
+                    "type": "bool"
                 }
             ],
             "stateMutability": "view",
@@ -744,6 +823,43 @@
                     "internalType": "bool",
                     "name": "",
                     "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "swordCount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "swords",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "available",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "address",
+                    "name": "owner",
+                    "type": "address"
                 }
             ],
             "stateMutability": "view",
