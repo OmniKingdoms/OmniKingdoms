@@ -38,8 +38,8 @@ export default function StickyFooter() {
         }}
       >
         <Container maxWidth="sm">
-          <Typography variant="body1">
-            Built at ETH Denver 2023
+          <Typography variant="body1" sx={{ marginTop: "0.5rem", marginBottom: "1rem" }} >
+            Built by <Link color="inherit" href="https://twitter.com/kyle_corsola" target="_blank" rel="noopener noreferrer">Kyle Corsola</Link> and <Link color="inherit" href="https://twitter.com/sov3333" target="_blank" rel="noopener noreferrer">SOV3</Link> at ETH Denver 2023
           </Typography>
           <Copyright />
         </Container>
