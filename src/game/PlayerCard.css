@@ -13,10 +13,11 @@
 }
 
 ul{
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     list-style-type:none;
     align-items: flex-start;
     text-align: left;
+    font-weight: bold;
 }
 
 .selector {
