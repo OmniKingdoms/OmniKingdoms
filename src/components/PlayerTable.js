@@ -27,25 +27,35 @@ import { visuallyHidden } from '@mui/utils';
 
 export default function EnhancedTable(props) {
 
-    console.log(`props in table: `, props);
+    // console.log(`props in table: `, props);
 
-    function createData(name, attack, wins, image) {
+    function createData(name, attack, wins, image, status) {
         return {
         name,
         attack,
         wins,
         image,
+        status,
         };
     }
 
     let rows = [];
 
     for (let i=0; i<props.players.length; i++) {
+
+      let playerStatus;
+
+      if (props.players[i].status === 0) playerStatus = 'Idle';
+      else if (props.players[i].status === 1) playerStatus = 'Questing';
+      else if (props.players[i].status === 2) playerStatus = 'Training';
+      else if (props.players[i].status === 3) playerStatus = 'Arena';
+
         let tempPlayer = createData(
             `Hero #${props.players[i].id}`,
             props.players[i].attack,
             props.players[i].wins,
             props.players[i].image,
+            playerStatus,
         );
         rows.push(tempPlayer);
     }
@@ -100,6 +110,12 @@ export default function EnhancedTable(props) {
       numeric: true,
       disablePadding: false,
       label: 'Wins',
+    },
+    {
+      id: 'status',
+      numeric: true,
+      disablePadding: false,
+      label: 'Status',
     },
   ];
   
@@ -342,6 +358,7 @@ export default function EnhancedTable(props) {
                       </TableCell>
                       <TableCell align="right">{row.attack}</TableCell>
                       <TableCell align="right">{row.wins}</TableCell>
+                      <TableCell align="right">{row.status}</TableCell>
                       <TableCell padding="checkbox"></TableCell>
                     </TableRow>
                   );
