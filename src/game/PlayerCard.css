@@ -33,3 +33,7 @@ ul{
 .right-arrow {
     height: 25px;
 }
+
+.sword {
+    position: absolute;
+}

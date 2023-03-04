@@ -64,7 +64,13 @@ const Arena = (props) => {
             }
             <Button onClick={enterArena} variant="contained" sx={{ m: "0.5rem" }} disabled={status}>Create Challenge</Button>
             <Button onClick={challengeArena} variant="contained" color="success" disabled={!status}>Accept Challenge</Button>
+            <div>
+                <br />
+                <h6>*Accept Challenge may fail on first or second try. Retry untill transaction clears</h6>
+            </div>
+        
         </div>
+
     )
 
 };

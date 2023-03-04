@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback} from "react";
 import './PlayerCard.css';
 import preview from '../images/nft-preview.gif';
+import sword from '../images/sword.png'
 import rightArrow from '../images/right-arrow.png'
 import Equip from '../components/modal/Equip';
 import { Button, Box, Typography, Modal } from '@mui/material';
@@ -20,6 +21,7 @@ const modalStyle = {
 
 const PlayerCard = (props) => {
     const [players, setPlayers] = useState([]);
+    const [isEquiped, setisEquiped] = useState(false);
     const [playerIndex, setPlayerIndex] = useState(0);
     const [playerData, setPlayerData] = useState({
         id: '...',
@@ -41,12 +43,17 @@ const PlayerCard = (props) => {
         3: 'Arena'
     }
 
-    const getPlayers = useCallback(async() => {
+    const getPlayers = async() => {
         const tmp = await props.contract.getPlayers(props.account);
         setPlayers(tmp.map(val => val.toNumber()));
         props.setCurrentPlayer(players[playerIndex]);
+        let hasSword = await props.contract.players(props.currentPlayer);
+        console.log(hasSword.item)
+        if (hasSword) {
+            setisEquiped(true);
+        }
         getPlayerData()
-    });
+    };
 
 
     const nextPlayer = async() => {
@@ -79,13 +86,19 @@ const PlayerCard = (props) => {
 
     useEffect(() => {
         getPlayers();
-    },[getPlayers]);
+    },[props]);
 
     return (
         <div className="card-container">
             <h6>Hero #{playerData.id}</h6>
-            <img className="player-image" src={playerData.image} alt="" />
-
+            <div>
+                <img className="player-image" src={playerData.image} alt="" />
+                {isEquiped &&
+                    <div className="sword">
+                        <img src={sword} alt="this is sword"/>
+                    </div>
+                }
+            </div>
             <div>
                 <Button variant="contained" className="button-equip" size="sm" color="success" onClick={handleOpenEquip} sx={{ marginBottom: "0.5rem" }}>EQUIP</Button>
                 <Modal
@@ -103,7 +116,7 @@ const PlayerCard = (props) => {
                             display="flex"
                             justifyContent="center"
                         >
-                            <Equip />
+                            <Equip contract={props.contract} currentPlayer={props.currentPlayer}/>
                         </Box>
                     </Box>
                 </Modal>

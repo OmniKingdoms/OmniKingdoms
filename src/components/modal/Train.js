@@ -6,6 +6,8 @@ import preview from '../../images/nft-preview.gif'
 const Train = (props) => {
     
     const [status, setStatus] = useState('');
+    const [disableBeginTrain, setDisableBeginTraining] = useState(false);
+    const [disableEndTraining, setDisableEndTraining] = useState(true);
     const [isTraining, setIsTraining] = useState(false);
     const [playerData, setPlayerData] = useState({
         id: '...',
@@ -16,8 +18,6 @@ const Train = (props) => {
     })
 
     const getPlayerData = async() => {
-
-        //const tmp = props.contract
 
         if (props.currentPlayer) {
             const response = await props.contract.players(props.currentPlayer);
@@ -32,9 +32,17 @@ const Train = (props) => {
             };
             setPlayerData(player);
 
-            if (response.status == 2) {
-                
-            };
+            if (response.status == 0) {
+                setDisableBeginTraining(false)
+            } else if (response.status == 2) {
+                let endTime = await props.contract.trainings(props.currentPlayer);
+                let curTime = await props.contract.getBlocktime();
+                console.log('end time' + endTime)
+                console.log('cur time' + curTime)
+                if (curTime >= endTime) setDisableEndTraining(false);
+            } else {
+                setDisableBeginTraining(true)
+            }
         };
     }
 
@@ -54,8 +62,12 @@ const Train = (props) => {
 
     return (
         <div>
-            <Button onClick={startTraining} variant="contained" sx={{ m: "0.5rem" }}>Begin Training</Button>
-            <Button onClick={endTraining} variant="contained" color="success">Finish Training</Button>
+            <Button onClick={startTraining} variant="contained" sx={{ m: "0.5rem" }} disabled={disableBeginTrain}>Begin Training</Button>
+            <Button onClick={endTraining} variant="contained" color="success" disabled={disableEndTraining}>Finish Training</Button>
+            <div>
+                <br />
+                <h6>*Train for 2 minutes*</h6>
+            </div>
         </div>
     )
 
