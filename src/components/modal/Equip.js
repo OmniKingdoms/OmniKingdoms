@@ -17,13 +17,12 @@ const Equip = (props) => {
             
         } else {
             let hold = [];
-            const array = await props.contract.getSwords(props.account);
-            for (let i = 1; i <= array.length; i++) {
-                let tmp = await props.contract.swords(i);
+            const arr = await props.contract.getSwords(props.account);
+            for (let i = 0; i < arr.length; i++) {
+                let tmp = await props.contract.swords(arr[i]);
                 let s = tmp.available;
                 if (s == true) {
-                    console.log('hitting')
-                    hold.push(i);
+                    hold.push(arr[i]);
                 }
             }
             setSwords(hold);
