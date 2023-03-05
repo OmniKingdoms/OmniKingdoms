@@ -25,7 +25,7 @@ img {
     /* width: 80%; */
 }
 
-.button-train, .button-arena, .button-quest, .player-card-container {
+.button-train, .button-arena, .button-quest, .button-craft, .player-card-container {
     position: absolute;
 }
 .button-train {
@@ -43,6 +43,12 @@ img {
     left: 85%;
     transform: translate(-35%, -85%);
 }
+.button-craft {
+    top: 75%;
+    left: 65%;
+    transform: translate(-75%, -65%);
+}
+
 .player-card-container {
     border: solid;
     top: 7%;

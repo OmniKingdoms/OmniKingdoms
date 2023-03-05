@@ -15,6 +15,7 @@ const LeaderBoard = (props) => {
         let hold = []
 
         for(var i = 1; i <= playerCount; i++){
+            console.log(playerCount)
             const response = await props.contract.players(i);
             const uri = await props.contract.uri(i);
             let body = {

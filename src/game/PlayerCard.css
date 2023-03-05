@@ -34,6 +34,9 @@ ul{
     height: 25px;
 }
 
-.sword {
+.sword-img {
     position: absolute;
+    height: 60px;
+    top: 16%;
+    left: 58%
 }

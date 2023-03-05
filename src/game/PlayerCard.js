@@ -29,6 +29,7 @@ const PlayerCard = (props) => {
         hp: '...',
         status: 'NA',
         wins: '',
+        sword: '',
         image: preview
     })
     const [openEquip, setOpenEquip] = React.useState(false);
@@ -47,13 +48,19 @@ const PlayerCard = (props) => {
         const tmp = await props.contract.getPlayers(props.account);
         setPlayers(tmp.map(val => val.toNumber()));
         props.setCurrentPlayer(players[playerIndex]);
-        let hasSword = await props.contract.players(props.currentPlayer);
-        console.log(hasSword.item)
+        checkSword();
+        getPlayerData();
+    };
+
+    const checkSword = async() => {
+        let tmp = await props.contract.players(props.currentPlayer);
+        const hasSword = tmp.item;
         if (hasSword) {
             setisEquiped(true);
+        } else {
+            setisEquiped(false);
         }
-        getPlayerData()
-    };
+    }
 
 
     const nextPlayer = async() => {
@@ -71,13 +78,14 @@ const PlayerCard = (props) => {
         if (props.currentPlayer) {
             const response = await props.contract.players(props.currentPlayer);
             const uri = await props.contract.uri(props.currentPlayer);
-        
+            
             const player = {
                 id: props.currentPlayer,
                 attack: response.attack.toNumber(),
                 hp: response.hp.toNumber(),
                 status: response.status,
                 wins: response.wins.toNumber(),
+                sword: response.item, 
                 image: uri
             };
             setPlayerData(player);
@@ -93,11 +101,6 @@ const PlayerCard = (props) => {
             <h6>Hero #{playerData.id}</h6>
             <div>
                 <img className="player-image" src={playerData.image} alt="" />
-                {isEquiped &&
-                    <div className="sword">
-                        <img src={sword} alt="this is sword"/>
-                    </div>
-                }
             </div>
             <div>
                 <Button variant="contained" className="button-equip" size="sm" color="success" onClick={handleOpenEquip} sx={{ marginBottom: "0.5rem" }}>EQUIP</Button>
@@ -142,6 +145,15 @@ const PlayerCard = (props) => {
             <div onClick={nextPlayer} className="selector">
                 <img className="right-arrow"  src={rightArrow} alt="" />
             </div>
+
+            {isEquiped &&
+                <div>
+                    <img src={sword} alt="sword" className="sword-img"/>
+                </div>   
+            }
+
+
+            
 
     
         </div>

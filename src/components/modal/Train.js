@@ -47,7 +47,8 @@ const Train = (props) => {
     }
 
     const startTraining = async() => {
-        await props.contract.startTraining(props.currentPlayer)
+        await props.contract.startTraining(props.currentPlayer);
+
     };
 
     const endTraining = async() => {

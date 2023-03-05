@@ -5,6 +5,7 @@ import PlayerCard from "./PlayerCard";
 import Train from "../components/modal/Train";
 import Quest from "../components/modal/Quest";
 import Arena from '../components/modal/Arena';
+import Craft from "../components/modal/Craft";
 import './action.css';
 import { Box, Typography, Modal } from '@mui/material';
 
@@ -116,6 +117,29 @@ const Action = ({contract, account}) => {
                                     justifyContent="center"
                                 >
                                     <Arena contract={contract} currentPlayer={currentPlayer}/>
+                                </Box>
+                            </Box>
+                        </Modal>
+                    </div>
+
+                    <div>
+                        <Button variant="primary" className="button-craft" size="sm" onClick={handleOpenArena}>CRAFT</Button>
+                        <Modal
+                            open={openArena}
+                            onClose={handleCloseArena}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box sx={modalStyle}>
+                                <Typography id="modal-modal-title" variant="h6" component="h2">
+                                    Craft a Sword
+                                </Typography>
+                                <Box 
+                                    id="modal-modal-description"
+                                    display="flex"
+                                    justifyContent="center"
+                                >
+                                    <Craft contract={contract} currentPlayer={currentPlayer}/>
                                 </Box>
                             </Box>
                         </Modal>
