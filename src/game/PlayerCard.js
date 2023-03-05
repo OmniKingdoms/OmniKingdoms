@@ -119,7 +119,7 @@ const PlayerCard = (props) => {
                             display="flex"
                             justifyContent="center"
                         >
-                            <Equip contract={props.contract} currentPlayer={props.currentPlayer}/>
+                            <Equip contract={props.contract} currentPlayer={props.currentPlayer} account={props.account}/>
                         </Box>
                     </Box>
                 </Modal>

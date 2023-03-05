@@ -28,12 +28,15 @@ const Action = ({contract, account}) => {
     const [openTrain, setOpenTrain] = React.useState(false);
     const [openQuest, setOpenQuest] = React.useState(false);
     const [openArena, setOpenArena] = React.useState(false);
+    const [openCraft, setOpenCraft] = React.useState(false);
     const handleOpenTrain = () => setOpenTrain(true);
     const handleCloseTrain = () => setOpenTrain(false);
     const handleOpenQuest = () => setOpenQuest(true);
     const handleCloseQuest = () => setOpenQuest(false);
     const handleOpenArena = () => setOpenArena(true);
     const handleCloseArena = () => setOpenArena(false);
+    const handleOpenCraft = () => setOpenCraft(true);
+    const handleCloseCraft = () => setOpenCraft(false);
 
 
     const getGold = async() => {
@@ -123,10 +126,10 @@ const Action = ({contract, account}) => {
                     </div>
 
                     <div>
-                        <Button variant="primary" className="button-craft" size="sm" onClick={handleOpenArena}>CRAFT</Button>
+                        <Button variant="primary" className="button-craft" size="sm" onClick={handleOpenCraft}>CRAFT</Button>
                         <Modal
-                            open={openArena}
-                            onClose={handleCloseArena}
+                            open={openCraft}
+                            onClose={handleCloseCraft}
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
@@ -139,7 +142,7 @@ const Action = ({contract, account}) => {
                                     display="flex"
                                     justifyContent="center"
                                 >
-                                    <Craft contract={contract} currentPlayer={currentPlayer}/>
+                                    <Craft contract={contract} currentPlayer={currentPlayer} account={account}/>
                                 </Box>
                             </Box>
                         </Modal>

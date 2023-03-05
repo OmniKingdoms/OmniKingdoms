@@ -7,25 +7,22 @@ const Equip = (props) => {
 
     const [avaliableSword, setAvailableSword] = useState(false);
     const [swords, setSwords] = useState([]);
-    const [playerData, setPlayerData] = useState({
-        id: '...',
-        attack: '...',
-        hp: '...',
-        status: 'NA',
-        image: preview
-    })
 
     const getPlayerData = async() => {
 
-        let hasSword = await props.contract.players(props.currentPlayer).item;
+        let response = await props.contract.players(props.currentPlayer);
+        let hasSword = response.item;
+
         if (hasSword) {
             
         } else {
             let hold = [];
-            const array = await props.contract.addressToSwords();
-            for (let i = 0; i < array.length; i++) {
+            const array = await props.contract.getSwords(props.account);
+            for (let i = 1; i <= array.length; i++) {
                 let tmp = await props.contract.swords(i);
-                if (tmp.avaliable) {
+                let s = tmp.available;
+                if (s == true) {
+                    console.log('hitting')
                     hold.push(i);
                 }
             }
