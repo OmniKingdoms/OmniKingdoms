@@ -14,7 +14,7 @@ const Craft = (props) => {
     }
 
     const craftSword = async() => {
-        
+        await props.contract.craftSword(props.currentPlayer)
     };
 
     useEffect(() => {
@@ -28,6 +28,8 @@ const Craft = (props) => {
             <ul>
                 <Button variant="contained" color="success"  sx={{ m: "0.5rem" }} onClick={craftSword} disabled={!canCraft}>Craft Sword</Button>
                 <Button variant="contained" color="success"  sx={{ m: "0.5rem" }} onClick={craftSword} disabled={true}>Craft Shield</Button>
+                <br />
+                <h6>3 gold per sword - shield coming soon</h6>
             </ul>
 
         </React.Fragment>
