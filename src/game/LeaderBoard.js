@@ -9,30 +9,63 @@ const LeaderBoard = (props) => {
     const [loading, setLoading] = useState(false);
 
     const getPlayers = async() => {
-        setLoading(true);
-        const tmp = await props.contract.playerCount();
-        const playerCount = tmp.toNumber();
-        let hold = []
+        // const tmp = await props.contract.playerCount();
+        // const playerCount = tmp.toNumber();
+        // console.log(playerCount);
 
-        for(var i = 1; i <= playerCount; i++){
-            const response = await props.contract.players(i);
-            const uri = await props.contract.uri(i);
-            let body = {
-                id: i,
-                attack: response.attack.toNumber(),
-                hp: response.hp.toNumber(),
-                status: response.status,
-                wins: response.wins.toNumber(),
-                image: uri
+        // let uni = [];
+        // for (var i = 1; i < playerCount; i++) {
+        //     console.log(i)
+        //     let ad = await props.contract.owner(i);
+        //     if (!uni.includes(ad)) {
+        //         uni.push(ad)
+        //     }
+        //     console.log('uniqu players ', uni.length);
+        // }
+
+        const date = new Date();
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        let currentDate = `${month}-${day}-${year}`;
+        const storedDate = JSON.parse(localStorage.getItem('date'));
+        if (storedDate.date !== currentDate || storedDate.reset == false) {
+            setLoading(true);
+            const tmp = await props.contract.playerCount();
+            const playerCount = tmp.toNumber();
+            let hold = []
+            console.log(playerCount);
+            for(var i = 1; i < playerCount; i++){
+                console.log(i)
+                const response = await props.contract.players(i);
+                const uri = await props.contract.uri(i);
+                let body = {
+                    id: i,
+                    attack: response.attack.toNumber(),
+                    hp: response.hp.toNumber(),
+                    status: response.status,
+                    wins: response.wins.toNumber(),
+                    image: uri
+                };
+                hold.push(body);
             };
-            hold.push(body);
-        };
-        let sorted = hold.sort(
-            (a,b) => (b.wins - a.wins)
-        );
-
-        setPlayers(sorted);
-        setLoading(false);
+            let sorted = hold.sort(
+                (a,b) => (b.wins - a.wins)
+            );
+            localStorage.setItem('playerArray', JSON.stringify({
+                cache: sorted
+            }))
+    
+            setPlayers(sorted);
+            setLoading(false);
+            localStorage.setItem('date', JSON.stringify({
+                date: currentDate,
+                reset: true
+            }))
+        } else {
+            const storedPlayers = JSON.parse(localStorage.getItem('playerArray'));
+            setPlayers(storedPlayers.cache);
+        }
     }
 
     useEffect(() => {

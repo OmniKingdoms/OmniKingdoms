@@ -44,6 +44,14 @@ const Arena = (props) => {
     };
 
     const challengeArena = async() => {
+        let winner;
+        let response = await props.contract.arena();
+        console.log(response.hostId.toNumber())
+        const host = {
+            id: response.hostId
+            
+        }
+
         await props.contract.fightArena(props.currentPlayer)
     };
 

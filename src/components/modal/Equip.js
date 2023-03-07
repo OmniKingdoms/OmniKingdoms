@@ -10,6 +10,10 @@ const Equip = (props) => {
 
     const getPlayerData = async() => {
 
+        
+
+
+
         let response = await props.contract.players(props.currentPlayer);
         let hasSword = response.item;
 

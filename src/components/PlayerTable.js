@@ -205,7 +205,7 @@ export default function EnhancedTable(props) {
             id="tableTitle"
             component="div"
           >
-            Leaderboard 👑
+            Leaderboard 👑 (updates once per day)
           </Typography>
         )}
   
