@@ -22,7 +22,6 @@ const LeaderBoard = (props) => {
         //     }
         //     console.log('uniqu players ', uni.length);
         // }
-
         const date = new Date();
         let day = date.getDate();
         let month = date.getMonth() + 1;
