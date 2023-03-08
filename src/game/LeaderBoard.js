@@ -9,9 +9,9 @@ const LeaderBoard = (props) => {
     const [loading, setLoading] = useState(false);
 
     const getPlayers = async() => {
-        // const tmp = await props.contract.playerCount();
-        // const playerCount = tmp.toNumber();
-        // console.log(playerCount);
+        const tmp = await props.contract.playerCount();
+        const playerCount = tmp.toNumber();
+        console.log(playerCount);
 
         // let uni = [];
         // for (var i = 1; i < playerCount; i++) {
@@ -28,7 +28,8 @@ const LeaderBoard = (props) => {
         let year = date.getFullYear();
         let currentDate = `${month}-${day}-${year}`;
         const storedDate = JSON.parse(localStorage.getItem('date'));
-        if (storedDate.date !== currentDate || storedDate.reset == false) {
+        if ( storedDate.reset == false) {
+        //if (storedDate.date !== currentDate || storedDate.reset == false) {
             setLoading(true);
             const tmp = await props.contract.playerCount();
             const playerCount = tmp.toNumber();
