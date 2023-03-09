@@ -22,7 +22,7 @@ const modalStyle = {
   textAlign: "center",
 };
 
-const Action = ({contract, account}) => {
+const Action = ({contract, account, extension}) => {
     const [currentPlayer, setCurrentPlayer] = useState(null);
     const [gold, setGold] = useState();
     const [openTrain, setOpenTrain] = React.useState(false);
@@ -119,7 +119,7 @@ const Action = ({contract, account}) => {
                                     display="flex"
                                     justifyContent="center"
                                 >
-                                    <Arena contract={contract} currentPlayer={currentPlayer}/>
+                                    <Arena contract={contract} currentPlayer={currentPlayer} extension={extension} />
                                 </Box>
                             </Box>
                         </Modal>

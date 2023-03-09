@@ -8,6 +8,7 @@ const Train = (props) => {
     const [status, setStatus] = useState('');
     const [disableBeginTrain, setDisableBeginTraining] = useState(false);
     const [disableEndTraining, setDisableEndTraining] = useState(true);
+    const [remaingtime, setRemainingTime] = useState(null);
     const [isTraining, setIsTraining] = useState(false);
     const [playerData, setPlayerData] = useState({
         id: '...',
@@ -32,23 +33,25 @@ const Train = (props) => {
             };
             setPlayerData(player);
 
-            if (response.status == 0) {
-                setDisableBeginTraining(false)
-            } else if (response.status == 2) {
-                let endTime = await props.contract.trainings(props.currentPlayer);
-                let curTime = await props.contract.getBlocktime();
-                console.log('end time' + endTime)
-                console.log('cur time' + curTime)
-                if (curTime >= endTime) setDisableEndTraining(false);
-            } else {
+            if (response.status !== 0) setDisableBeginTraining(true);
+            if (response.status == 2) {
                 setDisableBeginTraining(true)
+                let startTime = await props.contract.trainings(props.currentPlayer);
+                let curTime = await props.contract.getBlocktime();
+                console.log('start time - ' + startTime);
+                console.log('cur time - ' + curTime);
+                console.log('difference - ', curTime - startTime);
+                if (curTime - startTime >= 120) {
+                    setDisableEndTraining(false)
+                } else {
+                    setRemainingTime(120 - (curTime-startTime));
+                }
             }
         };
     }
 
     const startTraining = async() => {
         await props.contract.startTraining(props.currentPlayer);
-
     };
 
     const endTraining = async() => {
@@ -67,7 +70,11 @@ const Train = (props) => {
             <Button onClick={endTraining} variant="contained" color="success" disabled={disableEndTraining}>Finish Training</Button>
             <div>
                 <br />
-                <h6>*Train for 2 minutes*</h6>
+                {remaingtime &&
+                    <div>
+                        <h6>{remaingtime} Seconds Left</h6>
+                    </div>
+                }
             </div>
         </div>
     )

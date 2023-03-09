@@ -49,10 +49,10 @@ const Arena = (props) => {
         console.log(response.hostId.toNumber())
         const host = {
             id: response.hostId
-            
+
         }
 
-        await props.contract.fightArena(props.currentPlayer)
+        await props.extension.fightArena(props.currentPlayer)
     };
 
     useEffect(() => {
