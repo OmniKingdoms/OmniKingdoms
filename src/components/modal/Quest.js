@@ -5,6 +5,10 @@ import preview from '../../images/nft-preview.gif';
 const Quest = (props) => {
 
     const [status, setStatus] = useState('');
+    const [disableBeginQuest, setDisableBeginQuesting] = useState(false);
+    const [disableEndQuest, setDisableEndQuesting] = useState(true);
+
+
     const [playerData, setPlayerData] = useState({
         id: '...',
         attack: '...',
@@ -26,6 +30,13 @@ const Quest = (props) => {
                 image: uri
             };
             setPlayerData(player);
+
+            if (player.status !== 0) {
+                setDisableBeginQuesting(true);
+            }
+            if (player.status == 1) {
+                setDisableEndQuesting(false);
+            }
         }
     }
 
@@ -43,8 +54,8 @@ const Quest = (props) => {
 
     return (
         <div>
-            <Button onClick={startQuesting} variant="contained" sx={{ m: "0.5rem" }}>Begin Quest</Button>
-            <Button onClick={endQuesting} variant="contained" color="success">Finish Quest</Button>
+            <Button onClick={startQuesting} variant="contained" sx={{ m: "0.5rem" }} disabled={disableBeginQuest}>Begin Quest</Button>
+            <Button onClick={endQuesting} variant="contained" color="success" disabled={disableEndQuest}>Finish Quest</Button>
         </div>
     )
 
