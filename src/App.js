@@ -14,7 +14,7 @@ import Test from "./game/test";
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 import StickyFooter from './components/StickyFooter';
 import Contract from './contracts/data/scroll.json';
-import Extension from './contracts/data/diamond-test.json';
+import Extension from './contracts/data/diamond.json';
 
 import { ethers } from "ethers";
 import { Spinner } from 'react-bootstrap';
@@ -54,11 +54,11 @@ function App() {
 
   const loadContract = async (signer) => {
     
-    const gameContract = await new ethers.Contract(Contract.address, Contract.abi, signer)
-    //const gameContractextension = await new ethers.Contract(Extension.address, Extension.abi, signer)
+    const gameContract = await new ethers.Contract(Contract.address, Contract.abi, signer);
+    //const gameContract = await new ethers.Contract(Extension.address, Extension.abi, signer);
+    console.log('hitting in app')
 
     setContract(gameContract);
-    //setExtension(gameContractextension);
     setLoading(false);
   }
 

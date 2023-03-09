@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Box, CircularProgress } from '@mui/material';
 import './LeaderBoard.css';
 import EnhancedTable from "../components/PlayerTable";
+import cache from "./scores.json"
+
 
 const LeaderBoard = (props) => {
 
@@ -64,7 +66,8 @@ const LeaderBoard = (props) => {
             }))
         } else {
             const storedPlayers = JSON.parse(localStorage.getItem('playerArray'));
-            setPlayers(storedPlayers.cache);
+            console.log('weeeee')
+            setPlayers(cache.cache);
         }
     }
 
