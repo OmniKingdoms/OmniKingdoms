@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
+import logo_discord from '../images/logo_discord.png';
+import logo_twitter from '../images/logo_twitter.png';
 
 function Copyright() {
   return (
@@ -38,7 +40,10 @@ export default function StickyFooter() {
       >
         <Container maxWidth="sm">
           <Typography variant="body1" sx={{ marginTop: "0.5rem", marginBottom: "1rem" }} >
-            Built by <Link color="inherit" href="https://twitter.com/kyle_corsola" target="_blank" rel="noopener noreferrer">Kyle Corsola</Link> and <Link color="inherit" href="https://twitter.com/sov3333" target="_blank" rel="noopener noreferrer">SOV3</Link> at ETH Denver 2023
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <Link color="inherit" href="https://twitter.com/ScrollKingdoms" target="_blank" rel="noopener noreferrer" style={{ margin: "0 0.5rem" }}><img src={logo_twitter} alt="twitter" width="35px" /></Link>
+              <Link color="inherit" href="https://discord.gg/NX3qZuAFvG" target="_blank" rel="noopener noreferrer" style={{ margin: "0 0.5rem" }}><img src={logo_discord} alt="discord" width="35px" /></Link>
+            </div>
           </Typography>
           <Copyright />
         </Container>
