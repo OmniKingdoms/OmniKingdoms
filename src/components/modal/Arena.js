@@ -44,15 +44,8 @@ const Arena = (props) => {
     };
 
     const challengeArena = async() => {
-        let winner;
-        let response = await props.contract.arena();
-        console.log(response.hostId.toNumber())
-        const host = {
-            id: response.hostId
-
-        }
-
-        await props.extension.fightArena(props.currentPlayer)
+        console.log('you hit the challenge arena button')
+        await props.contract.fightArena(props.currentPlayer);
     };
 
     useEffect(() => {

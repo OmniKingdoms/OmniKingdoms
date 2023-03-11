@@ -11,11 +11,14 @@ const LeaderBoard = (props) => {
     const [loading, setLoading] = useState(false);
 
     const getPlayers = async() => {
+        console.log('hello from leaderboard')
+        // setPlayers(cache.cache);
+
         const tmp = await props.contract.playerCount();
         const playerCount = tmp.toNumber();
         console.log(playerCount);
 
-        // let uni = [];
+        let uni = [];
         // for (var i = 1; i < playerCount; i++) {
         //     console.log(i)
         //     let ad = await props.contract.owner(i);
@@ -38,7 +41,7 @@ const LeaderBoard = (props) => {
             let hold = []
             console.log(playerCount);
             for(var i = 1; i < playerCount; i++){
-                console.log(i)
+                console.log('saving to chache', i)
                 const response = await props.contract.players(i);
                 const uri = await props.contract.uri(i);
                 let body = {
@@ -65,9 +68,10 @@ const LeaderBoard = (props) => {
                 reset: true
             }))
         } else {
-            const storedPlayers = JSON.parse(localStorage.getItem('playerArray'));
-            console.log('weeeee')
+            //const storedPlayers = JSON.parse(localStorage.getItem('playerArray'));
+            //console.log(cache.cache)
             setPlayers(cache.cache);
+            console.log(players)
         }
     }
 
