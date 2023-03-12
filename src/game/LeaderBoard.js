@@ -35,6 +35,7 @@ const LeaderBoard = (props) => {
         const storedDate = JSON.parse(localStorage.getItem('date'));
         if ( storedDate.reset == false) {
         //if (storedDate.date !== currentDate || storedDate.reset == false) {
+            console.log('cache boutta hit')
             setLoading(true);
             const tmp = await props.contract.playerCount();
             const playerCount = tmp.toNumber();
