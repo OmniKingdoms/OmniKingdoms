@@ -33,6 +33,8 @@ const LeaderBoard = (props) => {
         let year = date.getFullYear();
         let currentDate = `${month}-${day}-${year}`;
         const storedDate = JSON.parse(localStorage.getItem('date'));
+        //const log = JSON.parse(localStorage.getItem('playerArray'));
+        //console.log(log.cache)
         if ( storedDate.reset == false) {
         //if (storedDate.date !== currentDate || storedDate.reset == false) {
             console.log('cache boutta hit')
