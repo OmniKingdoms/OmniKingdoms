@@ -6,10 +6,12 @@ import Link from '@mui/material/Link';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 const pages = [
-    { name: 'Play', slug: '/' }, 
-    { name: 'Leaderboard', slug: '/#/leaderboard' }, 
-    { name: 'Mint', slug: '/#/mint' }, 
-    { name: 'About', slug: 'https://scroll-kingdoms.gitbook.io/docs/', external: true }, 
+    // { name: 'Play', slug: '/' }, 
+    { name: 'Map', slug: '/#/map' }, 
+    { name: 'Profile', slug: '/#/profile' }, 
+    // { name: 'Mint', slug: '/#/mint' }, 
+    // { name: 'Leaderboard', slug: '/#/leaderboard' }, 
+    // { name: 'Twitter', slug: 'https://twitter.com/ScrollKingdoms', external: true }, 
 ];
 
 const ResponsiveAppBar = (props) => {
@@ -49,7 +51,7 @@ const ResponsiveAppBar = (props) => {
               textDecoration: 'none',
             }}
           >
-            Scroll Kingdoms
+            Scale RPG
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -115,7 +117,7 @@ const ResponsiveAppBar = (props) => {
               textDecoration: 'none',
             }}
           >
-            Scroll Kingdoms
+            Scale RPG
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page, i) => (

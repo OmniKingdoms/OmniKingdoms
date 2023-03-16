@@ -19,7 +19,7 @@ const Mint = ({contract}) => {
             <div className="mint-container">
                 <h1>Mint a Character</h1>
                 <div className="mint-image">
-                    <img src={preview} alt="preview" width="50%" />
+                    {/* <img src={preview} alt="preview" width="50%" /> */}
                 </div>
                 <div className="mint-button">
                     <Button 
@@ -30,7 +30,7 @@ const Mint = ({contract}) => {
                         Mint
                     </Button>
                 </div>
-                <img className="sword" src={sword} alt="" />
+                {/* <img className="sword" src={sword} alt="" /> */}
             </div>
         </React.Fragment>
     )
