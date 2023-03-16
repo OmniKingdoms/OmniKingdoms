@@ -11,7 +11,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary">
       {'Copyright © '}
-      📜 Scroll Kingdoms
+      Scale RPG
       {' '}
       {new Date().getFullYear()}
       {'.'}

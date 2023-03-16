@@ -20,6 +20,9 @@ import { ethers } from "ethers";
 import { Spinner } from 'react-bootstrap';
 
 import './App.css'
+// import Profile from "./game/Profile";
+
+import { Map, Profile } from './game';
 
 function App() {
 
@@ -80,6 +83,12 @@ function App() {
             <Routes>
               <Route path="/" element={
                 <Action contract={contract} account={account} />
+              } />
+              <Route path="/map" element={
+                <Map />
+              } />
+              <Route path="/profile" element={
+                <Profile />
               } />
               <Route path="/mint" element={
                 <Mint contract={contract}/>
