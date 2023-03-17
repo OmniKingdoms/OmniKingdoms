@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply font-poppins;
+  @apply antialiased;
+}
+
+html {
+}
+
+body {
+  @apply bg-[#f2f1ea];
+  @apply min-h-screen;
+}
