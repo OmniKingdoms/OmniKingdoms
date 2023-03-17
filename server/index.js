@@ -1,8 +1,10 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const PORT = process.env.PORT || 8080;
 const MONGODB_URL = process.env.MONGODB_URL || "mongodb://localhost:27017/starter";
@@ -25,8 +27,8 @@ app.post('/avatar', async (req, res) => {
 
     console.log(`POST route starting...`);
     // Get input from frontend
-    // console.log('input req', req.body);
-    // const input = req.body.promptPost;
+    console.log('input req', req.body);
+    const input = req.body.promptPost;
 
     // Send post request
     const response = await fetch(
@@ -39,8 +41,8 @@ app.post('/avatar', async (req, res) => {
             },
             method: 'POST',
             body: JSON.stringify({
-                inputs: `default character of beautiful goddess adventurer, magical powers, full body shot, high poly model, front facing symmetrical, facing forward for character in a game UI for fantasy web3 metaverse game, on colorful nature landscape background, unreal engine 5, intricate details, blender 3d model, cinematic lighting, golden ratio`, // for testing
-                // inputs: input,
+                // inputs: `default character of beautiful goddess adventurer, magical powers, full body shot, high poly model, front facing symmetrical, facing forward for character in a game UI for fantasy web3 metaverse game, on colorful nature landscape background, unreal engine 5, intricate details, blender 3d model, cinematic lighting, golden ratio`, // for testing
+                inputs: input,
             }),
         }
     )

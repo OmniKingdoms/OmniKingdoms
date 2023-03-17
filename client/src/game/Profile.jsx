@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback} from "react";
-import { Avatar } from "@mui/material";
+import AiAvatar from '../components/AiAvatar';
 import { Button, Box, Typography, Modal, Form } from '@mui/material';
 
 
@@ -40,6 +40,12 @@ const Profile = (props) => {
       <div>Inventory</div>
       <div>Equipment</div>
       <div>Mint</div>
+
+      <div>
+        <h3>Generate Image</h3>
+        <AiAvatar />
+      </div>
+
     </div>
   )
 }
