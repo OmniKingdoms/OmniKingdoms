@@ -14,6 +14,7 @@ import Test from "./game/test";
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 import StickyFooter from './components/StickyFooter';
 import Contract from './contracts/data/scroll.json';
+import Diamond from './contracts/data/diamond.json';
 import Extension from './contracts/data/diamond.json';
 
 import { ethers } from "ethers";
@@ -29,6 +30,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState(null);
   const [contract, setContract] = useState(null);
+  const [diamond, setDiamond] = useState(null);
   const [extension, setExtension] = useState(null);
 
   const web3Handler = async () => {
@@ -58,10 +60,11 @@ function App() {
   const loadContract = async (signer) => {
     
     const gameContract = await new ethers.Contract(Contract.address, Contract.abi, signer);
-    //const gameContract = await new ethers.Contract(Extension.address, Extension.abi, signer);
+    const diamond = await new ethers.Contract(Diamond.address, Diamond.abi, signer)
     console.log('hitting in app')
 
     setContract(gameContract);
+    setDiamond(diamond);
     setLoading(false);
   }
 
@@ -85,10 +88,10 @@ function App() {
                 <Action contract={contract} account={account} />
               } />
               <Route path="/map" element={
-                <Map />
+                <Map diamond={diamond}/>
               } />
               <Route path="/profile" element={
-                <Profile />
+                <Profile diamond={diamond}/>
               } />
               <Route path="/mint" element={
                 <Mint contract={contract}/>
