@@ -61,8 +61,6 @@ function App() {
     
     const gameContract = await new ethers.Contract(Contract.address, Contract.abi, signer);
     const diamond = await new ethers.Contract('0xD8002F95d1bc0C19aE3964cc057Fb39c9f4c5257', Diamond.abi, signer)
-    console.log('hitting in app')
-
     setContract(gameContract);
     setDiamond(diamond);
     setLoading(false);
@@ -88,10 +86,10 @@ function App() {
                 <Action contract={contract} account={account} />
               } />
               <Route path="/map" element={
-                <Map diamond={diamond}/>
+                <Map diamond={diamond} account={account}/>
               } />
               <Route path="/profile" element={
-                <Profile diamond={diamond}/>
+                <Profile diamond={diamond} account={account}/>
               } />
               <Route path="/mint" element={
                 <Mint contract={contract}/>

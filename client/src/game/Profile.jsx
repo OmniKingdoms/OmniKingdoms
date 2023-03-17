@@ -5,6 +5,16 @@ import { Button, Box, Typography, Modal, Form } from '@mui/material';
 
 const Profile = (props) => {
   const [name, setName] = useState('');
+  const [players, setPlayers] = useState(null);
+
+  const getPlayers = async() => {
+    console.log('hitting players')
+    const response = await props.diamond.getPlayers();
+    if (response.length) {
+      setPlayers(response.map(val => val.toNumber()));
+    }
+    console.log(players)
+  }
 
 
   const mint = async() => {
@@ -23,7 +33,7 @@ const Profile = (props) => {
   
 
   useEffect(() => {
-
+    getPlayers();
   },[props]);
 
   return (
@@ -31,6 +41,9 @@ const Profile = (props) => {
       <div>
         <input type="text" onInput={inputHandler} value={name}/>
         <Button onClick={mint}>Mint</Button>
+        {players && 
+          <p>{players.length}</p>
+        }
         <div>{name}</div>
       </div>
 
