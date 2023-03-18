@@ -6,15 +6,24 @@ import { Button, Box, Typography, Modal, Form } from '@mui/material';
 const Profile = (props) => {
   const [name, setName] = useState('');
   const [players, setPlayers] = useState(null);
+  const [currentPlayer, setCurerntPlayer] = useState(null);
 
   const getPlayers = async() => {
     console.log('hitting players')
     const response = await props.diamond.getPlayers();
     if (response.length) {
       setPlayers(response.map(val => val.toNumber()));
+      setCurerntPlayer(players[0]);
     }
-    console.log(players)
+    getPlayer(currentPlayer)
   }
+
+  const getPlayer = async(playerId) => {
+
+  }
+
+
+
 
 
   const mint = async() => {
@@ -31,7 +40,6 @@ const Profile = (props) => {
   }
 
   
-
   useEffect(() => {
     getPlayers();
   },[props]);

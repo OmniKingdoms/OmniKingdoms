@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 struct Player {
     uint256 level;
     uint256 xp;
+    uint256 status;
     uint256 strength;
     uint256 health;
     uint256 stamina;
@@ -19,19 +20,18 @@ struct Player {
 
 library PlayerStorageLib {
 
-    bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("player.test.storage.a");
+    bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("player.test.storage.b");
 
     struct PlayerStorage {
         uint256 totalSupply;
         uint256 playerCount;
         mapping(uint256 => address) owners;
         mapping(uint256 => Player) players;
-        mapping(uint256 => uint256) status;
         mapping(address => uint256) balances;
         mapping(address => mapping(address => uint256)) allowances;
         mapping(uint256 => string) URIs;
         mapping(string => bool) usedNames;
-        mapping(address => mapping(uint => bool)) addressToPlayers;
+        mapping(address => uint256[]) addressToPlayers;
     }
 
     function diamondStorage() internal pure returns (PlayerStorage storage ds) {
@@ -45,12 +45,12 @@ library PlayerStorageLib {
         PlayerStorage storage s = diamondStorage();
         require(!s.usedNames[_name], "name is taken");
         s.playerCount++;
-        s.players[s.playerCount] = Player(1,0,1,10,1,1,1,1,1,1,1, _name, _isMale);
-        s.status[s.playerCount] = 0;
+        s.players[s.playerCount] = Player(1,0,0,1,10,1,1,1,1,1,1,1, _name, _isMale);
         s.usedNames[_name] = true;
         s.URIs[s.playerCount] = _uri;
         s.owners[s.playerCount] = msg.sender;
-        s.addressToPlayers[msg.sender][s.playerCount] = true;
+        s.addressToPlayers[msg.sender].push(s.playerCount);
+        s.balances[msg.sender]++;
     }
 
     function _playerCount() internal view returns(uint256) {
@@ -92,7 +92,19 @@ library PlayerStorageLib {
         require(s.owners[_id] == msg.sender);
         require(_to != address(0), "_to cannot be zero address");    
         s.owners[_id] = _to;
+        for (uint256 i = 0; i < s.balances[msg.sender]; i++) {
+            if (s.addressToPlayers[msg.sender][i] == _id) {
+                delete s.addressToPlayers[msg.sender][i];
+                break;
+            }
+        }
+        s.balances[msg.sender]--;
+        s.balances[_to]++;
+    }
 
+    function _getPlayers() internal view returns (uint256[] memory) {
+        PlayerStorage storage s = diamondStorage();
+        return s.addressToPlayers[msg.sender];
     }
 
 
@@ -130,10 +142,9 @@ contract PlayerNft {
         owner = PlayerStorageLib._ownerOf(_id);
     }
 
-
-
-
-
+    function getPlayers() external view returns (uint256[] memory) {
+        return PlayerStorageLib._getPlayers();
+    }
 
 
     function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
