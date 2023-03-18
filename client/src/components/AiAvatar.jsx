@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const AiAvatar = () => {
+const AiAvatar = (props) => {
 
     const maxRetries = 20;
 
@@ -70,6 +70,7 @@ const AiAvatar = () => {
         setInput('');
 
         // Set image data into state property
+        console.log(data.image);
         setImg(data.image);
 
         setIsGenerating(false);
