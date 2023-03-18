@@ -1,7 +1,8 @@
+import Image from "next/image";
 import Maps from "./components/three/maps";
+import map from "../../public/images/game-map.jpeg";
+import Play from "./play/page";
 
 export default function Home() {
-  return (
-    <div className=" min-h-screen flex flex-col justify-center items-center"></div>
-  );
+  return <Play />;
 }

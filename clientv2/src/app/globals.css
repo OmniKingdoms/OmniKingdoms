@@ -14,3 +14,9 @@ body {
   @apply bg-[#f2f1ea];
   @apply min-h-screen;
 }
+
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}

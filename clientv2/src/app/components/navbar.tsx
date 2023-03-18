@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function Navbar() {
   return (
     <>
-      <div className="navbar font-bold">
+      <div className="navbar font-bold z-30">
         <div className="navbar-start">
           <div className="dropdown hover:bg-primary hover:text-white rounded-lg">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -29,7 +29,7 @@ export default function Navbar() {
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-primary text-white rounded-box w-52"
             >
               <li>
-                <Link href={"/"}>Play</Link>
+                <Link href={"/play"}>Play</Link>
               </li>
               <li>
                 <Link href={"/leaderboard"}>Leaderboard</Link>
@@ -71,7 +71,7 @@ export default function Navbar() {
         <div className="navbar-center hidden lg:flex ">
           <ul className="menu menu-horizontal px-1  ">
             <li className="hover:bg-primary rounded-lg hover:text-white">
-              <Link href={"/"}>Play</Link>
+              <Link href={"/play"}>Play</Link>
             </li>
 
             <li className="hover:bg-primary rounded-lg hover:text-white">
