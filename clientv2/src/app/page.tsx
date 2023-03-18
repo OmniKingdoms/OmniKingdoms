@@ -1,3 +1,7 @@
+import Maps from "./components/three/maps";
+
 export default function Home() {
-  return <h1 className="">oi</h1>;
+  return (
+    <div className=" min-h-screen flex flex-col justify-center items-center"></div>
+  );
 }
