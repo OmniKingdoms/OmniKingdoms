@@ -3,6 +3,8 @@ import Navbar from "./components/navbar";
 import WagmiProvider from "../context/wagmiProvider";
 import { Poppins } from "next/font/google";
 import Footer from "./components/footer";
+import { AnimatePresence } from "framer-motion";
+import AnimateProvider from "@/context/animateProvider";
 
 const poppins = Poppins({
   weight: "400",
@@ -25,9 +27,11 @@ export default function RootLayout({
     <html lang="en" className={`${poppins.variable}`}>
       <body>
         <WagmiProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <AnimateProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </AnimateProvider>
         </WagmiProvider>
       </body>
     </html>

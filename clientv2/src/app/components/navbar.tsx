@@ -35,7 +35,7 @@ export default function Navbar() {
                 <Link href={"/leaderboard"}>Leaderboard</Link>
               </li>
               <li tabIndex={0}>
-                <Link href={"/Profile"} className="justify-between ">
+                <Link href={"/profile"} className="justify-between ">
                   Profile
                   <svg
                     className="fill-current"
@@ -49,10 +49,10 @@ export default function Navbar() {
                 </Link>
                 <ul className="p-2 bg-primary ">
                   <li>
-                    <Link href={"/Profile/stats"}>Stats</Link>
+                    <Link href={"/profile/stats"}>Stats</Link>
                   </li>
                   <li>
-                    <Link href="/Profile/mint">Mint</Link>
+                    <Link href="/profile/mint">Mint</Link>
                   </li>
                 </ul>
               </li>
@@ -81,7 +81,7 @@ export default function Navbar() {
               tabIndex={0}
               className=" hover:bg-primary rounded-lg hover:text-white"
             >
-              <Link href={"/Profile"}>
+              <Link href={"/profile"}>
                 Profile
                 <svg
                   className="fill-current"
@@ -95,10 +95,10 @@ export default function Navbar() {
               </Link>
               <ul className="p-2 bg-primary text-white">
                 <li className="">
-                  <Link href={"/Profile/stats"}>Stats</Link>
+                  <Link href={"/profile/stats"}>Stats</Link>
                 </li>
                 <li>
-                  <Link href="/Profile/mint">Mint</Link>
+                  <Link href="/profile/mint">Mint</Link>
                 </li>
               </ul>
             </li>

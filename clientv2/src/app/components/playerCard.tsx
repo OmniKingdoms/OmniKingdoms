@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
 import preview from "../../../public/images/nft-preview.gif";
+import { motion } from "framer-motion";
 
 export default function PlayerCard() {
   return (
@@ -11,6 +15,12 @@ export default function PlayerCard() {
             {" "}
             Equip
           </button>
+          <Link href={"/profile"} className="z-20">
+            <button className="z-30 btn btn-ghost normal-case text-xl bg-primary bg-gradient-to-t from-neutral-800 hover:bg-secondary text-white">
+              {" "}
+              Profile
+            </button>
+          </Link>
         </div>
         <div className=" flex  items-center justify-between lg:gap-10 flex-row">
           <Image
