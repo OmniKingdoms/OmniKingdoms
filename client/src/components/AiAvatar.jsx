@@ -127,7 +127,7 @@ const AiAvatar = (props) => {
           type: 'image/jpeg'
         };
         let file = new File([data], "test.jpg", metadata);
-        uploadToIPFS(file)
+        //uploadToIPFS(file)
     }
 
     const mint = async() => {
