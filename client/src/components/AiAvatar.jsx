@@ -1,15 +1,58 @@
 import { useState, useEffect } from 'react';
+import { Button, Box, Typography, Modal, Form } from '@mui/material';
+import { create as ipfsHttpClient } from 'ipfs-http-client'
+import { Buffer } from 'buffer';
+
+const ipfsClient = require('ipfs-http-client');
+
+const projectId = '2ErURtKagCMdhuyXpeKH3HhuRhb';   // <---------- your Infura Project ID
+
+const projectSecret = '0270ba21357357b3a2ea8a02302cd117';  // <---------- your Infura Secret
+// (for security concerns, consider saving these values in .env files)
+
+const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
+
+const client = ipfsClient.create({
+    host: 'infura-ipfs.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+        authorization: auth,
+    },
+});
+
 
 const AiAvatar = (props) => {
 
     const maxRetries = 20;
 
     const [input, setInput] = useState('');
-    const [img, setImg] = useState(''); 
     const [isGenerating, setIsGenerating] = useState(false);
     const [finalPrompt, setFinalPrompt] = useState('');
     const [retry, setRetry] = useState(0);
     const [retryCount, setRetryCount] = useState(maxRetries);
+    const [name, setName] = useState('');
+    const [image, setImage] = useState(''); 
+
+
+    const uploadToIPFS = async (event) => {
+        // event.preventDefault()
+        // const file = event.target.files[0]
+        const file = event;
+        //console.log(file.src)
+        if (typeof file !== 'undefined') {
+            try {
+                console.log('hit the try, so there is a file')
+                const result = await client.add(file)
+                console.log(result)
+                setImage(`https://infura-ipfs.io/ipfs/${result.path}`);
+                //console.log(`https://infura-ipfs.io/ipfs/${result.path}`)
+            } catch (error){
+                console.log("ipfs image upload error: ", error)
+            }
+        }
+    }
+
 
     const sleep = (ms) => {
         return new Promise((resolve) => {
@@ -70,11 +113,35 @@ const AiAvatar = (props) => {
         setInput('');
 
         // Set image data into state property
-        console.log(data.image);
-        setImg(data.image);
-
+        props.setImg(data.image);
+        createFile(data.image)
+        
         setIsGenerating(false);
 
+    }
+
+    async function createFile(pic){
+        let response = await fetch(pic);
+        let data = await response.blob();
+        let metadata = {
+          type: 'image/jpeg'
+        };
+        let file = new File([data], "test.jpg", metadata);
+        uploadToIPFS(file)
+    }
+
+    const mint = async() => {
+        await props.diamond.mint(
+        name, 
+        image,
+        true
+        )
+      }
+    
+    const inputHandler = async (e) => {
+        e.preventDefault();
+        const val = e.target.value;
+        setName(val);
     }
 
     useEffect(() => {
@@ -129,10 +196,10 @@ const AiAvatar = (props) => {
             </div>
             <br />
             <div className="image-container">
-                {img && (
+                {props.img && (
                 <div className="output-content">
                     <img 
-                    src={img} 
+                    src={props.img} 
                     width="500"
                     height="500"
                     alt={input} 
@@ -141,6 +208,14 @@ const AiAvatar = (props) => {
                 </div>
                 )}
             </div>
+            <input type="text" onInput={inputHandler} value={name}/>
+            <Button onClick={mint}>Mint</Button>
+            {props.img &&
+                <div>{props.img}</div>
+            }
+            {name && 
+                <div>{name}</div>
+            }
         </div>
         </>
     );

@@ -6,29 +6,35 @@ import { Button, Box, Typography, Modal, Form } from '@mui/material';
 const Profile = (props) => {
   const [name, setName] = useState('');
   const [players, setPlayers] = useState(null);
+  const [currentPlayerId, setCurerntPlayerId] = useState(null);
   const [currentPlayer, setCurerntPlayer] = useState(null);
+  
+  const [img, setImg] = useState(''); 
+
 
   const getPlayers = async() => {
-    console.log('hitting players')
+    console.log('getting players')
     const response = await props.diamond.getPlayers();
     if (response.length) {
       setPlayers(response.map(val => val.toNumber()));
-      setCurerntPlayer(players[0]);
+      setCurerntPlayerId(4);
     }
-    getPlayer(currentPlayer)
+    getPlayer(currentPlayerId)
   }
 
   const getPlayer = async(playerId) => {
-
+    const response = await props.diamond.getPlayer(playerId);
+    const player = {
+      name: response.name,
+      uri: response.uri
+    }
+    setCurerntPlayer(player)
   }
-
-
-
 
 
   const mint = async() => {
     await props.diamond.mint(name, 
-    'https://bafybeihfvy2hmcnvpax6anx3tgx53qie4nj32eqtuehsu2g5c5hx3ukxc4.ipfs.nftstorage.link/240.png',
+    'img',
     true
     )
   }
@@ -39,18 +45,23 @@ const Profile = (props) => {
     setName(val);
   }
 
-  
+
   useEffect(() => {
+    console.log('hitting use effect')
     getPlayers();
-  },[props]);
+  },[props.diamond]);
 
   return (
     <div>
       <div>
         <input type="text" onInput={inputHandler} value={name}/>
         <Button onClick={mint}>Mint</Button>
-        {players && 
-          <p>{players.length}</p>
+        {currentPlayer && 
+          <div>
+            <p>{players.length}</p>
+            <p>{currentPlayer.name}</p>
+            <img src={currentPlayer.uri} alt="" />
+          </div>
         }
         <div>{name}</div>
       </div>
@@ -64,7 +75,7 @@ const Profile = (props) => {
 
       <div>
         <h3>Generate Image</h3>
-        <AiAvatar />
+        <AiAvatar img={img} setImg={setImg} diamond={props.diamond}/>
       </div>
 
     </div>
