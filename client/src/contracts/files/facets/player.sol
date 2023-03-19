@@ -14,13 +14,15 @@ struct Player {
     uint256 wisdom;
     uint256 haki;
     uint256 perception;
+    //uint256 defense;
     string name;
+    string uri;
     bool male;
 }
 
 library PlayerStorageLib {
 
-    bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("player.test.storage.b");
+    bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("player.test.storage.c");
 
     struct PlayerStorage {
         uint256 totalSupply;
@@ -29,7 +31,6 @@ library PlayerStorageLib {
         mapping(uint256 => Player) players;
         mapping(address => uint256) balances;
         mapping(address => mapping(address => uint256)) allowances;
-        mapping(uint256 => string) URIs;
         mapping(string => bool) usedNames;
         mapping(address => uint256[]) addressToPlayers;
     }
@@ -45,9 +46,8 @@ library PlayerStorageLib {
         PlayerStorage storage s = diamondStorage();
         require(!s.usedNames[_name], "name is taken");
         s.playerCount++;
-        s.players[s.playerCount] = Player(1,0,0,1,10,1,1,1,1,1,1,1, _name, _isMale);
+        s.players[s.playerCount] = Player(1,0,0,1,10,1,1,1,1,1,1,1, _name, _uri, _isMale);
         s.usedNames[_name] = true;
-        s.URIs[s.playerCount] = _uri;
         s.owners[s.playerCount] = msg.sender;
         s.addressToPlayers[msg.sender].push(s.playerCount);
         s.balances[msg.sender]++;

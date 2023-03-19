@@ -35,7 +35,8 @@ app.post('/avatar', async (req, res) => {
         `https://api-inference.huggingface.co/models/SOV3/avatar-fantasy-high-poly`, 
         {
             headers: {
-                Authorization: `Bearer ${process.env.HF_AUTH_KEY}`,
+                //Authorization: `Bearer ${process.env.HF_AUTH_KEY}`,
+                Authorization: `Bearer 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`,
                 'Content-Type': 'application/json',
                 'x-use-cache': 'false'
             },
