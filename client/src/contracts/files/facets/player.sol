@@ -14,7 +14,7 @@ struct Player {
     uint256 wisdom;
     uint256 haki;
     uint256 perception;
-    //uint256 defense;
+    uint256 defense;
     string name;
     string uri;
     bool male;
@@ -22,7 +22,7 @@ struct Player {
 
 library PlayerStorageLib {
 
-    bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("player.test.storage.c");
+    bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("player.test.storage.d");
 
     struct PlayerStorage {
         uint256 totalSupply;
@@ -46,7 +46,7 @@ library PlayerStorageLib {
         PlayerStorage storage s = diamondStorage();
         require(!s.usedNames[_name], "name is taken");
         s.playerCount++;
-        s.players[s.playerCount] = Player(1,0,0,1,10,1,1,1,1,1,1,1, _name, _uri, _isMale);
+        s.players[s.playerCount] = Player(1,0,0,1,10,1,1,1,1,1,1,1, 1,_name, _uri, _isMale);
         s.usedNames[_name] = true;
         s.owners[s.playerCount] = msg.sender;
         s.addressToPlayers[msg.sender].push(s.playerCount);
@@ -102,9 +102,9 @@ library PlayerStorageLib {
         s.balances[_to]++;
     }
 
-    function _getPlayers() internal view returns (uint256[] memory) {
+    function _getPlayers(address _address) internal view returns (uint256[] memory) {
         PlayerStorage storage s = diamondStorage();
-        return s.addressToPlayers[msg.sender];
+        return s.addressToPlayers[_address];
     }
 
 
@@ -142,13 +142,14 @@ contract PlayerNft {
         owner = PlayerStorageLib._ownerOf(_id);
     }
 
-    function getPlayers() external view returns (uint256[] memory) {
-        return PlayerStorageLib._getPlayers();
+    function getPlayers(address _address) external view returns (uint256[] memory) {
+        return PlayerStorageLib._getPlayers(_address);
     }
 
 
     function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 }
+
 
 
 

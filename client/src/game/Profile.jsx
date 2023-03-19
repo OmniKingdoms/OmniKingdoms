@@ -14,10 +14,10 @@ const Profile = (props) => {
 
   const getPlayers = async() => {
     console.log('getting players')
-    const response = await props.diamond.getPlayers();
+    const response = await props.diamond.getPlayers(props.account);
     if (response.length) {
       setPlayers(response.map(val => val.toNumber()));
-      setCurerntPlayerId(4);
+      setCurerntPlayerId(1);
     }
     getPlayer(currentPlayerId)
   }
