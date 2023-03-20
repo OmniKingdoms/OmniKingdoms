@@ -1,8 +1,16 @@
 "use client";
 import { Web3Button } from "@web3modal/react";
 import Link from "next/link";
+import { useAccount } from "wagmi";
+import Diamond from "../../contracts/data/diamond.json";
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
+import contractStore from "@/stores/contractStore";
 
 export default function Navbar() {
+  const { address, isConnected } = useAccount();
+  const store = contractStore();
+
   return (
     <>
       <div className="navbar font-bold z-30">
