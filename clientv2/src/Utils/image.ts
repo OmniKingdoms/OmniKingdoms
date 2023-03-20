@@ -67,7 +67,9 @@ export default async function createFile() {
     type: "image/jpeg",
   };
   let file = new File([data], "test.jpg", metadata);
-  uploadToIPFS(file);
+  const imgPath = await uploadToIPFS(file);
+  console.log(imgPath);
+  return imgPath;
 }
 async function uploadToIPFS(file: any) {
   if (typeof file !== "undefined") {
@@ -76,6 +78,7 @@ async function uploadToIPFS(file: any) {
       const result = await client.add(file);
       console.log(result);
       console.log(`https://infura-ipfs.io/ipfs/${result.path}`);
+      return `https://infura-ipfs.io/ipfs/${result.path}`;
     } catch (error) {
       console.log("ipfs image upload error: ", error);
     }

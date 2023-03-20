@@ -60,6 +60,11 @@ export default function play() {
       </div>
     );
   } else {
-    return <Web3Button label="Connect Wallet" avatar="hide" icon="hide" />;
+    return (
+      <div className="relative min-h-[85vh] min-w-full flex flex-col items-center justify-center">
+        <h2 className="font-bold m-4">Connect to play</h2>
+        <Web3Button label="Connect Wallet" avatar="hide" icon="hide" />
+      </div>
+    );
   }
 }

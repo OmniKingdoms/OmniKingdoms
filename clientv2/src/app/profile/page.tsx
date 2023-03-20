@@ -27,12 +27,15 @@ export default function Profile() {
   }
   console.log(players);
   if (players.length === 0) {
-    return <Mint />;
+    return (
+      <div className="relative min-h-[85vh] min-w-full flex flex-col items-center justify-center">
+        <Mint />
+      </div>
+    );
   }
 
   return (
     <>
-      {/* {isConnected ? <Card /> : <button>connect</button>} */}
       <Card />
     </>
   );
