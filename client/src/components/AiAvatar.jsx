@@ -46,7 +46,7 @@ const AiAvatar = (props) => {
                 const result = await client.add(file)
                 console.log(result)
                 setImage(`https://infura-ipfs.io/ipfs/${result.path}`);
-                //console.log(`https://infura-ipfs.io/ipfs/${result.path}`)
+                console.log(`https://infura-ipfs.io/ipfs/${result.path}`)
             } catch (error){
                 console.log("ipfs image upload error: ", error)
             }
@@ -127,7 +127,7 @@ const AiAvatar = (props) => {
           type: 'image/jpeg'
         };
         let file = new File([data], "test.jpg", metadata);
-        //uploadToIPFS(file)
+        uploadToIPFS(file)
     }
 
     const mint = async() => {

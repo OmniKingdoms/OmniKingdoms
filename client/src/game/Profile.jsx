@@ -17,7 +17,7 @@ const Profile = (props) => {
     const response = await props.diamond.getPlayers(props.account);
     if (response.length) {
       setPlayers(response.map(val => val.toNumber()));
-      setCurerntPlayerId(1);
+      setCurerntPlayerId(2);
     }
     getPlayer(currentPlayerId)
   }
