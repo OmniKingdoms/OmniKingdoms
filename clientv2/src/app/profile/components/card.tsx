@@ -4,45 +4,49 @@ import Stats from "./stats";
 import Equipament from "./equipament";
 import { useEffect, useState } from "react";
 import contractStore from "@/stores/contractStore";
+import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 
 import Image from "next/image";
+import Mint from "./mint";
 
 export default function Card() {
   const tabs = ["Stats", "Equipament", "Soon"];
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const store = contractStore();
-  const [player2, setPlayer2] = useState();
-  console.log(player2);
+  const [selectedPlayer, setSelectedPlayer] = useState();
+  const [index, setIndex] = useState(0);
 
+  const loadContract = async () => {
+    console.log(index);
+    console.log(store.players);
+    const contract = await store.diamond;
+    const response = await contract.getPlayer(store.players[index]);
+    console.log(response);
+    setSelectedPlayer(response);
+  };
   useEffect(() => {
-    const loadContract = async () => {
-      const response = await store.diamond.getPlayer(5);
-      setPlayer2(response);
-      console.log(player2);
-    };
     loadContract();
-  }, []);
+  }, [index]);
 
+  console.log(selectedPlayer);
   function renderSwitch(tab: string) {
     switch (tab) {
       case "Stats":
-        return <Stats player={player} />;
+        return <Stats player={selectedPlayer} />;
       case "Equipament":
         return <Equipament />;
       case "Soon":
         return <h1>{tab}</h1>;
       default:
-        return <Stats />;
+        return <Stats player={selectedPlayer} />;
     }
-  }
-  if (!player) {
-    <>loading</>;
   }
 
   return (
     <>
       {/* <AiImage /> */}
       <div className="relative min-h-[85vh] w-3/5 flex flex-col items-center  rounded-t-lg justify-center font-bold text-white mx-auto ">
+        <Mint />
         <nav className="flex items-start justify-between  w-full bg-primary  border-b-2 border-gray-700">
           <ul className="flex items-center  px-6 py-4 rounded-t-lg justify-between bg-primary  w-1/2">
             {tabs.map((item) => (
@@ -75,19 +79,45 @@ export default function Card() {
             transition={{ duration: 0.2 }}
             className=" h-full w-2/3  p-4 gap-4 "
           >
-            {/* <button onClick={() => (props.players = 4)}>changeee</button> */}
             {renderSwitch(selectedTab)}
           </motion.div>
-          <div className=" flex relative bg-red-400  w-1/2">
-            <Image src={player2?.uri} alt="avatar" fill className="absolute" />
-            <div className="absolute right-[42%] bottom-4  mx-auto grid h-fit w-fit  max-w-4xl animate-rotate place-items-center rounded-lg bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] from-yellow-600 via-yellow-300 to-yellow-500 p-[0.15rem] shadow-xl ring-1 before:absolute before:inset-0 before:z-0 before:h-full before:w-full before:animate-rotate before:bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] before:from-yellow-500 before:via-yellow-300 before:to-yellow-600 before:blur-2xl before:transition-all before:hover:scale-110 before:hover:blur-3xl sm:mx-auto">
+          <div className=" flex relative   w-1/2">
+            <Image
+              src={selectedPlayer?.uri}
+              alt="avatar"
+              fill
+              className="absolute"
+            />
+            <div className="absolute right-[52%] top-4  mx-auto grid h-fit w-fit  max-w-4xl animate-rotate place-items-center rounded-lg bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] from-yellow-600 via-yellow-300 to-yellow-500 p-[0.15rem] shadow-xl ring-1 before:absolute before:inset-0 before:z-0 before:h-full before:w-full before:animate-rotate before:bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] before:from-yellow-500 before:via-yellow-300 before:to-yellow-600 before:blur-2xl before:transition-all before:hover:scale-110 before:hover:blur-3xl sm:mx-auto">
               <div className="z-10 grid h-full w-full place-items-center rounded-lg bg-primary bg-gradient-to-t from-neutral-800 py-2 px-4 text-white">
-                Name : {player2?.name}
+                Name : {selectedPlayer?.name}
               </div>
             </div>
-            <div className="absolute right-[10%] bottom-4  mx-auto grid h-fit w-fit  max-w-4xl animate-rotate place-items-center rounded-lg bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] from-yellow-600 via-yellow-300 to-yellow-500 p-[0.15rem] shadow-xl ring-1 before:absolute before:inset-0 before:z-0 before:h-full before:w-full before:animate-rotate before:bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] before:from-yellow-500 before:via-yellow-300 before:to-yellow-600 before:blur-2xl before:transition-all before:hover:scale-110 before:hover:blur-3xl sm:mx-auto">
-              <div className="z-10 grid h-full w-full place-items-center rounded-lg bg-primary bg-gradient-to-t from-neutral-800 py-2 px-4 text-white"></div>
+            <div className="absolute right-[10%] top-4  mx-auto grid h-fit w-fit  max-w-4xl animate-rotate place-items-center rounded-lg bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] from-yellow-600 via-yellow-300 to-yellow-500 p-[0.15rem] shadow-xl ring-1 before:absolute before:inset-0 before:z-0 before:h-full before:w-full before:animate-rotate before:bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] before:from-yellow-500 before:via-yellow-300 before:to-yellow-600 before:blur-2xl before:transition-all before:hover:scale-110 before:hover:blur-3xl sm:mx-auto">
+              <div className="z-10 grid h-full w-full place-items-center rounded-lg bg-primary bg-gradient-to-t from-neutral-800 py-2 px-4 text-white">
+                {selectedPlayer?.male ? "Male" : "Female"}
+              </div>
             </div>
+
+            <button
+              disabled={index === 0}
+              onClick={() => setIndex(index - 1)}
+              className="absolute right-[72%] bottom-4  mx-auto grid h-fit w-fit  max-w-4xl animate-rotate place-items-center rounded-lg bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] from-yellow-600 via-yellow-300 to-yellow-500 p-[0.15rem] shadow-xl ring-1 before:absolute before:inset-0 before:z-0 before:h-full before:w-full before:animate-rotate before:bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] before:from-yellow-500 before:via-yellow-300 before:to-yellow-600 before:blur-2xl before:transition-all before:hover:scale-110 before:hover:blur-3xl sm:mx-auto"
+            >
+              <div className="z-10 grid h-full w-full place-items-center rounded-lg bg-primary bg-gradient-to-t from-neutral-800 py-2 px-4 text-white">
+                <HiArrowSmLeft />
+              </div>
+            </button>
+
+            <button
+              disabled={index === store.players.length - 1}
+              onClick={() => setIndex(index + 1)}
+              className="absolute right-[10%] bottom-4  mx-auto grid h-fit w-fit  max-w-4xl animate-rotate place-items-center rounded-lg bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] from-yellow-600 via-yellow-300 to-yellow-500 p-[0.15rem] shadow-xl ring-1 before:absolute before:inset-0 before:z-0 before:h-full before:w-full before:animate-rotate before:bg-[linear-gradient(var(--rotate),var(--tw-gradient-from)_33%,rgb(37_99_235)_66%,var(--tw-gradient-to))] before:from-yellow-500 before:via-yellow-300 before:to-yellow-600 before:blur-2xl before:transition-all before:hover:scale-110 before:hover:blur-3xl sm:mx-auto"
+            >
+              <div className="z-10 grid h-full w-full place-items-center rounded-lg bg-primary bg-gradient-to-t from-neutral-800 py-2 px-4 text-white">
+                <HiArrowSmRight />
+              </div>
+            </button>
           </div>
         </main>
       </div>

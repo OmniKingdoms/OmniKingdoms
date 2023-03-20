@@ -4,7 +4,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ["infura-ipfs.io"],
+    domains: ["infura-ipfs.io", "ipfs.io"],
   },
 };
 
