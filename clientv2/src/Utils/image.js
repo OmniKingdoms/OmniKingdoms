@@ -1,7 +1,7 @@
 import { bufferToBase64 } from "./util";
 import { create } from "ipfs-http-client";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const client = create({
   host: "infura-ipfs.io",
@@ -71,7 +71,7 @@ export default async function createFile() {
   console.log(imgPath);
   return imgPath;
 }
-async function uploadToIPFS(file: any) {
+async function uploadToIPFS(file) {
   if (typeof file !== "undefined") {
     try {
       console.log("hit the try, so there is a file");

@@ -4,7 +4,9 @@ import { useForm, SubmitHandler, set } from "react-hook-form";
 import contractStore from "@/stores/contractStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Suspense } from "react";
 
+import { useSearchParams } from "next/navigation";
 type Inputs = {
   name: string;
   gender: string;
@@ -16,21 +18,12 @@ type Player = {
   image?: string;
 };
 export default function AiImage() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    formState: { isSubmitting },
-    register,
-    handleSubmit,
-    reset,
-  } = useForm<Inputs>();
+  const { register, handleSubmit, reset } = useForm<Inputs>();
   const store = contractStore();
-
-  async function handleImg() {
-    const img = await createImg();
-    console.log(img);
-  }
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setIsLoading(true);
     reset();
@@ -45,40 +38,39 @@ export default function AiImage() {
     } else {
       player.gender = false;
     }
-    const response = await contract.mint(
-      player.name,
-      player.image,
-      player.gender
-    );
+    await contract.mint(player.name, player.image, player.gender);
     setIsLoading(false);
     router.push("/play");
   };
   return (
     <>
-      <form className="flex mb-4 gap-2" onSubmit={handleSubmit(onSubmit)}>
-        <input
-          className="input bg-primary"
-          placeholder="Player Name"
-          type="text"
-          {...register("name", { required: true })}
-        />
-        <select
-          className="input select-primary bg-primary"
-          {...register("gender", { required: true })}
-        >
-          <option>Male</option>
-          <option>Female</option>
-        </select>
-        <button disabled={isLoading} className="btn btn-primary text-white">
-          {" "}
-          Mint Player
-        </button>
-      </form>
-      {isLoading && (
-        <div>
-          <span className="relative inset-0 inline-flex h-6 w-6 animate-spin items-center justify-center rounded-full border-2 border-gray-300 after:absolute after:h-8 after:w-8 after:rounded-full after:border-2 after:border-y-indigo-500 after:border-x-transparent"></span>
-        </div>
-      )}
+      {" "}
+      <Suspense fallback={<p>loading</p>}>
+        <form className="flex mb-4 gap-2" onSubmit={handleSubmit(onSubmit)}>
+          <input
+            className="input bg-primary"
+            placeholder="Player Name"
+            type="text"
+            {...register("name", { required: true })}
+          />
+          <select
+            className="input select-primary bg-primary"
+            {...register("gender", { required: true })}
+          >
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+          <button disabled={isLoading} className="btn btn-primary text-white">
+            {" "}
+            Mint Player
+          </button>
+        </form>
+        {isLoading && (
+          <div>
+            <span className="relative inset-0 inline-flex h-6 w-6 animate-spin items-center justify-center rounded-full border-2 border-gray-300 after:absolute after:h-8 after:w-8 after:rounded-full after:border-2 after:border-y-indigo-500 after:border-x-transparent"></span>
+          </div>
+        )}
+      </Suspense>
     </>
   );
 }

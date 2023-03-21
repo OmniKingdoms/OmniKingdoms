@@ -1,16 +1,7 @@
 "use client";
 import { Web3Button } from "@web3modal/react";
 import Link from "next/link";
-import { useAccount } from "wagmi";
-import Diamond from "../../contracts/data/diamond.json";
-import { ethers } from "ethers";
-import { useEffect, useState } from "react";
-import contractStore from "@/stores/contractStore";
-
 export default function Navbar() {
-  const { address, isConnected } = useAccount();
-  const store = contractStore();
-
   return (
     <>
       <div className="navbar font-bold z-30">
@@ -37,7 +28,9 @@ export default function Navbar() {
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-primary text-white rounded-box w-52"
             >
               <li>
-                <Link href={"/play"}>Play</Link>
+                <Link passHref href={"/play"}>
+                  Play
+                </Link>
               </li>
               <li>
                 <Link href={"/leaderboard"}>Leaderboard</Link>
@@ -57,7 +50,9 @@ export default function Navbar() {
         <div className="navbar-center hidden lg:flex ">
           <ul className="menu menu-horizontal px-1  ">
             <li className="hover:bg-primary rounded-lg hover:text-white">
-              <Link href={"/play"}>Play</Link>
+              <Link passHref href={"/play"}>
+                Play
+              </Link>
             </li>
 
             <li className="hover:bg-primary rounded-lg hover:text-white">

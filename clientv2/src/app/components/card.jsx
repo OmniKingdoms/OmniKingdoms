@@ -16,20 +16,18 @@ export default function Card() {
   const [selectedPlayer, setSelectedPlayer] = useState();
   const [index, setIndex] = useState(0);
 
-  const loadContract = async () => {
-    console.log(index);
-    console.log(store.players);
-    const contract = await store.diamond;
-    const response = await contract.getPlayer(store.players[index]);
-    console.log(response);
-    setSelectedPlayer(response);
-  };
   useEffect(() => {
+    const loadContract = async () => {
+      const contract = await store.diamond;
+      const response = await contract.getPlayer(store.players[index]);
+      console.log(response);
+      setSelectedPlayer(response);
+    };
     loadContract();
   }, [index]);
 
   console.log(selectedPlayer);
-  function renderSwitch(tab: string) {
+  function renderSwitch(tab) {
     switch (tab) {
       case "Stats":
         return <Stats player={selectedPlayer} />;

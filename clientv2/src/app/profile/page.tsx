@@ -3,9 +3,13 @@ import { ethers } from "ethers";
 import contractStore from "@/stores/contractStore";
 import { useAccount } from "wagmi";
 import Diamond from "../../contracts/data/diamond.json";
-import Card from "./components/card";
+import Card from "../components/card";
 import { useEffect, useState } from "react";
-import Mint from "./components/mint";
+import Mint from "../components/mint";
+import dynamic from "next/dynamic";
+
+const Cardssr = dynamic(() => import("../components/card"), { ssr: false });
+const Mintssr = dynamic(() => import("../components/mint"), { ssr: false });
 
 export default function Profile() {
   const store = contractStore();
@@ -29,14 +33,14 @@ export default function Profile() {
   if (players.length === 0) {
     return (
       <div className="relative min-h-[85vh] min-w-full flex flex-col items-center justify-center">
-        <Mint />
+        <Mintssr />
       </div>
     );
   }
 
   return (
     <>
-      <Card />
+      <Cardssr />
     </>
   );
 }
