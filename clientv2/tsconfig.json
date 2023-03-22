@@ -14,15 +14,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/components/three/maps.jsx", "src/Utils/image.js", "src/app/components/card.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/utils/image.js", "src/components/card.jsx", "src/components/playerCard.jsx"],
   "exclude": ["node_modules"]
 }

@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      boxShadow: {
+        inn: "0 0 8px 8px white inset",
+      },
       backgroundImage: {
         "gradient-conic": "conic-gradient(var(--tw-gradient-stops))",
       },
@@ -35,8 +38,8 @@ module.exports = {
     themes: [
       {
         scroll: {
-          primary: "#1976d2",
-          secondary: "#3abff8",
+          primary: "#1B262D",
+          secondary: "#1B262D",
           accent: "#e5649c",
           neutral: "#1B262D",
           "base-100": "#FFFFFF",

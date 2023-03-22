@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply font-poppins;
+  @apply antialiased;
+}
+
+html {
+}
+
+body {
+  box-sizing: border-box;
+  @apply w-full;
+  @apply min-h-screen;
+  @apply mb-auto;
+  background: rgb(2, 22, 24);
+  background: radial-gradient(
+    circle,
+    rgba(2, 22, 24, 1) 31%,
+    rgba(1, 13, 13, 1) 63%,
+    rgba(1, 7, 10, 1) 83%
+  );
+}
+
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
