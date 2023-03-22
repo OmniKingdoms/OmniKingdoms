@@ -9,6 +9,8 @@ import Mint from "@/components/mint";
 import { HiLocationMarker } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { ethers } from "ethers";
+import Diamond from "@/contracts/data/diamond.json";
 
 export default function Play() {
   const store = contractStore();
@@ -16,7 +18,14 @@ export default function Play() {
   const [players, setPlayers] = useState([]);
 
   const loadContract = async () => {
-    const contract = await store.diamond;
+    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    // Get signer
+    const signer = provider.getSigner();
+    const contract = await new ethers.Contract(
+      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
+      Diamond.abi,
+      signer
+    );
     if (address) {
       const response = await contract.getPlayers(address);
       const players = await response.map((val: any) => val.toNumber());
@@ -55,6 +64,7 @@ export default function Play() {
         <Image
           src={minimap}
           alt="game map"
+          width={1200}
           className="rounded-3xl shadow-inner absolue"
         />
         <PlayerCard />

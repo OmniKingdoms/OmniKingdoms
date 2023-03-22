@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import contractStore from "@/store/contractStore";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import Diamond from "@/contracts/data/diamond.json";
+import { ethers } from "ethers";
 
 import { AiOutlineHeart } from "react-icons/ai";
 import { TbSword, TbBrandTailwind, TbClover } from "react-icons/tb";
@@ -22,7 +24,14 @@ export default function PlayerCard() {
 
   useEffect(() => {
     const loadContract = async () => {
-      const contract = await store.diamond;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // Get signer
+      const signer = provider.getSigner();
+      const contract = await new ethers.Contract(
+        process.env.NEXT_PUBLIC_DIAMOND_ADDRESS,
+        Diamond.abi,
+        signer
+      );
       const response = await contract.getPlayer(store.players[index]);
       console.log(response);
       setSelectedPlayer(await response);
