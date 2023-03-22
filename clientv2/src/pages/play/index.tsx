@@ -26,10 +26,12 @@ export default function Play() {
       Diamond.abi,
       signer
     );
+
     if (address) {
       const response = await contract.getPlayers(address);
       const players = await response.map((val: any) => val.toNumber());
       store.setPlayers(await players);
+      console.log(players);
       setPlayers(players);
     }
   };
@@ -48,9 +50,17 @@ export default function Play() {
 
   if (players.length === 0) {
     return (
-      <div className="relative min-h-screen min-w-full flex flex-col items-center justify-center ">
-        <Mint />
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="relative w-fit mb-auto min-h-fit flex flex-col sm:flex-row items-center justify-center mx-auto  h-[78vh]"
+      >
+        {" "}
+        <div>
+          <span className="inline-flex h-6 w-6 animate-spin rounded-full border-4 border-dotted border-purple-800"></span>
+        </div>
+      </motion.div>
     );
   }
   return (
@@ -61,13 +71,13 @@ export default function Play() {
         exit={{ opacity: 0 }}
         className="relative w-fit mb-auto min-h-fit flex flex-col sm:flex-row items-center justify-center mx-auto "
       >
+        <PlayerCard />
         <Image
           src={minimap}
           alt="game map"
           width={1200}
           className="rounded-3xl shadow-inner absolue"
         />
-        <PlayerCard />
         <Link href={"/craft"}>
           <span
             className=" absolute right-[28%] top-[40%] w-[6%] hover:cursor-pointer animate-bounce tooltip"
