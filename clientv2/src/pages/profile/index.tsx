@@ -1,11 +1,10 @@
-"use client";
 import { ethers } from "ethers";
-import contractStore from "@/stores/contractStore";
+import contractStore from "@/store/contractStore";
 import { useAccount } from "wagmi";
 import Diamond from "../../contracts/data/diamond.json";
-import Card from "./components/card";
+import Card from "@/components/card";
 import { useEffect, useState } from "react";
-import Mint from "./components/mint";
+import Mint from "@/components/mint";
 
 export default function Profile() {
   const store = contractStore();

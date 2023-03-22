@@ -1,9 +1,4 @@
-import play from "@/app/play/page";
-import contractStore from "@/stores/contractStore";
-
 export default function Stats({ player }: any) {
-  console.log(player, "stats");
-
   if (player) {
     const playerStats = [
       {

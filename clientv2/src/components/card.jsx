@@ -1,9 +1,8 @@
-"use client";
 import { motion } from "framer-motion";
 import Stats from "./stats";
-import Equipament from "./equipament";
+import Equipament from "./equipment";
 import { useEffect, useState } from "react";
-import contractStore from "@/stores/contractStore";
+import contractStore from "@/store/contractStore";
 import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 
 import Image from "next/image";
@@ -16,20 +15,18 @@ export default function Card() {
   const [selectedPlayer, setSelectedPlayer] = useState();
   const [index, setIndex] = useState(0);
 
-  const loadContract = async () => {
-    console.log(index);
-    console.log(store.players);
-    const contract = await store.diamond;
-    const response = await contract.getPlayer(store.players[index]);
-    console.log(response);
-    setSelectedPlayer(response);
-  };
   useEffect(() => {
+    const loadContract = async () => {
+      const contract = await store.diamond;
+      const response = await contract.getPlayer(store.players[index]);
+      console.log(response);
+      setSelectedPlayer(response);
+    };
     loadContract();
   }, [index]);
 
   console.log(selectedPlayer);
-  function renderSwitch(tab: string) {
+  function renderSwitch(tab) {
     switch (tab) {
       case "Stats":
         return <Stats player={selectedPlayer} />;

@@ -1,21 +1,11 @@
-"use client";
 import { Web3Button } from "@web3modal/react";
 import Link from "next/link";
-import { useAccount } from "wagmi";
-import Diamond from "../../contracts/data/diamond.json";
-import { ethers } from "ethers";
-import { useEffect, useState } from "react";
-import contractStore from "@/stores/contractStore";
-
 export default function Navbar() {
-  const { address, isConnected } = useAccount();
-  const store = contractStore();
-
   return (
     <>
-      <div className="navbar font-bold z-30">
+      <div className="navbar font-bold z-30 bg-black text-slate-50">
         <div className="navbar-start">
-          <div className="dropdown hover:bg-primary hover:text-white rounded-lg">
+          <div className="dropdown  hover:text-white  rounded-lg">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -34,10 +24,12 @@ export default function Navbar() {
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-primary text-white rounded-box w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow  rounded-box w-52   "
             >
               <li>
-                <Link href={"/play"}>Play</Link>
+                <Link passHref href={"/play"}>
+                  Play
+                </Link>
               </li>
               <li>
                 <Link href={"/leaderboard"}>Leaderboard</Link>
@@ -49,22 +41,24 @@ export default function Navbar() {
           </div>
           <Link
             href="/"
-            className="btn btn-ghost normal-case text-xl hover:bg-primary hover:text-white"
+            className="btn btn-ghost normal-case text-xl  hover:bg-gray-600 "
           >
             Scroll Kingdoms
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex ">
-          <ul className="menu menu-horizontal px-1  ">
-            <li className="hover:bg-primary rounded-lg hover:text-white">
-              <Link href={"/play"}>Play</Link>
+          <ul className="menu menu-horizontal px-1 gap-4  ">
+            <li className=" rounded-lg  hover:bg-gray-600 ">
+              <Link passHref href={"/play"}>
+                Play
+              </Link>
             </li>
 
-            <li className="hover:bg-primary rounded-lg hover:text-white">
+            <li className=" rounded-lg  hover:bg-gray-600 ">
               <Link href={"/leaderboard"}>Leaderboard</Link>
             </li>
 
-            <li className="hover:bg-primary rounded-lg hover:text-white">
+            <li className=" rounded-lg  hover:bg-gray-600 ">
               <Link href={"/about"}>About</Link>
             </li>
           </ul>
