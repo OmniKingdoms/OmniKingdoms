@@ -98,11 +98,7 @@ export default function Quest() {
         className="rounded-3xl shadow-inner  mix-blend-	"
       />
       <PlayerCard />
-      {hash && (
-        <motion.div initial={{ opacity: 1 }} animate={{ opacity: 0 }}>
-          <Toast hash={hash} />
-        </motion.div>
-      )}
+      {hash && <Toast hash={hash} />}
       <Link href={"/play"}>
         <span className=" absolute left-[10%] btn top-[5%] hover:cursor-pointer font-bold text-white rounded-lg bg-gray-600 py-1 px-2">
           Back
