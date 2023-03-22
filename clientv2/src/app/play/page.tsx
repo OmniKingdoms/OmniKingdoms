@@ -4,6 +4,7 @@ import map from "../../../public/images/game-map.jpeg";
 import PlayerCard from "../components/playerCard";
 import { useAccount } from "wagmi";
 import { Web3Button } from "@web3modal/react";
+import Mint from "../components/mint";
 
 export default function play() {
   const { address, isConnected } = useAccount();

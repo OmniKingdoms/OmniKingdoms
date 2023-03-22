@@ -1,15 +1,10 @@
-"use client";
 import { ethers } from "ethers";
-import contractStore from "@/stores/contractStore";
+import contractStore from "@/store/contractStore";
 import { useAccount } from "wagmi";
 import Diamond from "../../contracts/data/diamond.json";
-import Card from "../components/card";
+import Card from "@/components/card";
 import { useEffect, useState } from "react";
-import Mint from "../components/mint";
-import dynamic from "next/dynamic";
-
-const Cardssr = dynamic(() => import("../components/card"), { ssr: false });
-const Mintssr = dynamic(() => import("../components/mint"), { ssr: false });
+import Mint from "@/components/mint";
 
 export default function Profile() {
   const store = contractStore();
@@ -33,14 +28,14 @@ export default function Profile() {
   if (players.length === 0) {
     return (
       <div className="relative min-h-[85vh] min-w-full flex flex-col items-center justify-center">
-        <Mintssr />
+        <Mint />
       </div>
     );
   }
 
   return (
     <>
-      <Cardssr />
+      <Card />
     </>
   );
 }

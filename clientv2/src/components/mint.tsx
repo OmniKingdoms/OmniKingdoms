@@ -1,6 +1,6 @@
-import createImg from "@/Utils/image";
-import { useForm, SubmitHandler, set } from "react-hook-form";
-import contractStore from "@/stores/contractStore";
+import createImg from "@/utils/image";
+import { useForm, SubmitHandler } from "react-hook-form";
+import contractStore from "@/store/contractStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -14,7 +14,7 @@ type Player = {
   gender?: boolean;
   image?: string;
 };
-export default function AiImage() {
+export default function Mint() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,7 +54,10 @@ export default function AiImage() {
   };
   return (
     <>
-      <form className="flex mb-4 gap-2" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col mb-4 gap-2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <input
           className="input bg-primary"
           placeholder="Player Name"

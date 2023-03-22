@@ -1,5 +1,3 @@
-"use client";
-
 import {
   EthereumClient,
   w3mConnectors,
@@ -30,11 +28,12 @@ export default function WagmiProvider({
     <>
       <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>
       <Web3Modal
-        themeMode="light"
+        themeMode="dark"
         themeVariables={{
           "--w3m-font-family": "Roboto, sans-serif",
-          "--w3m-accent-color": "#1976d2",
-          "--w3m-background-color": "#1976d2",
+          "--w3m-accent-fill-color": "#261f35",
+          "--w3m-accent-color": "#E6E6FA",
+          "--w3m-background-color": "#0e051a",
           "--w3m-button-border-radius": "8px",
         }}
         projectId={projectId}
