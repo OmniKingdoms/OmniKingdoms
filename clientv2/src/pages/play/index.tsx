@@ -17,25 +17,27 @@ export default function Play() {
   const { address } = useAccount();
   const [players, setPlayers] = useState([]);
 
-  const loadContract = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    // Get signer
-    const signer = provider.getSigner();
-    const contract = await new ethers.Contract(
-      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-      Diamond.abi,
-      signer
-    );
-
-    if (address) {
-      const response = await contract.getPlayers(address);
-      const players = await response.map((val: any) => val.toNumber());
-      store.setPlayers(await players);
-      console.log(players);
-      setPlayers(players);
-    }
-  };
   useEffect(() => {
+    const loadContract = async () => {
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum as any
+      );
+      // Get signer
+      const signer = provider.getSigner();
+      const contract = await new ethers.Contract(
+        process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
+        Diamond.abi,
+        signer
+      );
+
+      if (address) {
+        const response = await contract.getPlayers(address);
+        const players = await response.map((val: any) => val.toNumber());
+        store.setPlayers(await players);
+        console.log(players);
+        setPlayers(players);
+      }
+    };
     loadContract();
   }, [address]);
 

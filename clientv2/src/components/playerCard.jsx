@@ -98,9 +98,9 @@ export default function PlayerCard() {
             </div>
             <div
               className=" flex justify-center items-center text-3xl text-purple-900 tooltip"
-              data-tip="stamina"
+              data-tip="magic"
             >
-              <SlEnergy />0{selectedPlayer?.stamina.toNumber()}
+              <SlEnergy />0{selectedPlayer?.magic.toNumber()}
             </div>
           </div>
           <div className=" my-auto ">
