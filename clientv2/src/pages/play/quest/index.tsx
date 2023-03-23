@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import questmap from "../../../public/images/quest2.png";
+import questmap from "../../../../public/images/quest2.png";
 import contractStore from "@/store/contractStore";
 import { useAccount } from "wagmi";
 import Diamond from "@/contracts/data/diamond.json";
@@ -18,18 +18,8 @@ export default function Quest() {
 
   useEffect(() => {
     async function getQuest() {
-      const provider = new ethers.providers.Web3Provider(
-        window.ethereum as any
-      );
-      // Get signer
-      const signer = provider.getSigner();
-      const contract = await new ethers.Contract(
-        process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-        Diamond.abi,
-        signer
-      );
-      const player = await contract.getPlayer(store.players[0]);
-      if (player.status.toNumber() === 0) {
+      console.log(store.status);
+      if (store.status === 0) {
         setQuest("start");
       } else {
         setQuest("end");
@@ -37,8 +27,9 @@ export default function Quest() {
     }
     getQuest();
   }, []);
-  console.log(quest);
   async function handleGold() {
+    console.log(store.status);
+
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
     const signer = provider.getSigner();
@@ -47,22 +38,17 @@ export default function Quest() {
       Diamond.abi,
       signer
     );
-    const player = await contract.getPlayer(store.players[0]);
-    if (player.status.toNumber() === 0) {
+    if (store.status === 0) {
       const quest = await contract.startQuestGold(store.players[0]);
-      console.log(quest.hash);
-      setQuest("start");
+      store.setStatus(2);
       setHash(quest.hash);
-      console.log(hash);
+      setQuest("end");
     } else {
       const quest = await contract.endQuestGold(store.players[0]);
-      console.log(quest.hash);
-
-      setQuest("end");
+      store.setStatus(0);
+      setQuest("start");
       setHash(quest.hash);
-      console.log(hash);
     }
-    console.log(quest);
   }
 
   if (store.players.length === 0) {

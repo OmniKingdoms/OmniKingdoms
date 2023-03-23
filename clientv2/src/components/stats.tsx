@@ -23,7 +23,7 @@ export default function Stats({ player }: any) {
       },
       {
         name: "stamina",
-        value: player.stamina.toNumber(),
+        value: player.magic.toNumber(),
       },
       {
         name: "mana",

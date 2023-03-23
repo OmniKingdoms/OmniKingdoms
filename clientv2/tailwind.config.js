@@ -40,7 +40,7 @@ module.exports = {
         scroll: {
           primary: "#1B262D",
           secondary: "#1B262D",
-          accent: "#e5649c",
+          accent: "#E6E6FA",
           neutral: "#1B262D",
           "base-100": "#FFFFFF",
           info: "#2679DF",
