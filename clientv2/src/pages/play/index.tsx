@@ -89,7 +89,7 @@ export default function Play() {
             <HiLocationMarker className="   w-full h-full  stroke-purple-800 stroke-1 fill-[#E6E6FA] mt-1 mx-auto" />
           </span>
         </Link>
-        <Link href={"/quest"}>
+        <Link href={"/play/quest"}>
           <span
             className=" absolute right-[53%] top-[10%]  w-[6%]  hover:cursor-pointer animate-bounce tooltip"
             data-tip="questing"
