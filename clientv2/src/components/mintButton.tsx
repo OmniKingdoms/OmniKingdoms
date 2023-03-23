@@ -4,7 +4,9 @@ import contractStore from "@/store/contractStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ethers } from "ethers";
+import { motion, Variants } from "framer-motion";
 import Diamond from "@/contracts/data/diamond.json";
+import Toast from "./toast";
 
 type Inputs = {
   name: string;
@@ -16,9 +18,19 @@ type Player = {
   gender?: boolean;
   image?: string;
 };
+
+const itemVariants: Variants = {
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 100, damping: 24 },
+  },
+  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+};
 export default function MintButton() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const {
     formState: { isSubmitting },
@@ -28,10 +40,6 @@ export default function MintButton() {
   } = useForm<Inputs>();
   const store = contractStore();
 
-  async function handleImg() {
-    const img = await createImg();
-    console.log(img);
-  }
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setIsLoading(true);
     reset();
@@ -43,7 +51,6 @@ export default function MintButton() {
       Diamond.abi,
       signer
     );
-    console.log(contract);
     const player: Player = {};
     player.image = await createImg();
     player.name = data.name;
@@ -63,33 +70,93 @@ export default function MintButton() {
   };
   return (
     <>
-      <form
-        className="flex flex-col mb-4 gap-2"
+      <motion.form
+        autoComplete="off"
+        className="flex flex-row mb-4 gap-6 absolute top-[10%] left-[82%]  fill-purple-800 "
+        initial={false}
+        animate={isOpen ? "open" : "closed"}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <input
-          className="input bg-primary select-primary text-white"
-          placeholder="Player Name"
-          type="text"
-          {...register("name", { required: true })}
-        />
-        <select
-          className="input select-primary text-white bg-primary"
-          {...register("gender", { required: true })}
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={() => setIsOpen(!isOpen)}
+          className=" flex justify-center items-center gap-2 btn-accent btn bg-[#9696ea] text-purple-800  w-fit border-0"
         >
-          <option>Male</option>
-          <option>Female</option>
-        </select>
-        <button disabled={isLoading} className="btn btn-primary text-white">
-          {" "}
-          Mint Player
-        </button>
-      </form>
-      {isLoading && (
-        <div>
-          <span className="relative inset-0 inline-flex h-6 w-6 animate-spin items-center justify-center rounded-full border-2 border-gray-300 after:absolute after:h-8 after:w-8 after:rounded-full after:border-2 after:border-y-indigo-500 after:border-x-transparent"></span>
-        </div>
-      )}
+          Mint
+          <motion.div
+            className=" max-w-fit"
+            variants={{
+              open: { rotate: 90 },
+              closed: { rotate: 270 },
+            }}
+            transition={{ duration: 0.2 }}
+            style={{ originY: 0.55 }}
+          >
+            <svg width="15" height="15" viewBox="0 0 20 20">
+              <path d="M0 7 L 20 7 L 10 16" />
+            </svg>
+          </motion.div>
+        </motion.button>
+
+        <motion.ul
+          className="flex items-center justify-center p-2 m-0 bg-accent rounded-lg"
+          variants={{
+            open: {
+              clipPath: "inset(0% 0% 0% 0% round 0px)",
+              transition: {
+                type: "spring",
+                bounce: 0,
+                duration: 0.7,
+                delayChildren: 0.3,
+                staggerChildren: 0.05,
+              },
+            },
+            closed: {
+              clipPath: "inset(10% 50% 90% 50% round 10px)",
+              transition: {
+                type: "spring",
+                bounce: 0,
+                duration: 0.3,
+              },
+            },
+          }}
+          style={{ pointerEvents: isOpen ? "auto" : "none" }}
+        >
+          <motion.li
+            className="block p-1 m-0 rounded-lg"
+            variants={itemVariants}
+          >
+            <input
+              className="input bg-accent select-accent placeholder:text-purple-800 text-purple-800 w-full focus:border-accent  border-b-2 border-0 border-[#c1c1ec] rounded-none"
+              placeholder="Name"
+              type="text"
+              {...register("name", { required: true })}
+            />
+            <select
+              className="input select-primary bg-accent text-purple-800  border-0"
+              {...register("gender", { required: true })}
+            >
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </motion.li>
+          <motion.li className=" " variants={itemVariants}>
+            <button
+              disabled={isLoading}
+              className="btn btn-accent text-purple-800 focus:border-success border-1 mb-2"
+            >
+              {" "}
+              {!isLoading ? (
+                "Mint Player"
+              ) : (
+                <div>
+                  <span className="relative inset-0 inline-flex h-6 w-6 animate-spin items-center justify-center rounded-full border-2 border-gray-300 after:absolute after:h-8 after:w-8 after:rounded-full after:border-2 after:border-y-indigo-500 after:border-x-transparent"></span>
+                </div>
+              )}
+            </button>
+          </motion.li>
+        </motion.ul>
+      </motion.form>
     </>
   );
 }

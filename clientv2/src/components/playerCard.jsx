@@ -43,7 +43,7 @@ export default function PlayerCard() {
   if (store.player.status) {
     return (
       <>
-        <div className="stats shadow absolute -left-32 -bottom-8 bg-[#E6E6FA] hover:bg-white py-2 pr-5 gap-6 scale-[0.40] sm:absolute sm:scale-75 sm:bottom-1 sm:-left-12 lg:left-1 lg:scale-100">
+        <div className="stats shadow absolute -left-32 -bottom-8 bg-[#E6E6FA] overflow-visible py-2 pr-5 gap-6 scale-[0.40] sm:absolute sm:scale-75 sm:bottom-1 sm:-left-12 lg:left-1 lg:scale-100">
           <div className="w-full flex items-center my-auto pl-1 gap-4">
             <div className="avatar p-4">
               <div className="w-16 rounded-full">
@@ -144,14 +144,9 @@ export default function PlayerCard() {
             </div>
           </div>
           <div className=" my-auto ">
+            <MintButton />
             <div
-              className=" flex justify-center items-center text-3xl text-amber-500 tooltip tooltip-bottom"
-              data-tip="gold"
-            >
-              <MintButton />
-            </div>
-            <div
-              className=" flex justify-center items-center text-3xl text-amber-500 tooltip tooltip-bottom"
+              className=" flex mt-12 justify-center items-center text-3xl text-amber-500 tooltip tooltip-bottom"
               data-tip="gold"
             >
               <RiCoinLine className="pr-2" />0{store.gold}
