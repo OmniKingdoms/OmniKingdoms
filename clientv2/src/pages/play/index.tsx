@@ -17,25 +17,27 @@ export default function Play() {
   const { address } = useAccount();
   const [players, setPlayers] = useState([]);
 
-  const loadContract = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    // Get signer
-    const signer = provider.getSigner();
-    const contract = await new ethers.Contract(
-      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-      Diamond.abi,
-      signer
-    );
-
-    if (address) {
-      const response = await contract.getPlayers(address);
-      const players = await response.map((val: any) => val.toNumber());
-      store.setPlayers(await players);
-      console.log(players);
-      setPlayers(players);
-    }
-  };
   useEffect(() => {
+    const loadContract = async () => {
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum as any
+      );
+      // Get signer
+      const signer = provider.getSigner();
+      const contract = await new ethers.Contract(
+        process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
+        Diamond.abi,
+        signer
+      );
+
+      if (address) {
+        const response = await contract.getPlayers(address);
+        const players = await response.map((val: any) => val.toNumber());
+        store.setPlayers(await players);
+        console.log(players);
+        setPlayers(players);
+      }
+    };
     loadContract();
   }, [address]);
 
@@ -54,12 +56,13 @@ export default function Play() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="relative w-fit mb-auto min-h-fit flex flex-col sm:flex-row items-center justify-center mx-auto  h-[78vh]"
+        className="relative w-fit mb-auto min-h-fit flex flex-col items-center justify-center mx-auto  h-[78vh]"
       >
         {" "}
-        <div>
+        {/* <div>
           <span className="inline-flex h-6 w-6 animate-spin rounded-full border-4 border-dotted border-purple-800"></span>
-        </div>
+        </div> */}
+        <Mint />
       </motion.div>
     );
   }

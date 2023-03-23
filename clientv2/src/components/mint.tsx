@@ -1,8 +1,10 @@
-import createImg from "@/utils/image";
+import createImg from "@/Utils/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import contractStore from "@/store/contractStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ethers } from "ethers";
+import Diamond from "@/contracts/data/diamond.json";
 
 type Inputs = {
   name: string;
@@ -33,7 +35,14 @@ export default function Mint() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setIsLoading(true);
     reset();
-    const contract = await store.diamond;
+    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    // Get signer
+    const signer = provider.getSigner();
+    const contract = await new ethers.Contract(
+      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
+      Diamond.abi,
+      signer
+    );
     console.log(contract);
     const player: Player = {};
     player.image = await createImg();
@@ -59,13 +68,13 @@ export default function Mint() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <input
-          className="input bg-primary"
+          className="input bg-primary select-primary text-white"
           placeholder="Player Name"
           type="text"
           {...register("name", { required: true })}
         />
         <select
-          className="input select-primary bg-primary"
+          className="input select-primary text-white bg-primary"
           {...register("gender", { required: true })}
         >
           <option>Male</option>

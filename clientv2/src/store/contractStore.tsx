@@ -16,7 +16,7 @@ export const contractStore = persist<TcontractStore>(
   (set, get) => ({
     players: [],
     player: {},
-    gold: 0,
+    gold: 1,
     setPlayers: (players) => set(() => ({ players: players })),
     setPlayer: (player) => set(() => ({ player: player })),
     setGold: (gold) => set(() => ({ gold: gold })),

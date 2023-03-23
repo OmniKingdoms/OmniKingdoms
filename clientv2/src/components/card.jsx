@@ -4,9 +4,11 @@ import Equipament from "./equipment";
 import { useEffect, useState } from "react";
 import contractStore from "@/store/contractStore";
 import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
+import Diamond from "@/contracts/data/diamond.json";
 
 import Image from "next/image";
 import Mint from "./mint";
+import { ethers } from "ethers";
 
 export default function Card() {
   const tabs = ["Stats", "Equipament", "Soon"];
@@ -17,7 +19,14 @@ export default function Card() {
 
   useEffect(() => {
     const loadContract = async () => {
-      const contract = await store.diamond;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // Get signer
+      const signer = provider.getSigner();
+      const contract = await new ethers.Contract(
+        process.env.NEXT_PUBLIC_DIAMOND_ADDRESS,
+        Diamond.abi,
+        signer
+      );
       const response = await contract.getPlayer(store.players[index]);
       console.log(response);
       setSelectedPlayer(response);

@@ -12,7 +12,14 @@ export default function Profile() {
   const [players, setPlayers] = useState([]);
 
   const loadContract = async () => {
-    const contract = await store.diamond;
+    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    // Get signer
+    const signer = provider.getSigner();
+    const contract = await new ethers.Contract(
+      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
+      Diamond.abi,
+      signer
+    );
     const response = await contract.getPlayers(address);
     console.log(response);
     const players = await response.map((val: any) => val.toNumber());
