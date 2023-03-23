@@ -1,4 +1,4 @@
-import { Web3Button } from "@web3modal/react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
 export default function Navbar() {
   return (
@@ -64,7 +64,11 @@ export default function Navbar() {
           </ul>
         </div>
         <div className="navbar-end mr-4">
-          <Web3Button label="Connect Wallet" avatar="hide" icon="hide" />
+          <ConnectButton
+            accountStatus="address"
+            chainStatus="icon"
+            showBalance={false}
+          />
         </div>
       </div>
     </>

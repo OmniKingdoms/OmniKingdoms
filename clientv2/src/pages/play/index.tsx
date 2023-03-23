@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ethers } from "ethers";
 import Diamond from "@/contracts/data/diamond.json";
-
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 export default function Play() {
   const store = contractStore();
   const { address } = useAccount();
@@ -45,7 +45,7 @@ export default function Play() {
     return (
       <div className="relative min-h-[85vh] min-w-full flex flex-col items-center justify-center">
         <h2 className="font-bold text-white m-4">Connect to play</h2>
-        <Web3Button label="Connect Wallet" avatar="hide" icon="hide" />
+        <ConnectButton />
       </div>
     );
   }
