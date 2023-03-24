@@ -14,6 +14,7 @@ import { SiGhost } from "react-icons/si";
 import { TfiEye } from "react-icons/tfi";
 import { RiCoinLine } from "react-icons/ri";
 import MintButton from "./mintButton";
+import Link from "next/link";
 export default function PlayerCard() {
   const { address, isConnected, isReconnecting } = useAccount();
   const store = contractStore();
@@ -30,8 +31,11 @@ export default function PlayerCard() {
         signer
       );
       const response = await contract.getPlayers(address);
+      console.log(response);
       const players = await response.map((val) => val.toNumber());
+      console.log(players);
       const player = await contract.getPlayer(players[index]);
+      console.log(player);
       store.setPlayer(await player);
       store.setStatus(await player.status.toNumber());
       console.log(store.status);
@@ -43,7 +47,7 @@ export default function PlayerCard() {
   if (store.player.status) {
     return (
       <>
-        <div className="stats shadow absolute -left-32 -bottom-8 bg-[#E6E6FA] overflow-visible py-2 pr-5 gap-6 scale-[0.40] sm:absolute sm:scale-75 sm:bottom-1 sm:-left-12 lg:left-1 lg:scale-100">
+        <div className="stats shadow absolute -left-32 -bottom-8 rounded-l-none rounded-br-none bg-[#E6E6FA] overflow-visible py-2 pr-5 gap-6 scale-[0.40] sm:absolute sm:scale-75 sm:bottom-1 sm:-left-12 lg:left-1 lg:scale-100">
           <div className="w-full flex items-center my-auto pl-1 gap-4">
             <div className="avatar p-4">
               <div className="w-16 rounded-full">
@@ -84,7 +88,7 @@ export default function PlayerCard() {
           </div>
           <div className=" my-auto">
             <div
-              className=" flex justify-center items-center text-3xl text-purple-900 tooltip tooltip-bottom"
+              className=" flex justify-center items-center text-3xl text-purple-900 tooltip tooltip"
               data-tip="strength"
             >
               <TbSword />0{store.player?.strength.toNumber()}
@@ -105,7 +109,7 @@ export default function PlayerCard() {
           </div>
           <div className=" my-auto ">
             <div
-              className=" flex justify-center items-center text-3xl text-purple-900 tooltip tooltip-bottom"
+              className=" flex justify-center items-center text-3xl text-purple-900 tooltip tooltip"
               data-tip="mana"
             >
               <GiPotionBall />0{store.player?.mana.toNumber()}
@@ -125,7 +129,7 @@ export default function PlayerCard() {
           </div>
           <div className=" my-auto ">
             <div
-              className=" flex justify-center items-center text-3xl text-purple-900 tooltip tooltip-bottom"
+              className=" flex justify-center items-center text-3xl text-purple-900 tooltip "
               data-tip="wisdom"
             >
               <GoLightBulb />0{store.player?.wisdom.toNumber()}
@@ -144,9 +148,16 @@ export default function PlayerCard() {
             </div>
           </div>
           <div className=" my-auto ">
-            <MintButton />
+            <Link href={"/mint"}>
+              <button
+                whileTap={{ scale: 0.97 }}
+                className=" items-center mb-2 btn-accent btn bg-[#9696ea] text-purple-800   border-0"
+              >
+                Mint
+              </button>
+            </Link>
             <div
-              className=" flex mt-12 justify-center items-center text-3xl text-amber-500 tooltip tooltip-bottom"
+              className=" flex  justify-center items-center text-3xl text-amber-500 tooltip tooltip-bottom"
               data-tip="gold"
             >
               <RiCoinLine className="pr-2" />0{store.gold}

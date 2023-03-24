@@ -45,7 +45,6 @@ export async function fetchImg() {
       return base64;
     } else if (response.status === 503) {
       const data = await response.json();
-      console.log(data.estimated_time);
       const retryAfter = data.estimated_time;
       const estimatedTime = parseInt(retryAfter);
       console.log(

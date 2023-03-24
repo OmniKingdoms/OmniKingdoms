@@ -73,6 +73,7 @@ export default function MintButton() {
       <motion.form
         autoComplete="off"
         className="flex flex-row mb-4 gap-6 absolute top-[10%] left-[82%]  fill-purple-800 "
+        data-tip="mint new player"
         initial={false}
         animate={isOpen ? "open" : "closed"}
         onSubmit={handleSubmit(onSubmit)}
@@ -99,7 +100,7 @@ export default function MintButton() {
         </motion.button>
 
         <motion.ul
-          className="flex items-center justify-center p-2 m-0 bg-accent rounded-lg"
+          className="flex items-center justify-center p-2 m-0 bg-accent rounded-xl"
           variants={{
             open: {
               clipPath: "inset(0% 0% 0% 0% round 0px)",
