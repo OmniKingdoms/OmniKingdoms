@@ -1,4 +1,4 @@
-import createImg from "@/Utils/image";
+import createImg, { uploadToIPFS } from "@/Utils/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import contractStore from "@/store/contractStore";
 import { useRouter } from "next/navigation";
@@ -45,7 +45,16 @@ export default function Mint() {
     );
     console.log(contract);
     const player: Player = {};
-    player.image = await createImg();
+    const res = await fetch("/api/getimage");
+    const json = await res.json();
+    console.log(json);
+    let imgblob = await fetch(json.img);
+    console.log(imgblob);
+    let imgn = await imgblob.blob();
+    console.log(imgn);
+    let file = new File([imgn], "test.jpg", json.metadata);
+    player.image = await uploadToIPFS(file);
+    console.log(player.image);
     player.name = data.name;
 
     if (data.gender === "Male") {
@@ -66,6 +75,7 @@ export default function Mint() {
       <form
         className="flex flex-col mb-4 gap-2"
         onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
       >
         <input
           className="input bg-primary select-primary text-white"

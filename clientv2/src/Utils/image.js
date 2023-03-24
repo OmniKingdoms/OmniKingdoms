@@ -45,6 +45,7 @@ export async function fetchImg() {
       return base64;
     } else if (response.status === 503) {
       const data = await response.json();
+      console.log(data.estimated_time);
       const retryAfter = data.estimated_time;
       const estimatedTime = parseInt(retryAfter);
       console.log(
@@ -70,7 +71,7 @@ export default async function createFile() {
   console.log(imgPath);
   return imgPath;
 }
-async function uploadToIPFS(file) {
+export async function uploadToIPFS(file) {
   if (typeof file !== "undefined") {
     try {
       console.log("hit the try, so there is a file");
