@@ -32,6 +32,11 @@ export default function Navbar() {
                 </Link>
               </li>
               <li>
+                <Link passHref href={"/mint"}>
+                  Mint
+                </Link>
+              </li>
+              <li>
                 <Link href={"/leaderboard"}>Leaderboard</Link>
               </li>
               <li>
@@ -51,6 +56,11 @@ export default function Navbar() {
             <li className=" rounded-lg  hover:bg-gray-600 ">
               <Link passHref href={"/play"}>
                 Play
+              </Link>
+            </li>
+            <li className=" rounded-lg  hover:bg-gray-600 ">
+              <Link passHref href={"/mint"}>
+                Mint
               </Link>
             </li>
 
