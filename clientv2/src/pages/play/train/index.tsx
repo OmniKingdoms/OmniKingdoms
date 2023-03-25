@@ -41,7 +41,7 @@ export default function Train() {
       signer
     );
     if (store.status === 0) {
-      const quest = await contract.startTrainingCombat(store.players[0]);
+      const quest = await contract.startTrainingCombat(store.selectedPlayer);
       console.log(quest);
 
       setHash(quest.hash);
@@ -51,7 +51,7 @@ export default function Train() {
         store.setStatus(1);
       }, 10000);
     } else {
-      const quest = await contract.endTrainingCombat(store.players[0]);
+      const quest = await contract.endTrainingCombat(store.selectedPlayer);
       await provider.getTransaction(quest.hash);
       setQuest("start");
       setHash(quest.hash);

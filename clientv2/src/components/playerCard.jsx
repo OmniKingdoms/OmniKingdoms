@@ -16,9 +16,9 @@ import { RiCoinLine } from "react-icons/ri";
 import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 
 import Link from "next/link";
+import InventoryModal from "./inventoryModal";
 export default function PlayerCard() {
   const { address } = useAccount();
-  const [selectedPlayer, setSelectedPlayer] = useState();
   const store = contractStore();
   const [index, setIndex] = useState(0);
 
@@ -37,6 +37,8 @@ export default function PlayerCard() {
       const players = await response.map((val) => val.toNumber());
       console.log(players);
       const player = await contract.getPlayer(players[index]);
+      store.setSelectedPlayer(players[index]);
+      console.log(store.selectedPlayer);
       store.setPlayer(await player);
       store.setStatus(await player.status.toNumber());
       const gold = await contract.getGoldBalance(address);
@@ -172,23 +174,23 @@ export default function PlayerCard() {
               <TfiEye />0{store.player?.perception.toNumber()}
             </div>
           </div>
+
           <div className=" my-auto ">
-            <Link href={"/mint"}>
-              <button
-                whileTap={{ scale: 0.97 }}
-                className=" items-center mb-2 btn-accent btn bg-[#9696ea] text-purple-800   border-0"
-              >
-                Mint
-              </button>
-            </Link>
             <div
-              className=" flex  justify-center items-center text-3xl text-amber-500 tooltip tooltip-bottom"
+              className=" flex  justify-center items-center text-3xl text-amber-500 tooltip "
               data-tip="gold"
             >
               <RiCoinLine className="pr-2" />0{store.gold}
             </div>
+            <label
+              htmlFor="my-modal"
+              className="btn mt-2 bg-[#9696ea] btn-accent"
+            >
+              inventory
+            </label>
           </div>
         </div>
+        <InventoryModal />
       </>
     );
   } else {

@@ -79,7 +79,7 @@ export default function Play() {
           src={minimap}
           alt="game map"
           width={1200}
-          className="rounded-3xl shadow-inner absolue"
+          className="rounded-3xl shadow-inner "
         />
         <Link href={"/play/craft"}>
           <span

@@ -12,6 +12,8 @@ type TcontractStore = {
   setGold: (gold: number) => void;
   status: number | null;
   setStatus: (status: number) => void;
+  selectedPlayer: number | null;
+  setSelectedPlayer: (selectedPlayer: number) => void;
 };
 
 export const contractStore = persist<TcontractStore>(
@@ -20,10 +22,13 @@ export const contractStore = persist<TcontractStore>(
     player: {},
     gold: 1,
     status: null,
+    selectedPlayer: null,
     setPlayers: (players) => set(() => ({ players: players })),
     setPlayer: (player) => set(() => ({ player: player })),
     setGold: (gold) => set(() => ({ gold: gold })),
     setStatus: (status) => set(() => ({ status: status })),
+    setSelectedPlayer: (selectedPlayer) =>
+      set(() => ({ selectedPlayer: selectedPlayer })),
   }),
   {
     name: "player",

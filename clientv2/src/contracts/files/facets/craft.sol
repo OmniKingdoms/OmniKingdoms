@@ -7,7 +7,7 @@ struct Player {
     uint256 status;
     uint256 strength;
     uint256 health;
-    uint256 stamina;
+    uint256 magic;
     uint256 mana;
     uint256 agility;
     uint256 luck;
@@ -18,30 +18,54 @@ struct Player {
     string name;
     string uri;
     bool male;
+    Slot slot;
 }
 
-struct Item {
-    uint256 slot;
-    uint256 rank;
-    string name;
-    address owner;
-    bool isEquiped;
+struct Slot {
+    uint256 head;
+    uint256 body;
+    uint256 leftHand;
+    uint256 rightHand;
+    uint256 pants;
+    uint256 feet;
 }
 
 // slots {
 //     0: head;
 //     1: body;
-//     2: hand;
-//     3: pants;
-//     4: feet;
+//     2: lefthand;
+//     3: rightHand;
+//     4: pants;
+//     5: feet;
 // }
+
+struct Item {
+    uint256 slot;
+    uint256 rank;
+    uint256 value;
+    uint256 stat;
+    string name;
+    address owner;
+    bool isEquiped;
+}
+
+// stat {
+//     0: strength;
+//     1: health;
+//     2: agility;
+//     3: magic;
+//     4: defense;
+//     5: luck;
+// }
+
+
 
 library StorageLib {
 
-    bytes32 constant PLAYER_STORAGE_POSITION = keccak256("player.test.storage.d");
-    bytes32 constant ITEM_STORAGE_POSITION = keccak256("Item.test.storage.d");
-    bytes32 constant POTION_STORAGE_POSITION = keccak256("Potion.test.storage.d");
-    bytes32 constant COIN_STORAGE_POSITION = keccak256("coin.test.storage.d");
+    bytes32 constant PLAYER_STORAGE_POSITION = keccak256("player.test.storage.a");
+    bytes32 constant ITEM_STORAGE_POSITION = keccak256("Item.test.storage.a");
+    bytes32 constant POTION_STORAGE_POSITION = keccak256("Potion.test.storage.a");
+    bytes32 constant COIN_STORAGE_POSITION = keccak256("coin.test.storage.a");
 
 
     struct PlayerStorage {
@@ -69,6 +93,7 @@ library StorageLib {
 
     struct CoinStorage {
         mapping(address => uint256) goldBalance;
+        mapping(address => uint256) gemBalance;
         mapping(address => uint256) totemBalance;
         mapping(address => uint256) diamondBalance;
     }
@@ -102,7 +127,7 @@ library StorageLib {
         require(c.goldBalance[msg.sender] >= 5); //check user has enough gold
         c.goldBalance[msg.sender] -= 5; //deduct 5 gold from the address' balance
         i.owners[i.itemCount] = msg.sender;
-        i.items[i.itemCount] = Item(2, 1, "Sword", msg.sender, false);
+        i.items[i.itemCount] = Item(2, 1, 1, 0, "Sword", msg.sender, false);
         i.addressToItems[msg.sender].push(i.itemCount);
     }
     function _craftArmor(uint256 _tokenId) internal {
@@ -114,7 +139,7 @@ library StorageLib {
         require(c.goldBalance[msg.sender] >= 3); //check user has enough gold
         c.goldBalance[msg.sender] -= 3; //deduct 3 gold from the address' balance
         i.owners[i.itemCount] = msg.sender;
-        i.items[i.itemCount] = Item(1, 1, "Armor", msg.sender, false);
+        i.items[i.itemCount] = Item(1, 1, 1, 1, "Armor", msg.sender, false);
         i.addressToItems[msg.sender].push(i.itemCount);
     }
 
@@ -139,12 +164,20 @@ library StorageLib {
         return i.items[_itemId];
     }
 
+    function _mintCoins() internal {
+        CoinStorage storage c = diamondStorageCoin();
+        c.goldBalance[msg.sender] += 10; //mint one gold
+        c.gemBalance[msg.sender] += 10; //mint one gold
+        c.diamondBalance[msg.sender] += 10; //mint one gold
+        c.totemBalance[msg.sender] += 10; //mint one gold
+    }
+
 
 }
 
 
 
-contract Questing {
+contract CraftFacet {
 
     event ItemCrafted(address indexed _owner, uint256 _player);
 
@@ -152,14 +185,24 @@ contract Questing {
         StorageLib._craftSword(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
     }
+
     function craftArmor(uint256 _tokenId) external {
         StorageLib._craftArmor(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
     }
 
+    function getItems(address _address) public view returns(uint256[] memory items) {
+        items = StorageLib._getItems(_address);
+    }
+    function getItem(uint256 _itemId) public view returns(Item memory item) {
+        item = StorageLib._getItem(_itemId);
+    }
+
+    function mintCoins() external {
+        StorageLib._mintCoins();
+    }
 
 
 
-
-    function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
+    //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 }

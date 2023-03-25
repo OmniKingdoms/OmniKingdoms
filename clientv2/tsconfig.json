@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/utils/image.js", "src/components/card.jsx", "src/components/playerCard.jsx", "src/components/toast.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/utils/image.js", "src/components/card.jsx", "src/components/playerCard.jsx", "src/components/toast.jsx", "src/components/itemCard.jsx", "src/components/itemCard.jsx"],
   "exclude": ["node_modules"]
 }

@@ -41,7 +41,7 @@ export default function Quest() {
       signer
     );
     if (store.status === 0) {
-      const quest = await contract.startQuestGold(store.players[0]);
+      const quest = await contract.startQuestGold(store.selectedPlayer);
       console.log(quest);
 
       setHash(quest.hash);
@@ -51,7 +51,7 @@ export default function Quest() {
         store.setStatus(2);
       }, 10000);
     } else {
-      const quest = await contract.endQuestGold(store.players[0]);
+      const quest = await contract.endQuestGold(store.selectedPlayer);
       await provider.getTransaction(quest.hash);
       setQuest("start");
       setHash(quest.hash);
