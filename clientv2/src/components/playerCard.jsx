@@ -32,6 +32,7 @@ export default function PlayerCard() {
       const response = await contract.getPlayers(address);
       const players = await response.map((val) => val.toNumber());
       const player = await contract.getPlayer(players[index]);
+      console.log('Player', player)
       store.setPlayer(await player);
       store.setStatus(await player.status.toNumber());
       console.log(store.status);
