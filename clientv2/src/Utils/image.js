@@ -11,9 +11,9 @@ const client = create({
     authorization:
       "Basic " +
       Buffer.from(
-        process.env.NEXT_PUBLIC_INFURA_ID +
+        '2ErURtKagCMdhuyXpeKH3HhuRhb' +
           ":" +
-          process.env.NEXT_PUBLIC_INFURA_SECRET
+        "0270ba21357357b3a2ea8a02302cd117"
       ).toString("base64"),
   },
 });
