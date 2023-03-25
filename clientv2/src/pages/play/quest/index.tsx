@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import questmap from "../../../../public/images/quest2.png";
 import contractStore from "@/store/contractStore";
-import { useAccount } from "wagmi";
+import { useAccount, useTransaction } from "wagmi";
 import Diamond from "@/contracts/data/diamond.json";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -9,12 +9,14 @@ import Link from "next/link";
 import PlayerCard from "@/components/playerCard";
 import { ethers } from "ethers";
 import Toast from "@/components/toast";
+import Countdown from "react-countdown";
 
 export default function Quest() {
   const store = contractStore();
   const { address } = useAccount();
   const [quest, setQuest] = useState("");
   const [hash, setHash] = useState("");
+  const [timer, setTimer] = useState(false);
 
   useEffect(() => {
     async function getQuest() {
@@ -40,14 +42,23 @@ export default function Quest() {
     );
     if (store.status === 0) {
       const quest = await contract.startQuestGold(store.players[0]);
-      store.setStatus(2);
+      console.log(quest);
+
       setHash(quest.hash);
       setQuest("end");
+      setTimeout(() => {
+        setTimer(true);
+        store.setStatus(2);
+      }, 10000);
     } else {
       const quest = await contract.endQuestGold(store.players[0]);
-      store.setStatus(0);
+      await provider.getTransaction(quest.hash);
       setQuest("start");
       setHash(quest.hash);
+      setTimeout(() => {
+        setTimer(true);
+        store.setStatus(0);
+      }, 10000);
     }
   }
 
@@ -92,12 +103,25 @@ export default function Quest() {
       </Link>
 
       <button
-        className="absolute left-[46%] top-[30%] btn  bg-gray-600 "
+        disabled={timer}
+        className="absolute left-[46%] top-[30%] btn bg-gray-600 disabled:text-zinc-100 disabled:bg-opacity-90 disabled:text-opacity-100"
         onClick={() => {
           handleGold();
         }}
       >
-        {quest} Quest
+        {timer ? (
+          <Countdown
+            date={Date.now() + 1000 * 20} // 1sec * seconds
+            onComplete={() => setTimer(false)}
+            renderer={(props) => (
+              <>
+                {props.minutes}:{props.seconds}
+              </>
+            )}
+          />
+        ) : (
+          <>{quest} Gold Quest</>
+        )}
       </button>
     </motion.div>
   );

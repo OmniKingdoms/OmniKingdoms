@@ -63,7 +63,7 @@ export default async function handler(
             type: "image/jpeg",
           };
 
-          res.status(200).json({ img: base64, metadata: metadata });
+          res.status(500).json({ img: base64, metadata: metadata });
         }
       } else if (response.status === 503) {
         const data = await response.json();
@@ -76,6 +76,7 @@ export default async function handler(
         await fetchImg();
       }
     } catch (error) {
+      res.status(504);
       console.log(error);
     }
   };

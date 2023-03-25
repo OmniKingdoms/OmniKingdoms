@@ -46,29 +46,35 @@ export default function Mint() {
     console.log(contract);
     const player: Player = {};
     const res = await fetch("/api/getimage");
-    const json = await res.json();
-    console.log(json);
-    let imgblob = await fetch(json.img);
-    console.log(imgblob);
-    let imgn = await imgblob.blob();
-    console.log(imgn);
-    let file = new File([imgn], "test.jpg", json.metadata);
-    player.image = await uploadToIPFS(file);
-    console.log(player.image);
-    player.name = data.name;
-
-    if (data.gender === "Male") {
-      player.gender = true;
+    console.log(res);
+    if (res.status === 200) {
+      setIsLoading(false);
     } else {
-      player.gender = false;
+      const json = await res.json();
+      console.log(json);
+
+      let imgblob = await fetch(json.img);
+      console.log(imgblob);
+      let imgn = await imgblob.blob();
+      console.log(imgn);
+      let file = new File([imgn], "test.jpg", json.metadata);
+      player.image = await uploadToIPFS(file);
+      console.log(player.image);
+      player.name = data.name;
+
+      if (data.gender === "Male") {
+        player.gender = true;
+      } else {
+        player.gender = false;
+      }
+      const response = await contract.mint(
+        player.name,
+        player.image,
+        player.gender
+      );
+      setIsLoading(false);
+      router.push("/play");
     }
-    const response = await contract.mint(
-      player.name,
-      player.image,
-      player.gender
-    );
-    setIsLoading(false);
-    router.push("/play");
   };
   return (
     <>

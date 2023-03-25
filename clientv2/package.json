@@ -23,6 +23,7 @@
     "ipfs-http-client": "^60.0.0",
     "next": "13.2.4",
     "react": "18.2.0",
+    "react-countdown": "^2.3.5",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.7",
     "react-icons": "^4.8.0",
