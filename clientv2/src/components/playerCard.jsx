@@ -37,7 +37,7 @@ export default function PlayerCard() {
       const players = await response.map((val) => val.toNumber());
       console.log(players);
       const player = await contract.getPlayer(players[index]);
-      console.log(player);
+      console.log(player.status.toNumber());
       store.setPlayer(await player);
       store.setStatus(await player.status.toNumber());
       const gold = await contract.getGoldBalance(address);

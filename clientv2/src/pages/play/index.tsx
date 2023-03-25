@@ -81,7 +81,7 @@ export default function Play() {
           width={1200}
           className="rounded-3xl shadow-inner absolue"
         />
-        <Link href={"/craft"}>
+        <Link href={"/play/craft"}>
           <span
             className=" absolute right-[28%] top-[40%] w-[6%] hover:cursor-pointer animate-bounce tooltip"
             data-tip="craft"
@@ -89,10 +89,26 @@ export default function Play() {
             <HiLocationMarker className="   w-full h-full  stroke-purple-800 stroke-1 fill-[#E6E6FA] mt-1 mx-auto" />
           </span>
         </Link>
+        <Link href={"/play/train"}>
+          <span
+            className=" absolute right-[48%] top-[35%] w-[6%] hover:cursor-pointer animate-bounce tooltip"
+            data-tip="training"
+          >
+            <HiLocationMarker className="   w-full h-full  stroke-purple-800 stroke-1 fill-[#E6E6FA] mt-1 mx-auto" />
+          </span>
+        </Link>
         <Link href={"/play/quest"}>
           <span
+            className=" absolute right-[33%] top-[15%]  w-[6%]  hover:cursor-pointer animate-bounce tooltip"
+            data-tip="quest"
+          >
+            <HiLocationMarker className="  w-full h-full stroke-purple-800 stroke-1 fill-[#E6E6FA] mt-1 mx-auto" />
+          </span>
+        </Link>
+        <Link href={"/play/arena"}>
+          <span
             className=" absolute right-[53%] top-[10%]  w-[6%]  hover:cursor-pointer animate-bounce tooltip"
-            data-tip="questing"
+            data-tip="arena"
           >
             <HiLocationMarker className="  w-full h-full stroke-purple-800 stroke-1 fill-[#E6E6FA] mt-1 mx-auto" />
           </span>

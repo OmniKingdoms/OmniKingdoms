@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import questmap from "../../../../public/images/quest2.png";
+import questmap from "../../../../public/images/quest.png";
 import contractStore from "@/store/contractStore";
 import { useAccount, useTransaction } from "wagmi";
 import Diamond from "@/contracts/data/diamond.json";

@@ -34,7 +34,5 @@ export default function Toast({ hash }: any) {
     hash,
   });
 
-  console.log(isSuccess);
-
   return <>{isSuccess ? <Success /> : <Loading />}</>;
 }
