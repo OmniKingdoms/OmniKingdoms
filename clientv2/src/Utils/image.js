@@ -71,7 +71,7 @@ export default async function createFile() {
   console.log(imgPath);
   return imgPath;
 }
-async function uploadToIPFS(file) {
+export async function uploadToIPFS(file) {
   if (typeof file !== "undefined") {
     try {
       console.log("hit the try, so there is a file");
