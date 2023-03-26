@@ -1,0 +1,22 @@
+.board-container {
+    padding: 1rem;
+    margin: 0.5rem;
+}
+
+.users-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.sorting {
+    margin: 1rem;
+}
+
+.sorting button {
+    margin: 0 0.5rem;
+}
+
+.spinner {
+    display: flex;
+    justify-content: center;
+}
