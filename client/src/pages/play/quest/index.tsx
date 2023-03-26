@@ -10,8 +10,11 @@ import PlayerCard from "@/components/playerCard";
 import { ethers } from "ethers";
 import Toast from "@/components/toast";
 import Countdown from "react-countdown";
+import { useRouter } from "next/router";
 
 export default function Quest() {
+  const router = useRouter();
+
   const store = contractStore();
   const { address } = useAccount();
   const [quest, setQuest] = useState("");
@@ -45,17 +48,17 @@ export default function Quest() {
       console.log(quest);
 
       setHash(quest.hash);
-      setQuest("end");
       setTimeout(() => {
+        setQuest("end");
         setTimer(true);
         store.setStatus(2);
       }, 10000);
     } else {
       const quest = await contract.endQuestGold(store.selectedPlayer);
       await provider.getTransaction(quest.hash);
-      setQuest("start");
       setHash(quest.hash);
       setTimeout(() => {
+        setQuest("start");
         setTimer(true);
         store.setStatus(0);
       }, 10000);
@@ -111,8 +114,8 @@ export default function Quest() {
       >
         {timer ? (
           <Countdown
-            date={Date.now() + 1000 * 20} // 1sec * seconds
-            onComplete={() => setTimer(false)}
+            date={Date.now() + 1000 * 10} // 1sec * seconds
+            onComplete={() => router.reload()}
             renderer={(props) => (
               <>
                 {props.minutes}:{props.seconds}

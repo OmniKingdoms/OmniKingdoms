@@ -9,12 +9,13 @@ import Link from "next/link";
 import PlayerCard from "@/components/playerCard";
 import { ethers } from "ethers";
 import Toast from "@/components/toast";
-import Countdown from "react-countdown";
+import { useRouter } from "next/router";
 
 export default function Craft() {
   const store = contractStore();
   const { address } = useAccount();
   const [hash, setHash] = useState("");
+  const router = useRouter();
 
   useEffect(() => {}, []);
   async function handleCraftSword() {
@@ -47,6 +48,9 @@ export default function Craft() {
 
     const quest = await contract.craftArmor(store.selectedPlayer);
     console.log(quest);
+    setTimeout(() => {
+      router.reload();
+    }, 10000);
     setHash(quest.hash);
   }
 
