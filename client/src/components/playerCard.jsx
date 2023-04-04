@@ -46,6 +46,21 @@ export default function PlayerCard() {
     };
     loadContract();
   }, [index, address]);
+
+  function statusSwitch(status) {
+    switch (status) {
+      case 0:
+        return <span className="text-success">ready</span>;
+      case 1:
+        return <span className="text-error">training</span>;
+      case 2:
+        return <span className="text-error">questing</span>;
+      case 3:
+        return <span className="text-error">fighting</span>;
+      default:
+        return <span className="text-success">ready</span>;
+    }
+  }
   if (store.player.status) {
     return (
       <>
@@ -96,11 +111,7 @@ export default function PlayerCard() {
                   {store.player?.male ? "Male" : "Female"}
                 </div>
                 <div className=" font-bold text-sm">
-                  {store.player.status.toNumber() === 0 ? (
-                    <span className="text-success">ready</span>
-                  ) : (
-                    <span className="text-error">not ready</span>
-                  )}
+                  {statusSwitch(store.player.status.toNumber())}
                 </div>
               </div>
               <div className="stat-desc text-purple-800 font-bold">
@@ -149,7 +160,7 @@ export default function PlayerCard() {
             </div>
             <div
               className=" flex justify-center items-center text-3xl text-purple-900 tooltip"
-              data-tip="perception"
+              data-tip="luck"
             >
               <TbClover />0{store.player?.luck.toNumber()}
             </div>

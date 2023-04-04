@@ -27,6 +27,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.7",
     "react-icons": "^4.8.0",
+    "react-toastify": "^9.1.2",
     "simplex-noise": "^4.0.1",
     "three": "^0.150.1",
     "typescript": "5.0.2",

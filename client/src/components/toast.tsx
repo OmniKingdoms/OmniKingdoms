@@ -1,38 +1,51 @@
 import { useWaitForTransaction } from "wagmi";
 import { motion } from "framer-motion";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export function Success() {
-  return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      animate={{ opacity: 0 }}
-      transition={{ duration: 5 }}
-      className="absolute top-10 right-0 bottom-0  rounded-md shadow"
-    >
-      <p className=" bg-green-600 p-2 text-slate-100 rounded-lg ">
-        Transaction Success.
-      </p>
-    </motion.div>
-  );
-}
-export function Loading() {
-  return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
-      className="absolute top-10 right-0 bottom-0  rounded-md shadow"
-    >
-      <p className=" bg-gray-600 p-2 text-slate-100 rounded-lg ">
-        Transaction Pending.
-      </p>
-    </motion.div>
-  );
-}
 export default function Toast({ hash }: any) {
   const { data, isError, isLoading, isSuccess } = useWaitForTransaction({
     hash,
   });
+  if (isError) {
+    toast.error(data as any, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
+  if (isLoading) {
+    console.log("render");
+    toast.info("approving tx: " + hash, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
 
-  return <>{isSuccess ? <Success /> : <Loading />}</>;
+  if (isSuccess) {
+    console.log("render");
+
+    toast.success("success:" + hash, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
+  return <ToastContainer />;
 }
