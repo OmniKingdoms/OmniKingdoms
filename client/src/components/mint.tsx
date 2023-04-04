@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ethers } from "ethers";
 import Diamond from "@/contracts/data/diamond.json";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type Inputs = {
   name: string;
@@ -34,7 +36,6 @@ export default function Mint() {
   }
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setIsLoading(true);
-    reset();
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
     const signer = provider.getSigner();
@@ -45,11 +46,11 @@ export default function Mint() {
     );
     console.log(contract);
     const player: Player = {};
-    const res = await fetch("/api/getimage");
-    console.log(res);
-    if (res.status === 200) {
+    try {
+      const res = await fetch("/api/getimage");
+      console.log(res);
       setIsLoading(false);
-    } else {
+
       const json = await res.json();
       console.log(json);
 
@@ -67,13 +68,52 @@ export default function Mint() {
       } else {
         player.gender = false;
       }
-      const response = await contract.mint(
+      const mint = await contract.mint(
         player.name,
         player.image,
         player.gender
       );
+      toast.promise(provider.waitForTransaction(mint.hash), {
+        pending: "Tx pending: " + mint.hash,
+        success: {
+          render() {
+            return "Success: " + mint.hash;
+          },
+        },
+        error: "Tx failed",
+      });
+      reset();
+
       setIsLoading(false);
       router.push("/play");
+    } catch (error: any) {
+      reset();
+
+      if (error.data) {
+        toast.error(error.data.message as string, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else {
+        toast.error(error.reason as string, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+      console.log(error);
+      setIsLoading(false);
     }
   };
   return (
@@ -106,6 +146,7 @@ export default function Mint() {
           <span className="relative inset-0 inline-flex h-6 w-6 animate-spin items-center justify-center rounded-full border-2 border-gray-300 after:absolute after:h-8 after:w-8 after:rounded-full after:border-2 after:border-y-indigo-500 after:border-x-transparent"></span>
         </div>
       )}
+      <ToastContainer theme="dark" />
     </>
   );
 }
