@@ -36,6 +36,8 @@ export default function Mint() {
   }
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setIsLoading(true);
+    reset();
+
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
     const signer = provider.getSigner();
@@ -82,10 +84,8 @@ export default function Mint() {
         },
         error: "Tx failed",
       });
-      reset();
 
       setIsLoading(false);
-      router.push("/play");
     } catch (error: any) {
       reset();
 

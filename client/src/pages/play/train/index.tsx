@@ -11,6 +11,8 @@ import { ethers } from "ethers";
 import Toast from "@/components/toast";
 import Countdown from "react-countdown";
 import { useRouter } from "next/router";
+import { TbSword } from "react-icons/tb";
+import CombatTrainingModal from "@/components/combatTrainingModal";
 
 export default function Train() {
   const router = useRouter();
@@ -105,27 +107,17 @@ export default function Train() {
         </span>
       </Link>
 
-      <button
-        disabled={timer}
-        className="absolute left-[46%] top-[30%] btn bg-gray-600 disabled:text-zinc-100 disabled:bg-opacity-90 disabled:text-opacity-100"
-        onClick={() => {
-          handleCombatTrain();
-        }}
+      <label
+        htmlFor="my-modal-4"
+        className="absolute left-[46%] top-[30%] btn mt-2 bg-[#9696ea] btn-accent gap-4"
       >
-        {timer ? (
-          <Countdown
-            date={Date.now() + 1000 * 60 * 2} // 1sec * seconds
-            onComplete={() => router.reload()}
-            renderer={(props) => (
-              <>
-                {props.minutes}:{props.seconds}
-              </>
-            )}
-          />
-        ) : (
-          <>{quest} Combat Training</>
-        )}
-      </button>
+        Combat Training
+        <div className="badge gap-2 text-amber-300 ">
+          +1
+          <TbSword />
+        </div>
+      </label>
+      <CombatTrainingModal />
     </motion.div>
   );
 }

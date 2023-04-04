@@ -1,23 +1,19 @@
 import { motion } from "framer-motion";
 import craftmap from "../../../../public/images/craft1.png";
 import contractStore from "@/store/contractStore";
-import { useAccount, useTransaction } from "wagmi";
 import Diamond from "@/contracts/data/diamond.json";
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PlayerCard from "@/components/playerCard";
 import { ethers } from "ethers";
-import Toast from "@/components/toast";
-import { useRouter } from "next/router";
-
+import { RiCoinLine } from "react-icons/ri";
+import { TbSword } from "react-icons/tb";
+import { AiOutlineHeart } from "react-icons/ai";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function Craft() {
   const store = contractStore();
-  const { address } = useAccount();
-  const [hash, setHash] = useState("");
-  const router = useRouter();
 
-  useEffect(() => {}, []);
   async function handleCraftSword() {
     console.log(store.status);
 
@@ -29,10 +25,42 @@ export default function Craft() {
       Diamond.abi,
       signer
     );
-
-    const quest = await contract.craftSword(store.selectedPlayer);
-    console.log(quest);
-    setHash(quest.hash);
+    try {
+      const craft = await contract.craftSword(store.selectedPlayer);
+      toast.promise(provider.waitForTransaction(craft.hash), {
+        pending: "Tx pending: " + craft.hash,
+        success: {
+          render() {
+            return "Success: " + craft.hash;
+          },
+        },
+        error: "Tx failed",
+      });
+    } catch (error: any) {
+      if (error.data) {
+        toast.error(error.data.message as string, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else {
+        toast.error(error.reason as string, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    }
   }
   async function handleCraftArmor() {
     console.log(store.status);
@@ -46,12 +74,42 @@ export default function Craft() {
       signer
     );
 
-    const quest = await contract.craftArmor(store.selectedPlayer);
-    console.log(quest);
-    setTimeout(() => {
-      router.reload();
-    }, 10000);
-    setHash(quest.hash);
+    try {
+      const craft = await contract.craftArmor(store.selectedPlayer);
+      toast.promise(provider.waitForTransaction(craft.hash), {
+        pending: "Tx pending: " + craft.hash,
+        success: {
+          render() {
+            return "Success: " + craft.hash;
+          },
+        },
+        error: "Tx failed",
+      });
+    } catch (error: any) {
+      if (error.data) {
+        toast.error(error.data.message as string, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else {
+        toast.error(error.reason as string, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    }
   }
 
   if (store.players.length === 0) {
@@ -87,31 +145,51 @@ export default function Craft() {
         className="rounded-3xl shadow-inner  mix-blend-	"
       />
       <PlayerCard />
-      {hash && <Toast hash={hash} />}
       <Link href={"/play"}>
-        <span className=" absolute left-[10%] btn top-[5%] hover:cursor-pointer font-bold text-white rounded-lg bg-gray-600 py-1 px-2">
+        <span className=" absolute left-[10%] btn top-[5%] hover:cursor-pointer font-bold text-white rounded-lg bg-gray-600 py-1 px-2  ">
           Back
         </span>
       </Link>
 
       <button
         disabled={store.status !== 0}
-        className="absolute left-[40%] top-[55%] btn bg-gray-600 disabled:text-zinc-100 disabled:bg-opacity-90 disabled:text-opacity-100"
+        className="absolute left-[40%] top-[55%] flex-col disabled:text-zinc-100 disabled:bg-opacity-90 disabled:text-opacity-100 btn mt-2 bg-[#9696ea] btn-accent gap-1"
         onClick={() => {
           handleCraftSword();
         }}
       >
-        <>Craft Sword</>
+        <div>Craft Sword</div>
+        <div className="badge gap-4 text-amber-300 ">
+          <div className="flex items-center gap-1">
+            <span className="text-red-500">-5</span>
+            <RiCoinLine className="text-red-500" />
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-amber-300">+1</span>
+            <TbSword className="text-amber-300" />
+          </div>
+        </div>
       </button>
       <button
         disabled={store.status !== 0}
-        className="absolute left-[55%] top-[60%] btn bg-gray-600 disabled:text-zinc-100 disabled:bg-opacity-90 disabled:text-opacity-100"
+        className="absolute left-[55%] top-[60%] flex-col disabled:text-zinc-100 disabled:bg-opacity-90 disabled:text-opacity-100 btn mt-2 bg-[#9696ea] btn-accent gap-1"
         onClick={() => {
           handleCraftArmor();
         }}
       >
-        <>Craft Armor</>
+        <div>Craft Armor</div>
+        <div className="badge gap-4 text-amber-300 ">
+          <div className="flex items-center gap-1">
+            <span className="text-red-500">-3</span>
+            <RiCoinLine className="text-red-500" />
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-amber-300">+1</span>
+            <AiOutlineHeart className="text-amber-300 " />
+          </div>
+        </div>
       </button>
+      <ToastContainer theme="dark" />
     </motion.div>
   );
 }

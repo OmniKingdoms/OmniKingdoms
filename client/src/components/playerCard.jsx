@@ -126,7 +126,7 @@ export default function PlayerCard() {
           </div>
           <div className=" my-auto">
             <div
-              className=" flex justify-center items-center text-3xl text-purple-900 tooltip tooltip"
+              className=" flex justify-center items-center text-3xl text-purple-900  tooltip"
               data-tip="strength"
             >
               <TbSword />0{store.player?.strength.toNumber()}
