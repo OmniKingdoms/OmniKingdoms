@@ -66,8 +66,6 @@ struct Slot {
 // }
 
 
-
-
 library StorageLib {
 
     bytes32 constant PLAYER_STORAGE_POSITION = keccak256("player.test.storage.a");
@@ -146,7 +144,7 @@ library StorageLib {
         require(s.players[_playerId].status == 0); //make sure player is idle
         require(s.owners[_playerId] == msg.sender); //ownerOf
         c.goldBalance[msg.sender] -= 1; //deduct one gold from their balance
-        s.players[_playerId].status = 4;
+        s.players[_playerId].status = 4; //set the host's status to being in the arena
         a.mainArena.open = false;
         a.mainArena.hostId = _playerId;
         a.mainArena.hostAddress = payable(msg.sender);
@@ -196,6 +194,59 @@ library StorageLib {
         return uint256(keccak256(abi.encodePacked(block.timestamp + s.playerCount + _tokenId)));
     }
 
+    function _enterMagicArena(uint256 _playerId) internal {
+        PlayerStorage storage s = diamondStoragePlayer();
+        CoinStorage storage c = diamondStorageCoin();
+        ArenaStorage storage a = diamondStorageArena();
+        require(a.magicArena.open, "arena is closed"); //check that the arena is open
+        require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
+        require(s.players[_playerId].status == 0); //make sure player is idle
+        require(s.owners[_playerId] == msg.sender); //ownerOf
+        c.goldBalance[msg.sender] -= 1; //deduct one gold from their balance
+        s.players[_playerId].status = 4; //set the host's status to being in the arena
+        a.magicArena.open = false;
+        a.magicArena.hostId = _playerId;
+        a.magicArena.hostAddress = payable(msg.sender);
+    }
+
+    function _fightMagicArena(uint256 _challengerId) internal {
+        PlayerStorage storage s = diamondStoragePlayer();
+        CoinStorage storage c = diamondStorageCoin();
+        ArenaStorage storage a = diamondStorageArena();
+        require(!a.magicArena.open, "arena is empty");
+        require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
+        uint256 winner = _simulateMagicFight(a.magicArena.hostId, _challengerId);
+        if (winner == _challengerId) { //means the challenger won
+            a.magicArenaWins[_challengerId]++; //add main Arena wins
+            a.totalArenaWins[_challengerId]++; //add total wins
+            a.magicArenaLosses[a.mainArena.hostId]++; //add main Arena losses
+            a.totalArenaLosses[a.mainArena.hostId]++; //add total losses
+            c.goldBalance[msg.sender] += 1; //increase gold
+        } else { //means the host won
+            a.magicArenaWins[a.mainArena.hostId]++; //add main Arena wins
+            a.totalArenaWins[a.mainArena.hostId]++; //add total wins
+            a.magicArenaLosses[_challengerId]++; //add main Arena losses
+            a.totalArenaLosses[_challengerId]++; //add total losses
+            c.goldBalance[a.mainArena.hostAddress] += 2; //increase gold of the host
+            c.goldBalance[msg.sender] -= 1; //decrease gold
+        }
+        a.magicArena.open = true;
+        s.players[a.magicArena.hostId].status = 0; // set the host to idle
+    }
+
+    function _simulateMagicFight(uint256 _hostId, uint256 _challengerId) internal view returns (uint256) {
+        PlayerStorage storage s = diamondStoragePlayer();
+
+        Player storage host = s.players[_hostId];
+        Player storage challenger = s.players[_challengerId];
+        uint hostPoints = (host.health * (_randomMainArena(_hostId) % 5)) - (challenger.magic  * (_randomMainArena(_challengerId) % 4));
+        uint challengerPoints = (challenger.health * (_randomMainArena(_challengerId) % 5)) - (host.magic  * (_randomMainArena(_hostId) % 5));
+        if ( hostPoints >= challengerPoints ) {
+            return _hostId;
+        } else {
+            return _challengerId;
+        }
+    }
 
     function _getMainArena() internal view returns (bool) {
         ArenaStorage storage a = diamondStorageArena();
@@ -214,6 +265,22 @@ library StorageLib {
         return a.mainArena.open;
     }
 
+
+
+    function _getTotalWins(uint256 _playerId) internal view returns (uint256) {
+        ArenaStorage storage a = diamondStorageArena();
+        return a.totalArenaWins[_playerId];   
+    }
+    function _getMainArenaWins(uint256 _playerId) internal view returns (uint256) {
+        ArenaStorage storage a = diamondStorageArena();
+        return a.mainArenaWins[_playerId];   
+    }
+    function _getMagicArenaWins(uint256 _playerId) internal view returns (uint256) {
+        ArenaStorage storage a = diamondStorageArena();
+        return a.magicArenaWins[_playerId];   
+    }
+
+
     function _openArenas () internal {
         ArenaStorage storage a = diamondStorageArena();
         a.mainArena.open = true;
@@ -221,8 +288,6 @@ library StorageLib {
         a.thirdArena.open = true;
         a.magicArena.open = true;
     }
-
-
 
 }
 
@@ -253,10 +318,18 @@ contract ArenaFacet {
         StorageLib._enterMainArena(_playerId);
     }
 
-    function fightMainArena(uint256 _challengerId) internal {
+    function fightMainArena(uint256 _challengerId) public {
         StorageLib._fightMainArena(_challengerId);
     }
+    function enterMagicArena(uint256 _playerId) public {
+        StorageLib._enterMagicArena(_playerId);
+    }
 
+    function fightMagicArena(uint256 _challengerId) public {
+        StorageLib._fightMagicArena(_challengerId);
+    }
+
+    
 
 
 
