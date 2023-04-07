@@ -193,7 +193,7 @@ library StorageLib {
 
     function _randomMainArena (uint _tokenId) internal view returns(uint256) {
         PlayerStorage storage s = diamondStoragePlayer();
-        return uint256(keccak256(abi.encodePacked(block.timestamp + block.prevrandao + s.playerCount + _tokenId)));
+        return uint256(keccak256(abi.encodePacked(block.timestamp + s.playerCount + _tokenId)));
     }
 
 
@@ -221,6 +221,8 @@ library StorageLib {
         a.thirdArena.open = true;
         a.magicArena.open = true;
     }
+
+
 
 }
 
@@ -261,5 +263,5 @@ contract ArenaFacet {
 
 
 
-    function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
+    //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 }

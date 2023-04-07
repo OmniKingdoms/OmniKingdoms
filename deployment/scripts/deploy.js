@@ -27,7 +27,9 @@ async function deployDiamond () {
     'QuestFacet',
     'CraftFacet',
     'TrainFacet',
-    'EquipFacet'
+    'EquipFacet',
+    'ArenaFacet',
+    'ExchangeFacet'
   ]
   // The `facetCuts` variable is the FacetCut[] that contains the functions to add during diamond deployment
   const facetCuts = []

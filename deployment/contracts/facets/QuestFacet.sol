@@ -144,6 +144,7 @@ library StorageLib {
         q.cooldowns[_tokenId] = block.timestamp;
     }
 
+
     function _getGoldBalance(address _address) internal view returns (uint256) {
         CoinStorage storage c = diamondStorageCoin();
         return c.goldBalance[_address];
@@ -152,6 +153,16 @@ library StorageLib {
         CoinStorage storage c = diamondStorageCoin();
         return c.gemBalance[_address];
     }
+
+    function _getGoldStart(uint256 _playerId) internal view returns(uint256) {
+        QuestStorage storage q = diamondStorageQuest();
+        return q.goldQuest[_playerId];
+    }
+    function _getGemStart(uint256 _playerId) internal view returns(uint256) {
+        QuestStorage storage q = diamondStorageQuest();
+        return q.gemQuest[_playerId];
+    }
+
 
 }
 
@@ -189,10 +200,16 @@ contract QuestFacet {
         return StorageLib._getGemBalance(_address);
     }
 
+    function getGoldStart(uint256 _playerId) external view returns(uint256) {
+        return StorageLib._getGoldStart(_playerId);
+    }
+    function getGemStart(uint256 _playerId) external view returns(uint256) {
+        return StorageLib._getGemStart(_playerId);
+    }
 
 
-    
+
+
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 }
-

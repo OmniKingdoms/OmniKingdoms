@@ -58,7 +58,7 @@ library StorageLib {
 
     struct TrainStorage {
         mapping(uint256 => uint256) combat;
-        mapping(uint256 => uint256) magic;
+        mapping(uint256 => uint256) mana;
         mapping(uint256 => uint256) meditation;
         mapping(uint256 => uint256) education;
         mapping(uint256 => uint256) cooldown;
@@ -92,6 +92,7 @@ library StorageLib {
         PlayerStorage storage s = diamondStoragePlayer();
         TrainStorage storage t = diamondStorageTrain();
         require(s.owners[_tokenId] == msg.sender);
+        require(tx.origin == msg.sender);
         require(s.players[_tokenId].status == 1);
         require(
             block.timestamp >= t.combat[_tokenId] + 120,
@@ -102,7 +103,7 @@ library StorageLib {
         s.players[_tokenId].strength++; 
     }
 
-    function _startTrainingMagic(uint256 _tokenId) internal {
+    function _startTrainingMana(uint256 _tokenId) internal {
         PlayerStorage storage s = diamondStoragePlayer();
         TrainStorage storage t = diamondStorageTrain();
         require(s.players[_tokenId].status == 0); //is idle
@@ -110,21 +111,21 @@ library StorageLib {
         require(block.timestamp >= t.cooldown[_tokenId] + 1); //check time requirement
 
         s.players[_tokenId].status = 1;
-        t.magic[_tokenId] = block.timestamp;
+        t.mana[_tokenId] = block.timestamp;
         delete t.cooldown[_tokenId];
     }
 
-    function _endTrainingMagic(uint256 _tokenId) internal {
+    function _endTrainingMana(uint256 _tokenId) internal {
         PlayerStorage storage s = diamondStoragePlayer();
         TrainStorage storage t = diamondStorageTrain();
         require(s.owners[_tokenId] == msg.sender);
         require(s.players[_tokenId].status == 1); //require that they are training
         require(
-            block.timestamp >= t.magic[_tokenId] + 1,
+            block.timestamp >= t.mana[_tokenId] + 1,
             "it's too early to pull out"
         );
         s.players[_tokenId].status = 0;
-        delete t.magic[_tokenId]; 
+        delete t.mana[_tokenId]; 
         s.players[_tokenId].mana++; 
         t.cooldown[_tokenId] = block.timestamp; //reset the cool down
     }
@@ -136,13 +137,23 @@ library StorageLib {
         require(s.players[_tokenId].status == 0); //is idle
         require(s.owners[_tokenId] == msg.sender); // ownerOf
 
-        s.players[_tokenId].status = 1;
-        t.combat[_tokenId] = block.timestamp;
+        s.players[_tokenId].status = 1; //set status to training
+        t.meditation[_tokenId] = block.timestamp;
         delete t.cooldown[_tokenId];
+    }
+
+    function _getCombatStart(uint256 _playerId) internal view returns(uint256) {
+        TrainStorage storage t = diamondStorageTrain();
+        return t.combat[_playerId];
+    }
+    function _getManaStart(uint256 _playerId) internal view returns(uint256) {
+        TrainStorage storage t = diamondStorageTrain();
+        return t.mana[_playerId];
     }
 
 
 }
+
 
 
 contract TrainFacet {
@@ -159,14 +170,21 @@ contract TrainFacet {
         StorageLib._endTrainingCombat(_tokenId);
         emit EndTraining(msg.sender, _tokenId);
     }
-    function startTrainingMagic(uint256 _tokenId) external {
-        StorageLib._startTrainingMagic(_tokenId);
+    function startTrainingMana(uint256 _tokenId) external {
+        StorageLib._startTrainingMana(_tokenId);
         emit BeginTraining(msg.sender, _tokenId);
     }
 
-    function endTrainingMagic(uint256 _tokenId) external {
-        StorageLib._endTrainingMagic(_tokenId);
+    function endTrainingMana(uint256 _tokenId) external {
+        StorageLib._endTrainingMana(_tokenId);
         emit EndTraining(msg.sender, _tokenId);
+    }
+
+    function getCombatStart(uint256 _playerId) external view returns(uint256) {
+        return StorageLib._getCombatStart(_playerId);
+    }
+    function getManaStart(uint256 _playerId) external view returns(uint256) {
+        return StorageLib._getCombatStart(_playerId);
     }
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
