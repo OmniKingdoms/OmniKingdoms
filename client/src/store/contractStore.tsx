@@ -3,7 +3,7 @@ import Diamond from "@/contracts/data/diamond.json";
 import { ethers } from "ethers";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-type TcontractStore = {
+type TplayerStore = {
   players: number[];
   setPlayers: (players: number[]) => void;
   player: any;
@@ -16,13 +16,14 @@ type TcontractStore = {
   setSelectedPlayer: (selectedPlayer: number) => void;
 };
 
-export const contractStore = persist<TcontractStore>(
+const playerStore = persist<TplayerStore>(
   (set, get) => ({
     players: [],
     player: {},
     gold: 1,
     status: null,
     selectedPlayer: null,
+    diamond: null,
     setPlayers: (players) => set(() => ({ players: players })),
     setPlayer: (player) => set(() => ({ player: player })),
     setGold: (gold) => set(() => ({ gold: gold })),
@@ -35,4 +36,14 @@ export const contractStore = persist<TcontractStore>(
   }
 );
 
-export default create(contractStore);
+type Tcontract = {
+  diamond: any;
+  setDiamond: (diamond: any) => void;
+};
+
+export const contractStore = create<Tcontract>((set) => ({
+  diamond: null,
+  setDiamond: (diamond) => set(() => ({ diamond: diamond })),
+}));
+
+export default create(playerStore);
