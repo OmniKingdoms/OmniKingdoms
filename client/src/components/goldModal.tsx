@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import contractStore from "@/store/contractStore";
-import Diamond from "@/contracts/data/diamond.json";
+import Diamond from "../../../deployment/artifacts/hardhat-diamond-abi/HardhatDiamondABI.sol/DIAMOND-1-HARDHAT.json";
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,7 +31,8 @@ export default function GoldModal() {
       Diamond.abi,
       signer
     );
-
+    const start = await contract.getGoldStart(store.selectedPlayer);
+    console.log(start.toNumber());
     try {
       const quest = await contract.startQuestGold(store.selectedPlayer);
       toast.promise(provider.waitForTransaction(quest.hash), {
@@ -82,6 +83,10 @@ export default function GoldModal() {
       Diamond.abi,
       signer
     );
+    const start = await contract.getGoldStart(store.selectedPlayer);
+    console.log(start.toNumber());
+    console.log(Date.now());
+
     try {
       const quest = await contract.endQuestGold(store.selectedPlayer);
       toast.promise(provider.waitForTransaction(quest.hash), {
