@@ -1,48 +1,59 @@
 import { ethers } from "ethers";
-import contractStore from "@/store/contractStore";
-import Diamond from "@/contracts/data/diamond.json";
+import playerStore, { contractStore } from "@/store/contractStore";
+import Countdown from "react-countdown";
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 
 export default function CombatTrainingModal() {
-  const store = contractStore();
+  const player = playerStore((state) => state.player);
+  const selectedPlayer = playerStore((state) => state.selectedPlayer);
+  const diamond = contractStore((state) => state.diamond);
+
   const [endTrain, setEndTrain] = useState(false);
+  const [timer, setTimer] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+
+  async function combatTimer() {
+    const blockTimestamp = (await diamond?.getCombatStart(
+      selectedPlayer
+    )) as any;
+    const startTime = blockTimestamp.toNumber() as any;
+    console.log(startTime);
+    const curTime = (Date.now() / 1000).toFixed(0) as any;
+    const time = curTime - startTime;
+    console.log(time);
+    if (time < 120) {
+      setCountdown(120 - time);
+      setTimer(true);
+    }
+  }
 
   useEffect(() => {
-    if (!store.player.status) {
+    combatTimer();
+    if (!player.status) {
       setEndTrain(false);
     } else {
-      console.log(store.player.status.toNumber());
-      if (store.player.status.toNumber() === 1) {
+      console.log(player.status.toNumber());
+      if (player.status.toNumber() === 1) {
         setEndTrain(true);
       }
     }
-  }, [store.player.status]);
+  }, [player.status, timer]);
 
   async function handleStartCombatTrain() {
-    console.log(store.player.status.toNumber());
-
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    // Get signer
-    const signer = provider.getSigner();
-    const contract = await new ethers.Contract(
-      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-      Diamond.abi,
-      signer
-    );
 
     try {
-      const train = await contract.startTrainingCombat(store.selectedPlayer);
-      console.log(await contract.playerCount());
-      toast.promise(provider.waitForTransaction(train.hash), {
-        pending: "Tx pending: " + train.hash,
+      const train = await diamond?.startTrainingCombat(selectedPlayer);
+      toast.promise(provider.waitForTransaction(train?.hash as any), {
+        pending: "Tx pending: " + train?.hash,
         success: {
           render() {
             setEndTrain(true);
-
-            return "Success: " + train.hash;
+            setTimer(true);
+            return "Success: " + train?.hash;
           },
         },
         error: "Tx failed",
@@ -74,26 +85,18 @@ export default function CombatTrainingModal() {
     }
   }
   async function handleEndCombatTrain() {
-    console.log(store.player.status.toNumber());
-
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    // Get signer
-    const signer = provider.getSigner();
-    const contract = await new ethers.Contract(
-      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-      Diamond.abi,
-      signer
-    );
-    try {
-      const train = await contract.endTrainingCombat(store.selectedPlayer);
 
-      toast.promise(provider.waitForTransaction(train.hash), {
-        pending: "Tx pending: " + train.hash,
+    try {
+      const train = await diamond?.endTrainingCombat(selectedPlayer);
+
+      toast.promise(provider.waitForTransaction(train?.hash as any), {
+        pending: "Tx pending: " + train?.hash,
         success: {
           render() {
             setEndTrain(false);
 
-            return "Success: " + train.hash;
+            return "Success: " + train?.hash;
           },
         },
         error: "Tx failed",
@@ -125,7 +128,6 @@ export default function CombatTrainingModal() {
     }
   }
 
-  useEffect(() => {}, []);
   return (
     <>
       <input type="checkbox" id="my-modal-4" className="modal-toggle" />
@@ -146,9 +148,23 @@ export default function CombatTrainingModal() {
             <button
               className="btn grid flex-grow h-12 card  rounded-box place-items-center bg-[#9696ea] btn-accent"
               onClick={handleEndCombatTrain}
-              disabled={!endTrain}
+              disabled={timer || !endTrain}
             >
-              End Training
+              {timer ? (
+                <Countdown
+                  date={Date.now() + 1000 * countdown} // 1sec * seconds
+                  onComplete={() => {
+                    setTimer(false);
+                  }}
+                  renderer={(props) => (
+                    <>
+                      0{props.minutes}:{props.seconds}
+                    </>
+                  )}
+                />
+              ) : (
+                "End Training"
+              )}
             </button>
           </div>
         </label>

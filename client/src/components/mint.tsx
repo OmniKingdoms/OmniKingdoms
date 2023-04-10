@@ -1,10 +1,8 @@
-import createImg, { uploadToIPFS } from "@/Utils/image";
+import { uploadToIPFS } from "@/Utils/image";
 import { useForm, SubmitHandler } from "react-hook-form";
-import contractStore from "@/store/contractStore";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { contractStore } from "@/store/contractStore";
+import { useState, useRef } from "react";
 import { ethers } from "ethers";
-import Diamond from "@/contracts/data/diamond.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -19,8 +17,11 @@ type Player = {
   image?: string;
 };
 export default function Mint() {
-  const router = useRouter();
+  const diamond = contractStore((state) => state.diamond);
+  const inputRef = useRef<HTMLInputElement>();
+  const timeout: { current: NodeJS.Timeout | null } = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [nameAvailable, setNameAvailable] = useState(false);
 
   const {
     formState: { isSubmitting },
@@ -28,25 +29,32 @@ export default function Mint() {
     handleSubmit,
     reset,
   } = useForm<Inputs>();
-  const store = contractStore();
 
-  async function handleImg() {
-    const img = await createImg();
-    console.log(img);
-  }
+  const handleNameValidate = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value.trim()) {
+      setNameAvailable(false);
+    }
+    timeout.current && clearTimeout(timeout.current);
+    e.preventDefault();
+    timeout.current = setTimeout(async () => {
+      if (!e.target.value.trim()) {
+        setNameAvailable(false);
+      } else {
+        const name = await diamond?.nameAvailable(e.target.value.trim());
+        console.log(name);
+        setNameAvailable(!name as any);
+      }
+    }, 100);
+  };
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setIsLoading(true);
     reset();
-
+    const name = await diamond?.nameAvailable(data.name);
+    console.log(name);
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
-    const signer = provider.getSigner();
-    const contract = await new ethers.Contract(
-      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-      Diamond.abi,
-      signer
-    );
-    console.log(contract);
+
     const player: Player = {};
     try {
       const res = await fetch("/api/getimage");
@@ -63,23 +71,23 @@ export default function Mint() {
       let file = new File([imgn], "test.jpg", json.metadata);
       player.image = await uploadToIPFS(file);
       console.log(player.image);
-      player.name = data.name;
+      player.name = data.name.trim();
 
       if (data.gender === "Male") {
         player.gender = true;
       } else {
         player.gender = false;
       }
-      const mint = await contract.mint(
+      const mint = await diamond?.mint(
         player.name,
-        player.image,
+        player.image as any,
         player.gender
       );
-      toast.promise(provider.waitForTransaction(mint.hash), {
-        pending: "Tx pending: " + mint.hash,
+      toast.promise(provider.waitForTransaction(mint?.hash as any), {
+        pending: "Tx pending: " + mint?.hash,
         success: {
           render() {
-            return "Success: " + mint.hash;
+            return "Success: " + mint?.hash;
           },
         },
         error: "Tx failed",
@@ -127,8 +135,16 @@ export default function Mint() {
           className="input bg-primary select-primary text-white"
           placeholder="Player Name"
           type="text"
-          {...register("name", { required: true })}
+          {...register("name", {
+            required: true,
+            onChange: handleNameValidate,
+          })}
         />
+        {!nameAvailable && (
+          <span className="text-xs text-red-500">
+            empty name or name already taken
+          </span>
+        )}
         <select
           className="input select-primary text-white bg-primary"
           {...register("gender", { required: true })}
@@ -136,7 +152,10 @@ export default function Mint() {
           <option>Male</option>
           <option>Female</option>
         </select>
-        <button disabled={isLoading} className="btn btn-primary text-white">
+        <button
+          disabled={!nameAvailable || isLoading}
+          className="btn btn-primary text-white"
+        >
           {" "}
           Mint Player
         </button>

@@ -1,7 +1,6 @@
 import { create } from "zustand";
-import Diamond from "@/contracts/data/diamond.json";
-import { ethers } from "ethers";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
+import { DIAMOND1HARDHAT } from "../../../types/ethers-contracts/DIAMOND1HARDHAT";
 
 type TplayerStore = {
   players: number[];
@@ -10,9 +9,9 @@ type TplayerStore = {
   setPlayer: (player: number) => void;
   gold: number;
   setGold: (gold: number) => void;
-  status: number | null;
+  status: number;
   setStatus: (status: number) => void;
-  selectedPlayer: number | null;
+  selectedPlayer: number;
   setSelectedPlayer: (selectedPlayer: number) => void;
 };
 
@@ -21,9 +20,8 @@ const playerStore = persist<TplayerStore>(
     players: [],
     player: {},
     gold: 1,
-    status: null,
-    selectedPlayer: null,
-    diamond: null,
+    status: 0,
+    selectedPlayer: 0,
     setPlayers: (players) => set(() => ({ players: players })),
     setPlayer: (player) => set(() => ({ player: player })),
     setGold: (gold) => set(() => ({ gold: gold })),
@@ -37,13 +35,13 @@ const playerStore = persist<TplayerStore>(
 );
 
 type Tcontract = {
-  diamond: any;
-  setDiamond: (diamond: any) => void;
+  diamond: DIAMOND1HARDHAT | null;
+  setDiamond: (diamond: DIAMOND1HARDHAT) => void;
 };
 
 export const contractStore = create<Tcontract>((set) => ({
   diamond: null,
-  setDiamond: (diamond) => set(() => ({ diamond: diamond })),
+  setDiamond: (diamond: DIAMOND1HARDHAT) => set(() => ({ diamond: diamond })),
 }));
 
 export default create(playerStore);

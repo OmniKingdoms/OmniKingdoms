@@ -1,47 +1,54 @@
 import { ethers } from "ethers";
-import contractStore from "@/store/contractStore";
-import Diamond from "../../../deployment/artifacts/hardhat-diamond-abi/HardhatDiamondABI.sol/DIAMOND-1-HARDHAT.json";
-
+import playerStore, { contractStore } from "@/store/contractStore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
+import Countdown from "react-countdown";
 
 export default function GoldModal() {
-  const store = contractStore();
+  const player = playerStore((state) => state.player);
+  const selectedPlayer = playerStore((state) => state.selectedPlayer);
+  const diamond = contractStore((state) => state.diamond);
+
   const [endQuest, setEndQuest] = useState(false);
+  const [timer, setTimer] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+
+  async function questTimer() {
+    const blockTimestamp = (await diamond?.getGoldStart(selectedPlayer)) as any;
+    const startTime = blockTimestamp.toNumber() as any;
+    console.log(startTime);
+    const curTime = (Date.now() / 1000).toFixed(0) as any;
+    const time = curTime - startTime;
+    console.log(time);
+    if (time < 60) {
+      setCountdown(60 - time);
+      setTimer(true);
+    }
+  }
 
   useEffect(() => {
-    if (!store.player.status) {
+    questTimer();
+    if (!player.status) {
       setEndQuest(false);
     } else {
-      if (store.player.status.toNumber() === 2) {
+      if (player.status.toNumber() === 2) {
         setEndQuest(true);
       }
     }
-  }, [store.player.status]);
+  }, [player.status, timer]);
 
   async function handleBeginGold() {
-    console.log(store.player.status.toNumber());
-
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-    // Get signer
-    const signer = provider.getSigner();
-    const contract = await new ethers.Contract(
-      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-      Diamond.abi,
-      signer
-    );
-    const start = await contract.getGoldStart(store.selectedPlayer);
-    console.log(start.toNumber());
     try {
-      const quest = await contract.startQuestGold(store.selectedPlayer);
-      toast.promise(provider.waitForTransaction(quest.hash), {
-        pending: "Tx pending: " + quest.hash,
+      const quest = await diamond?.startQuestGold(selectedPlayer);
+      toast.promise(provider.waitForTransaction(quest?.hash as any), {
+        pending: "Tx pending: " + quest?.hash,
         success: {
           render() {
             setEndQuest(true);
-
-            return "Success: " + quest.hash;
+            setTimer(true);
+            return "Success: " + quest?.hash;
           },
         },
         error: "Tx failed",
@@ -73,29 +80,20 @@ export default function GoldModal() {
     }
   }
   async function handleEndGold() {
-    console.log(store.player.status.toNumber());
+    console.log(player.status.toNumber());
 
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
-    const signer = provider.getSigner();
-    const contract = await new ethers.Contract(
-      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-      Diamond.abi,
-      signer
-    );
-    const start = await contract.getGoldStart(store.selectedPlayer);
-    console.log(start.toNumber());
-    console.log(Date.now());
 
     try {
-      const quest = await contract.endQuestGold(store.selectedPlayer);
-      toast.promise(provider.waitForTransaction(quest.hash), {
-        pending: "Tx pending: " + quest.hash,
+      const quest = await diamond?.endQuestGold(selectedPlayer);
+      toast.promise(provider.waitForTransaction(quest?.hash as any), {
+        pending: "Tx pending: " + quest?.hash,
         success: {
           render() {
             setEndQuest(false);
 
-            return "Success: " + quest.hash;
+            return "Success: " + quest?.hash;
           },
         },
         error: "Tx failed",
@@ -127,7 +125,6 @@ export default function GoldModal() {
     }
   }
 
-  useEffect(() => {}, []);
   return (
     <>
       <input type="checkbox" id="my-modal-4" className="modal-toggle" />
@@ -145,12 +142,27 @@ export default function GoldModal() {
               Begin Quest
             </button>
             <div className="divider lg:divider-horizontal"></div>
+
             <button
               className="btn grid flex-grow h-12 card  rounded-box place-items-center bg-[#9696ea] btn-accent"
               onClick={handleEndGold}
-              disabled={!endQuest}
+              disabled={timer || !endQuest}
             >
-              End Quest
+              {timer ? (
+                <Countdown
+                  date={Date.now() + 1000 * countdown} // 1sec * seconds
+                  onComplete={() => {
+                    setTimer(false);
+                  }}
+                  renderer={(props) => (
+                    <>
+                      0{props.minutes}:{props.seconds}
+                    </>
+                  )}
+                />
+              ) : (
+                "End Quest"
+              )}
             </button>
           </div>
         </label>
