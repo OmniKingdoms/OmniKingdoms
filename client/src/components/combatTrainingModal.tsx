@@ -25,7 +25,7 @@ export default function CombatTrainingModal() {
     const time = curTime - startTime;
     console.log(time);
     if (time < 120) {
-      setCountdown(120 - time);
+      setCountdown(120 - time); // 2min
       setTimer(true);
     }
   }
