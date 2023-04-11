@@ -155,6 +155,7 @@ library StorageLib {
         CoinStorage storage c = diamondStorageCoin();
         ArenaStorage storage a = diamondStorageArena();
         require(!a.mainArena.open, "arena is empty");
+        require(s.players[_challengerId].status == 0); //make sure player is idle
         require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
         uint256 winner = _simulateFight(a.mainArena.hostId, _challengerId);
         if (winner == _challengerId) { //means the challenger won
@@ -214,6 +215,7 @@ library StorageLib {
         CoinStorage storage c = diamondStorageCoin();
         ArenaStorage storage a = diamondStorageArena();
         require(!a.magicArena.open, "arena is empty");
+        require(s.players[_challengerId].status == 0); //make sure player is idle
         require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
         uint256 winner = _simulateMagicFight(a.magicArena.hostId, _challengerId);
         if (winner == _challengerId) { //means the challenger won
@@ -248,9 +250,9 @@ library StorageLib {
         }
     }
 
-    function _getMainArena() internal view returns (bool) {
+    function _getMainArena() internal view returns (bool, uint256) {
         ArenaStorage storage a = diamondStorageArena();
-        return a.mainArena.open;
+        return (a.mainArena.open, a.mainArena.hostId);
     }
     function _getSecondArena() internal view returns (bool) {
         ArenaStorage storage a = diamondStorageArena();
@@ -297,21 +299,21 @@ contract ArenaFacet {
 
     event ItemCrafted(address indexed _owner, uint256 _player);
 
-    constructor() {
+    function openArenas() public {
         StorageLib._openArenas();
     }
 
-    function getMainArena() external view returns(bool) {
+    function getMainArena() external view returns(bool, uint256) {
         return StorageLib._getMainArena();
     }
-    function getSecondArena() external view returns(bool) {
-        return StorageLib._getMainArena();
-    }
-    function getThirdArena() external view returns(bool) {
-        return StorageLib._getMainArena();
-    }
+    // function getSecondArena() external view returns(bool) {
+    //     return StorageLib._getMainArena();
+    // }
+    // function getThirdArena() external view returns(bool) {
+    //     return StorageLib._getMainArena();
+    // }
     function getMagicArena() external view returns(bool) {
-        return StorageLib._getMainArena();
+        return StorageLib._getMagicArena();
     }
 
     function enterMainArena(uint256 _playerId) public {
