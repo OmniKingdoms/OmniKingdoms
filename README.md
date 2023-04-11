@@ -7,6 +7,10 @@
 ### Live preview 
 https://clientpv2.vercel.app/
 
+## Generate type
+
+npx typechain --target ethers-v5 "deployment/artifacts/hardhat-diamond-abi/HardhatDiamondABI.sol/DIAMOND-1-HARDHAT.json"
+
 ##  Project Description
 
 Scroll Kingdoms is a cross chain MMORPG. Ideally the game will be a free, play to game. Users can customize their characters by changing their unique name, equipping items and switching between skins. They can also earn in game resources by questing, as well as boosting their stats via training. We plan to add PvP arenas, and boss battles (both individual and co-op). Our token will be used for trading on our custom multi-token standard exchange, governance, and special game events (such as special quests and items).
