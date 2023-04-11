@@ -14,7 +14,6 @@ export default function InventoryModal() {
   const [itens, setItens] = useState([]);
 
   const store = contractStore();
-  const dimas = [1, 2, 3];
 
   useEffect(() => {
     const loadContract = async () => {
