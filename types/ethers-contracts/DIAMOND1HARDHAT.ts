@@ -172,11 +172,14 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     "fightMainArena(uint256)": FunctionFragment;
     "getMagicArena()": FunctionFragment;
     "getMainArena()": FunctionFragment;
-    "getSecondArena()": FunctionFragment;
-    "getThirdArena()": FunctionFragment;
+    "openArenas()": FunctionFragment;
     "craftArmor(uint256)": FunctionFragment;
+    "craftGuitar(uint256)": FunctionFragment;
+    "craftHelmet(uint256)": FunctionFragment;
+    "craftSorcerShoes(uint256)": FunctionFragment;
     "craftSword(uint256)": FunctionFragment;
     "getItem(uint256)": FunctionFragment;
+    "getItemCount()": FunctionFragment;
     "getItems(address)": FunctionFragment;
     "mintCoins()": FunctionFragment;
     "diamondCut((address,uint8,bytes4[])[],address,bytes)": FunctionFragment;
@@ -237,11 +240,14 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
       | "fightMainArena"
       | "getMagicArena"
       | "getMainArena"
-      | "getSecondArena"
-      | "getThirdArena"
+      | "openArenas"
       | "craftArmor"
+      | "craftGuitar"
+      | "craftHelmet"
+      | "craftSorcerShoes"
       | "craftSword"
       | "getItem"
+      | "getItemCount"
       | "getItems"
       | "mintCoins"
       | "diamondCut((address,uint8,bytes4[])[],address,bytes)"
@@ -319,15 +325,23 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getSecondArena",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getThirdArena",
+    functionFragment: "openArenas",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "craftArmor",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "craftGuitar",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "craftHelmet",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "craftSorcerShoes",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -337,6 +351,10 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getItem",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getItemCount",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getItems",
@@ -557,17 +575,26 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     functionFragment: "getMainArena",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getSecondArena",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getThirdArena",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "openArenas", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "craftArmor", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "craftGuitar",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "craftHelmet",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "craftSorcerShoes",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "craftSword", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getItem", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getItemCount",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getItems", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintCoins", data: BytesLike): Result;
   decodeFunctionResult(
@@ -1060,13 +1087,28 @@ export interface DIAMOND1HARDHAT extends BaseContract {
 
     getMagicArena(overrides?: CallOverrides): Promise<[boolean]>;
 
-    getMainArena(overrides?: CallOverrides): Promise<[boolean]>;
+    getMainArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
 
-    getSecondArena(overrides?: CallOverrides): Promise<[boolean]>;
-
-    getThirdArena(overrides?: CallOverrides): Promise<[boolean]>;
+    openArenas(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     craftArmor(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    craftGuitar(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    craftHelmet(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    craftSorcerShoes(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -1080,6 +1122,10 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       _itemId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[ItemStructOutput] & { item: ItemStructOutput }>;
+
+    getItemCount(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { count: BigNumber }>;
 
     getItems(
       _address: PromiseOrValue<string>,
@@ -1362,13 +1408,28 @@ export interface DIAMOND1HARDHAT extends BaseContract {
 
   getMagicArena(overrides?: CallOverrides): Promise<boolean>;
 
-  getMainArena(overrides?: CallOverrides): Promise<boolean>;
+  getMainArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
 
-  getSecondArena(overrides?: CallOverrides): Promise<boolean>;
-
-  getThirdArena(overrides?: CallOverrides): Promise<boolean>;
+  openArenas(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   craftArmor(
+    _tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  craftGuitar(
+    _tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  craftHelmet(
+    _tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  craftSorcerShoes(
     _tokenId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -1382,6 +1443,8 @@ export interface DIAMOND1HARDHAT extends BaseContract {
     _itemId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<ItemStructOutput>;
+
+  getItemCount(overrides?: CallOverrides): Promise<BigNumber>;
 
   getItems(
     _address: PromiseOrValue<string>,
@@ -1648,13 +1711,26 @@ export interface DIAMOND1HARDHAT extends BaseContract {
 
     getMagicArena(overrides?: CallOverrides): Promise<boolean>;
 
-    getMainArena(overrides?: CallOverrides): Promise<boolean>;
+    getMainArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
 
-    getSecondArena(overrides?: CallOverrides): Promise<boolean>;
-
-    getThirdArena(overrides?: CallOverrides): Promise<boolean>;
+    openArenas(overrides?: CallOverrides): Promise<void>;
 
     craftArmor(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    craftGuitar(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    craftHelmet(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    craftSorcerShoes(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1668,6 +1744,8 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       _itemId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<ItemStructOutput>;
+
+    getItemCount(overrides?: CallOverrides): Promise<BigNumber>;
 
     getItems(
       _address: PromiseOrValue<string>,
@@ -2072,11 +2150,26 @@ export interface DIAMOND1HARDHAT extends BaseContract {
 
     getMainArena(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getSecondArena(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getThirdArena(overrides?: CallOverrides): Promise<BigNumber>;
+    openArenas(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     craftArmor(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    craftGuitar(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    craftHelmet(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    craftSorcerShoes(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -2090,6 +2183,8 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       _itemId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getItemCount(overrides?: CallOverrides): Promise<BigNumber>;
 
     getItems(
       _address: PromiseOrValue<string>,
@@ -2355,11 +2450,26 @@ export interface DIAMOND1HARDHAT extends BaseContract {
 
     getMainArena(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getSecondArena(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getThirdArena(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    openArenas(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     craftArmor(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    craftGuitar(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    craftHelmet(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    craftSorcerShoes(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -2373,6 +2483,8 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       _itemId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    getItemCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getItems(
       _address: PromiseOrValue<string>,

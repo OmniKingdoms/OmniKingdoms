@@ -267,18 +267,10 @@ const _abi = [
         name: "",
         type: "bool",
       },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getSecondArena",
-    outputs: [
       {
-        internalType: "bool",
+        internalType: "uint256",
         name: "",
-        type: "bool",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -286,15 +278,9 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "getThirdArena",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
+    name: "openArenas",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -325,6 +311,45 @@ const _abi = [
       },
     ],
     name: "craftArmor",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "craftGuitar",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "craftHelmet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "craftSorcerShoes",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -393,6 +418,19 @@ const _abi = [
         internalType: "struct Item",
         name: "item",
         type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getItemCount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "count",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
