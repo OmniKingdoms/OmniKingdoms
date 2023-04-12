@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { contractStore } from "@/store/contractStore";
 import { ethers } from "ethers";
+import { DIAMOND1HARDHAT } from "../../../types/ethers-contracts/DIAMOND1HARDHAT";
 
 import Diamond from "../../../deployment/artifacts/hardhat-diamond-abi/HardhatDiamondABI.sol/DIAMOND-1-HARDHAT.json";
 
@@ -33,7 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
       process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
       Diamond.abi,
       signer
-    );
+    ) as DIAMOND1HARDHAT;
     store.setDiamond(contract);
     setMounted(true);
   }, []);

@@ -32,6 +32,7 @@ export default function Play() {
 
       if (address) {
         const response = await contract.getPlayers(address);
+        console.log(response);
         const players = await response.map((val: any) => val.toNumber());
         store.setPlayers(await players);
         console.log(players);
