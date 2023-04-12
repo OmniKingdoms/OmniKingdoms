@@ -1,14 +1,17 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { DIAMOND1HARDHAT } from "../../../types/ethers-contracts/DIAMOND1HARDHAT";
+import {
+  DIAMOND1HARDHAT,
+  PlayerStructOutput,
+} from "../../../types/ethers-contracts/DIAMOND1HARDHAT";
 
 type TplayerStore = {
   players: number[];
   setPlayers: (players: number[]) => void;
-  player: any;
-  setPlayer: (player: number) => void;
-  gold: number;
-  setGold: (gold: number) => void;
+  player: PlayerStructOutput | undefined;
+  setPlayer: (player: PlayerStructOutput | undefined) => void;
+  gold: number | undefined;
+  setGold: (gold: number | undefined) => void;
   status: number;
   setStatus: (status: number) => void;
   selectedPlayer: number;
@@ -18,7 +21,7 @@ type TplayerStore = {
 const playerStore = persist<TplayerStore>(
   (set, get) => ({
     players: [],
-    player: {},
+    player: undefined,
     gold: 1,
     status: 0,
     selectedPlayer: 0,

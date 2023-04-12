@@ -27,7 +27,9 @@ export default function WagmiProvider({
   return (
     <>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+        <RainbowKitProvider chains={chains} initialChain={scrollTestnet}>
+          {children}
+        </RainbowKitProvider>
       </WagmiConfig>
     </>
   );

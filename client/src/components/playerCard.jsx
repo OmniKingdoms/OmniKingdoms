@@ -15,7 +15,6 @@ import { TfiEye } from "react-icons/tfi";
 import { RiCoinLine } from "react-icons/ri";
 import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 
-import Link from "next/link";
 import InventoryModal from "./inventoryModal";
 export default function PlayerCard() {
   const { address } = useAccount();
@@ -23,7 +22,6 @@ export default function PlayerCard() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    console.log(address);
     if (address) {
       const loadContract = async () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -35,12 +33,9 @@ export default function PlayerCard() {
           signer
         );
         const response = await contract.getPlayers(address);
-        console.log(response);
         const players = await response.map((val) => val.toNumber());
-        console.log(players);
         const player = await contract.getPlayer(players[index]);
         store.setSelectedPlayer(players[index]);
-        console.log(store.selectedPlayer);
         store.setPlayer(await player);
         store.setStatus(await player.status.toNumber());
         const gold = await contract.getGoldBalance(address);
@@ -49,7 +44,6 @@ export default function PlayerCard() {
       loadContract();
     }
   }, [index, address]);
-
   function statusSwitch(status) {
     switch (status) {
       case 0:
@@ -66,7 +60,7 @@ export default function PlayerCard() {
         return <span className="text-success">ready</span>;
     }
   }
-  if (store.player.status) {
+  if (store.player?.status) {
     return (
       <>
         <div className="stats flex md:flex-col 2xl:absolute shadow md:rounded-l-none  bg-[#E6E6FA] overflow-visible p-1 sm:p-2 gap-1 sm:gap-2 h-fit w-fit">

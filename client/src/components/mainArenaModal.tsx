@@ -27,17 +27,14 @@ export default function MainArenaModal() {
     const hostId = await getArena();
     const player = await diamond?.getPlayer(hostId as any);
     setHost(player);
-    console.log(host);
   }
 
   useEffect(() => {
     getArena();
 
-    if (!player.status) {
+    if (!player?.status) {
       setEndQuest(false);
     } else if (player.status.toNumber() != 0) {
-      console.log(player.name);
-      console.log(player.status.toNumber());
       setEndQuest(true);
     } else {
       setEndQuest(false);
@@ -45,9 +42,7 @@ export default function MainArenaModal() {
     if (!arena) {
       getHost();
     }
-    console.log(arena);
-    console.log(endQuest);
-  }, [player.status, arena]);
+  }, [player?.status, arena]);
 
   async function handleEnterArena() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
@@ -90,8 +85,6 @@ export default function MainArenaModal() {
     }
   }
   async function handleFightArena() {
-    console.log(player.status.toNumber());
-
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
 

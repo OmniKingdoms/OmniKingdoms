@@ -1,12 +1,11 @@
 import Image from "next/image";
 import minimap from "../../../public/images/minimapv2.png";
-import { useAccount } from "wagmi";
-import { Web3Button } from "@web3modal/react";
+import { useAccount, useNetwork } from "wagmi";
 import contractStore from "@/store/contractStore";
 import { useEffect, useState } from "react";
 import Mint from "@/components/mint";
 import { HiLocationMarker } from "react-icons/hi";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { ethers } from "ethers";
 import Diamond from "@/contracts/data/diamond.json";
@@ -14,34 +13,32 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 export default function Play() {
   const store = contractStore();
   const { address } = useAccount();
+  const { chain } = useNetwork();
+
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
     const loadContract = async () => {
-      const provider = new ethers.providers.Web3Provider(
-        window.ethereum as any
-      );
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
       // Get signer
       const signer = provider.getSigner();
       const contract = await new ethers.Contract(
-        process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
+        process.env.NEXT_PUBLIC_DIAMOND_ADDRESS,
         Diamond.abi,
         signer
       );
 
       if (address) {
         const response = await contract.getPlayers(address);
-        console.log(response);
-        const players = await response.map((val: any) => val.toNumber());
+        const players = await response.map((val) => val.toNumber());
         store.setPlayers(await players);
-        console.log(players);
         setPlayers(players);
       }
     };
     loadContract();
   }, [address]);
 
-  if (!address) {
+  if (!address && chain?.id !== 534353) {
     return (
       <div className="relative min-h-[85vh] min-w-full flex flex-col items-center justify-center">
         <h2 className="font-bold text-white m-4">Connect to play</h2>

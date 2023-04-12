@@ -14,8 +14,6 @@ export default function Craft() {
   const store = contractStore();
 
   async function handleCraftSword() {
-    console.log(store.status);
-
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
     const signer = provider.getSigner();
@@ -62,8 +60,6 @@ export default function Craft() {
     }
   }
   async function handleCraftArmor() {
-    console.log(store.status);
-
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
     const signer = provider.getSigner();
