@@ -1,9 +1,11 @@
 const express = require("express");
 const redis = require("redis");
 const util = require("util");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
+app.use(cors());
 
 const Player = require("./models/Player");
 const mongoose = require("mongoose");
