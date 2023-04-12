@@ -37,7 +37,7 @@ export default function Navbar() {
                 </Link>
               </li>
               <li>
-                <Link href={""}>Leaderboard</Link>
+                <Link href={"/leaderboard"}>Leaderboard</Link>
               </li>
               <li>
                 <Link href={""}>About</Link>
@@ -65,7 +65,7 @@ export default function Navbar() {
             </li>
 
             <li className=" rounded-lg  hover:bg-gray-600 ">
-              <Link href={""}>Leaderboard</Link>
+              <Link href={"/leaderboard"}>Leaderboard</Link>
             </li>
 
             <li className=" rounded-lg  hover:bg-gray-600 ">
