@@ -13,6 +13,7 @@ import { ethers } from "ethers";
 import { DIAMOND1HARDHAT } from "../../../types/ethers-contracts/DIAMOND1HARDHAT";
 
 import Diamond from "../../../deployment/artifacts/hardhat-diamond-abi/HardhatDiamondABI.sol/DIAMOND-1-HARDHAT.json";
+import PlayerCard from "@/components/playerCard";
 
 const poppins = Poppins({
   weight: "400",
@@ -38,7 +39,6 @@ export default function App({ Component, pageProps }: AppProps) {
     store.setDiamond(contract);
     setMounted(true);
   }, []);
-
   return (
     <>
       <WagmiProvider>
@@ -48,7 +48,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <main className={`${poppins.variable} `}>
           <Navbar />
           <AnimatePresence mode="wait">
-            <motion.div key={router.pathname}>
+            <motion.div
+              key={router.pathname}
+              className="flex md:flex-row flex-col relative items-center "
+            >
+              {router.pathname !== "/mint" && <PlayerCard />}
               {mounted && <Component {...pageProps} />}
             </motion.div>
           </AnimatePresence>

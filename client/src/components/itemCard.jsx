@@ -4,20 +4,10 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import bodyarmor from "../../public/images/bodyarmor.jpeg";
 import sword from "../../public/images/sword.jpeg";
-import { motion } from "framer-motion";
 import contractStore from "@/store/contractStore";
 
-const itemVariants = {
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", stiffness: 100, damping: 24 },
-  },
-  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
-};
 export default function ItemCard({ itemId }) {
   const [item, setItem] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
   const store = contractStore();
 
   useEffect(() => {
@@ -79,65 +69,44 @@ export default function ItemCard({ itemId }) {
   }
 
   return (
-    <motion.div
-      initial={false}
-      animate={isOpen ? "open" : "closed"}
-      className={`overflow-visible w-12 h-12 left-96 top-96 rounded-md ring-2  bg-gray-100 flex flex-col items-center gap-2 ${
+    <div
+      className={`overflow-visible dropdown w-12 h-12 rounded-md ring-2 bg-gray-100  items-center gap-2 ${
         item.isEquiped ? "ring-green-400" : ""
       }`}
     >
       {item?.name === "Armor" && (
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <Image src={bodyarmor} className="rounded-md" alt={item?.name} />
-        </motion.button>
+        <label tabIndex={itemId}>
+          <Image src={bodyarmor} className="rounded-md " alt={item?.name} />
+        </label>
       )}
       {item?.name === "Sword" && (
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        <div tabIndex={itemId}>
           <Image src={sword} className="rounded-md" alt={item?.name} />
-        </motion.button>
+        </div>
       )}
-      <motion.ul
-        className="flex flex-col bg-[#9696ea] w-40 grid-cols-2 items-center justify-center p-2 m-0  rounded-xl "
-        variants={{
-          open: {
-            clipPath: "inset(0% 0% 0% 0% round 0px)",
-            transition: {
-              type: "spring",
-              bounce: 0,
-              duration: 0.7,
-              delayChildren: 0.3,
-              staggerChildren: 0.05,
-            },
-          },
-          closed: {
-            clipPath: "inset(10% 50% 90% 50% round 10px)",
-            transition: {
-              type: "spring",
-              bounce: 0,
-              duration: 0.3,
-            },
-          },
-        }}
-        style={{ pointerEvents: isOpen ? "auto" : "none" }}
+      <ul
+        tabIndex={itemId}
+        className=" dropdown-content menu p-2 shadow bg-base-100 rounded-box flex items-center  "
       >
-        <motion.li className="" variants={itemVariants}>
+        <li className="">
           {item.stat.toNumber() === 0 && "strength: " + item.value.toNumber()}
           {item.stat.toNumber() === 1 && "health: " + item.value.toNumber()}
-        </motion.li>
-        <motion.li className="font-bold" variants={itemVariants}>
+        </li>
+        <li>
           {item.isEquiped ? (
-            <button onClick={handleUnequip}>Unequip</button>
+            <button
+              className="font-bold btn btn-accent"
+              onClick={handleUnequip}
+            >
+              Unequip
+            </button>
           ) : (
-            <button onClick={handleEquip}>Equip</button>
+            <button className="font-bold btn btn-accent" onClick={handleEquip}>
+              Equip
+            </button>
           )}
-        </motion.li>
-      </motion.ul>
-    </motion.div>
+        </li>
+      </ul>
+    </div>
   );
 }

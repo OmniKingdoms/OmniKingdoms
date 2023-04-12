@@ -1,6 +1,5 @@
 import Image from "next/image";
 import minimap from "../../../public/images/minimapv2.png";
-import PlayerCard from "@/components/playerCard";
 import { useAccount } from "wagmi";
 import { Web3Button } from "@web3modal/react";
 import contractStore from "@/store/contractStore";
@@ -75,7 +74,6 @@ export default function Play() {
         exit={{ opacity: 0 }}
         className="relative w-fit mb-auto min-h-fit flex flex-col sm:flex-row items-center justify-center mx-auto "
       >
-        <PlayerCard />
         <Image
           src={minimap}
           alt="game map"

@@ -18,7 +18,6 @@ type Player = {
 };
 export default function Mint() {
   const diamond = contractStore((state) => state.diamond);
-  const inputRef = useRef<HTMLInputElement>();
   const timeout: { current: NodeJS.Timeout | null } = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [nameAvailable, setNameAvailable] = useState(false);
@@ -50,39 +49,44 @@ export default function Mint() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setIsLoading(true);
     reset();
-    const name = await diamond?.nameAvailable(data.name);
-    console.log(name);
+
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
 
     const player: Player = {};
     try {
-      const res = await fetch("/api/getimage");
-      console.log(res);
-      setIsLoading(false);
+      // const res = await fetch("/api/getimage");
+      // console.log(res);
+      // setIsLoading(false);
 
-      const json = await res.json();
-      console.log(json);
+      // const json = await res.json();
+      // console.log(json);
 
-      let imgblob = await fetch(json.img);
-      console.log(imgblob);
-      let imgn = await imgblob.blob();
-      console.log(imgn);
-      let file = new File([imgn], "test.jpg", json.metadata);
-      player.image = await uploadToIPFS(file);
-      console.log(player.image);
+      // let imgblob = await fetch(json.img);
+      // console.log(imgblob);
+      // let imgn = await imgblob.blob();
+      // console.log(imgn);
+      // let file = new File([imgn], "test.jpg", json.metadata);
+      // player.image = await uploadToIPFS(file);
+      // console.log(player.image);
       player.name = data.name.trim();
 
       if (data.gender === "Male") {
         player.gender = true;
+        player.image =
+          "https://infura-ipfs.io/ipfs/QmVQPguk3yttbq9inEyFNrADpZpHUTxAmgBv44i1zyLor7";
       } else {
         player.gender = false;
+        player.image =
+          "https://infura-ipfs.io/ipfs/QmbcRntJWvu6XJM89YZcPMgvEPQmyv1yJtmaFihYrbrkJC";
       }
+
       const mint = await diamond?.mint(
         player.name,
         player.image as any,
         player.gender
       );
+      setIsLoading(false);
       toast.promise(provider.waitForTransaction(mint?.hash as any), {
         pending: "Tx pending: " + mint?.hash,
         success: {
@@ -92,8 +96,6 @@ export default function Mint() {
         },
         error: "Tx failed",
       });
-
-      setIsLoading(false);
     } catch (error: any) {
       reset();
 
