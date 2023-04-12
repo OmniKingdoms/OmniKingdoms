@@ -92,6 +92,7 @@ library StorageLib {
     }
 
     struct ArenaStorage {
+        bool open;
         Arena mainArena;
         Arena secondArena;
         Arena thirdArena;
@@ -254,17 +255,17 @@ library StorageLib {
         ArenaStorage storage a = diamondStorageArena();
         return (a.mainArena.open, a.mainArena.hostId);
     }
-    function _getSecondArena() internal view returns (bool) {
+    function _getSecondArena() internal view returns (bool, uint256) {
         ArenaStorage storage a = diamondStorageArena();
-        return a.mainArena.open;
+        return (a.secondArena.open, a.secondArena.hostId) ;
     }
     function _getThirdArena() internal view returns (bool) {
         ArenaStorage storage a = diamondStorageArena();
-        return a.mainArena.open;
+        return a.thirdArena.open;
     }
-    function _getMagicArena() internal view returns (bool) {
+    function _getMagicArena() internal view returns (bool, uint256) {
         ArenaStorage storage a = diamondStorageArena();
-        return a.mainArena.open;
+        return (a.magicArena.open, a.magicArena.hostId);
     }
 
 
@@ -285,6 +286,8 @@ library StorageLib {
 
     function _openArenas () internal {
         ArenaStorage storage a = diamondStorageArena();
+        require(a.open == false);
+        a.open = true;
         a.mainArena.open = true;
         a.secondArena.open = true;
         a.thirdArena.open = true;
@@ -312,7 +315,7 @@ contract ArenaFacet {
     // function getThirdArena() external view returns(bool) {
     //     return StorageLib._getMainArena();
     // }
-    function getMagicArena() external view returns(bool) {
+    function getMagicArena() external view returns(bool, uint256) {
         return StorageLib._getMagicArena();
     }
 
@@ -331,6 +334,15 @@ contract ArenaFacet {
         StorageLib._fightMagicArena(_challengerId);
     }
 
+    function getTotalWins(uint256 _playerId) public view returns(uint256) {
+        return StorageLib._getTotalWins(_playerId);
+    }
+    function getMagicArenaWins(uint256 _playerId) public view returns(uint256) {
+        return StorageLib._getMagicArenaWins(_playerId);
+    }
+    function getMainArenaWins(uint256 _playerId) public view returns(uint256) {
+        return StorageLib._getMainArenaWins(_playerId);
+    }
     
 
 

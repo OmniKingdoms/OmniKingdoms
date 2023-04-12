@@ -65,6 +65,8 @@ library PlayerStorageLib {
     function _mint(string memory _name, string memory _uri, bool _isMale) internal {
         PlayerStorage storage s = diamondStorage();
         require(!s.usedNames[_name], "name is taken");
+        require(bytes(_name).length <= 8);
+        require(bytes(_name).length >= 3);
         s.playerCount++;
         s.players[s.playerCount] = Player(1,0,0,1,10,1,1,1,1,1,1,1, 1,_name, _uri, _isMale, Slot(0,0,0,0,0,0));
         s.slots[s.playerCount] = Slot(0,0,0,0,0,0);

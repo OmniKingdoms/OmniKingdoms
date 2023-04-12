@@ -80,6 +80,43 @@
         "LibDiamond"
       ]
     },
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamondCut.sol": {
+      "lastModificationDate": 1679806917526,
+      "contentHash": "74d1e316ccff781e1e23bcfed30d7a05",
+      "sourceName": "contracts/interfaces/IDiamondCut.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IDiamond.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IDiamondCut"
+      ]
+    },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamondLoupe.sol": {
       "lastModificationDate": 1679806917526,
       "contentHash": "a471cd6a18e337530aa0fb37a1dd2294",
@@ -148,43 +185,6 @@
       ],
       "artifacts": [
         "IERC173"
-      ]
-    },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamondCut.sol": {
-      "lastModificationDate": 1679806917526,
-      "contentHash": "74d1e316ccff781e1e23bcfed30d7a05",
-      "sourceName": "contracts/interfaces/IDiamondCut.sol",
-      "solcConfig": {
-        "version": "0.8.17",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./IDiamond.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IDiamondCut"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IERC165.sol": {
@@ -451,8 +451,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/ArenaFacet.sol": {
-      "lastModificationDate": 1681184485004,
-      "contentHash": "c1d694db08b02ea40c891257a1085bf0",
+      "lastModificationDate": 1681256912960,
+      "contentHash": "ec7f5547c07e856955cf5c36a43da031",
       "sourceName": "contracts/facets/ArenaFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -487,8 +487,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/CraftFacet.sol": {
-      "lastModificationDate": 1681177741883,
-      "contentHash": "65f8e762f089b6291980622512e9ab12",
+      "lastModificationDate": 1681259819101,
+      "contentHash": "a5028e64478869d9e3d89a5297469c90",
       "sourceName": "contracts/facets/CraftFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -595,8 +595,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/PlayerFacet.sol": {
-      "lastModificationDate": 1679806917523,
-      "contentHash": "f647f07b63aeb05e7a5f1d06dda44aee",
+      "lastModificationDate": 1681249528659,
+      "contentHash": "7ff71020e5697cf8dca82037fd3d5913",
       "sourceName": "contracts/facets/PlayerFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -703,7 +703,7 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/node_modules/hardhat-diamond-abi/dist/contract.sol": {
-      "lastModificationDate": 1681186315510,
+      "lastModificationDate": 1681259835919,
       "contentHash": "f0899ccf3452b0b76299b9fb99d6bbf2",
       "sourceName": "hardhat-diamond-abi/HardhatDiamondABI.sol",
       "solcConfig": {
