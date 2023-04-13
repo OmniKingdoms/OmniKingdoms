@@ -43,8 +43,8 @@ export default function App({ Component, pageProps }: AppProps) {
         signer
       ) as DIAMOND1HARDHAT;
       store.setDiamond(contract);
-      setMounted(true);
     }
+    setMounted(true);
   }, [address]);
   return (
     <>

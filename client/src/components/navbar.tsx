@@ -36,11 +36,17 @@ export default function Navbar() {
                   Mint
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href={""}>Leaderboard</Link>
-              </li>
+              </li> */}
               <li>
-                <Link href={""}>About</Link>
+                <Link
+                  href={
+                    "https://scroll-kingdoms-1.gitbook.io/game-play/game-play"
+                  }
+                >
+                  Docs
+                </Link>
               </li>
             </ul>
           </div>
@@ -64,12 +70,18 @@ export default function Navbar() {
               </Link>
             </li>
 
-            <li className=" rounded-lg  hover:bg-gray-600 ">
+            {/* <li className=" rounded-lg  hover:bg-gray-600 ">
               <Link href={""}>Leaderboard</Link>
-            </li>
+            </li> */}
 
             <li className=" rounded-lg  hover:bg-gray-600 ">
-              <Link href={""}>About</Link>
+              <Link
+                href={
+                  "https://scroll-kingdoms-1.gitbook.io/game-play/game-play"
+                }
+              >
+                Docs
+              </Link>
             </li>
           </ul>
         </div>
