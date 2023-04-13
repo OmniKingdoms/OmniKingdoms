@@ -121,7 +121,7 @@ library StorageLib {
         require(s.owners[_tokenId] == msg.sender);
         require(s.players[_tokenId].status == 1); //require that they are training
         require(
-            block.timestamp >= t.mana[_tokenId] + 1,
+            block.timestamp >= t.mana[_tokenId] + 300,
             "it's too early to pull out"
         );
         s.players[_tokenId].status = 0;

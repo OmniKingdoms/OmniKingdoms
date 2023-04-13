@@ -10,6 +10,8 @@ import PlayerCard from "@/components/playerCard";
 import { ethers } from "ethers";
 import Toast from "@/components/toast";
 import Countdown from "react-countdown";
+import { RiCoinLine } from "react-icons/ri";
+import MainArenaModal from "@/components/mainArenaModal";
 
 export default function Arena() {
   const store = contractStore();
@@ -102,24 +104,17 @@ export default function Arena() {
         </span>
       </Link>
 
-      <button
-        disabled
-        className="absolute left-[46%] top-[50%] btn bg-gray-600 disabled:text-zinc-100 disabled:bg-opacity-90 disabled:text-opacity-100"
+      <label
+        htmlFor="my-modal-4"
+        className="absolute left-[46%] top-[30%] btn mt-2 bg-[#9696ea] btn-accent gap-4"
       >
-        {timer ? (
-          <Countdown
-            date={Date.now() + 1000 * 20} // 1sec * seconds
-            onComplete={() => setTimer(false)}
-            renderer={(props) => (
-              <>
-                {props.minutes}:{props.seconds}
-              </>
-            )}
-          />
-        ) : (
-          <>Soon</>
-        )}
-      </button>
+        Main Arena
+        <div className="badge gap-2 text-red-500 ">
+          -1
+          <RiCoinLine className="" />
+        </div>
+      </label>
+      <MainArenaModal />
     </motion.div>
   );
 }

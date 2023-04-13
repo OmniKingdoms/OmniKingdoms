@@ -92,6 +92,7 @@ library StorageLib {
     }
 
     struct ArenaStorage {
+        bool open;
         Arena mainArena;
         Arena secondArena;
         Arena thirdArena;
@@ -150,20 +151,27 @@ library StorageLib {
         a.mainArena.hostAddress = payable(msg.sender);
     }
 
-    function _fightMainArena(uint256 _challengerId) internal {
+    function _fightMainArena(uint256 _challengerId) internal returns (uint256[] memory) {
         PlayerStorage storage s = diamondStoragePlayer();
         CoinStorage storage c = diamondStorageCoin();
         ArenaStorage storage a = diamondStorageArena();
         require(!a.mainArena.open, "arena is empty");
+        require(s.players[_challengerId].status == 0); //make sure player is idle
         require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
         uint256 winner = _simulateFight(a.mainArena.hostId, _challengerId);
+        uint256 _winner;
+        uint256 _loser;
         if (winner == _challengerId) { //means the challenger won
+            _winner = _challengerId;
+            _loser = a.mainArena.hostId;
             a.mainArenaWins[_challengerId]++; //add main Arena wins
             a.totalArenaWins[_challengerId]++; //add total wins
             a.mainArenaLosses[a.mainArena.hostId]++; //add main Arena losses
             a.totalArenaLosses[a.mainArena.hostId]++; //add total losses
             c.goldBalance[msg.sender] += 1; //increase gold
         } else { //means the host won
+            _loser = _challengerId;
+            _winner = a.mainArena.hostId;
             a.mainArenaWins[a.mainArena.hostId]++; //add main Arena wins
             a.totalArenaWins[a.mainArena.hostId]++; //add total wins
             a.mainArenaLosses[_challengerId]++; //add main Arena losses
@@ -173,6 +181,10 @@ library StorageLib {
         }
         a.mainArena.open = true;
         s.players[a.mainArena.hostId].status = 0; // set the host to idle
+        uint256[] memory result;
+        result[0] = _winner;
+        result[1] = _loser;
+        return result;
     }
 
     function _simulateFight(uint256 _hostId, uint256 _challengerId) internal view returns (uint256) {
@@ -214,6 +226,7 @@ library StorageLib {
         CoinStorage storage c = diamondStorageCoin();
         ArenaStorage storage a = diamondStorageArena();
         require(!a.magicArena.open, "arena is empty");
+        require(s.players[_challengerId].status == 0); //make sure player is idle
         require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
         uint256 winner = _simulateMagicFight(a.magicArena.hostId, _challengerId);
         if (winner == _challengerId) { //means the challenger won
@@ -248,21 +261,21 @@ library StorageLib {
         }
     }
 
-    function _getMainArena() internal view returns (bool) {
+    function _getMainArena() internal view returns (bool, uint256) {
         ArenaStorage storage a = diamondStorageArena();
-        return a.mainArena.open;
+        return (a.mainArena.open, a.mainArena.hostId);
     }
-    function _getSecondArena() internal view returns (bool) {
+    function _getSecondArena() internal view returns (bool, uint256) {
         ArenaStorage storage a = diamondStorageArena();
-        return a.mainArena.open;
+        return (a.secondArena.open, a.secondArena.hostId) ;
     }
     function _getThirdArena() internal view returns (bool) {
         ArenaStorage storage a = diamondStorageArena();
-        return a.mainArena.open;
+        return a.thirdArena.open;
     }
-    function _getMagicArena() internal view returns (bool) {
+    function _getMagicArena() internal view returns (bool, uint256) {
         ArenaStorage storage a = diamondStorageArena();
-        return a.mainArena.open;
+        return (a.magicArena.open, a.magicArena.hostId);
     }
 
 
@@ -279,10 +292,24 @@ library StorageLib {
         ArenaStorage storage a = diamondStorageArena();
         return a.magicArenaWins[_playerId];   
     }
+    function _getTotalLosses(uint256 _playerId) internal view returns (uint256) {
+        ArenaStorage storage a = diamondStorageArena();
+        return a.totalArenaLosses[_playerId];   
+    }
+    function _getMainArenaLosses(uint256 _playerId) internal view returns (uint256) {
+        ArenaStorage storage a = diamondStorageArena();
+        return a.mainArenaLosses[_playerId];   
+    }
+    function _getMagicArenaLosses(uint256 _playerId) internal view returns (uint256) {
+        ArenaStorage storage a = diamondStorageArena();
+        return a.magicArenaLosses[_playerId];   
+    }
 
 
     function _openArenas () internal {
         ArenaStorage storage a = diamondStorageArena();
+        require(a.open == false);
+        a.open = true;
         a.mainArena.open = true;
         a.secondArena.open = true;
         a.thirdArena.open = true;
@@ -295,40 +322,70 @@ library StorageLib {
 
 contract ArenaFacet {
 
-    event ItemCrafted(address indexed _owner, uint256 _player);
+    event MainWin(uint256 indexed _playerId);
+    event MagicWin(uint256 indexed _playerId);
+    event MainLoss(uint256 indexed _playerId);
+    event MagicLoss(uint256 indexed _playerId);
+    
+    event EnterMain(uint256 indexed _playerId);
+    event EnterMagic(uint256 indexed _playerId);
 
-    constructor() {
+    function openArenas() public {
         StorageLib._openArenas();
     }
 
-    function getMainArena() external view returns(bool) {
+    function getMainArena() external view returns(bool, uint256) {
         return StorageLib._getMainArena();
     }
-    function getSecondArena() external view returns(bool) {
-        return StorageLib._getMainArena();
-    }
-    function getThirdArena() external view returns(bool) {
-        return StorageLib._getMainArena();
-    }
-    function getMagicArena() external view returns(bool) {
-        return StorageLib._getMainArena();
+    // function getSecondArena() external view returns(bool) {
+    //     return StorageLib._getMainArena();
+    // }
+    // function getThirdArena() external view returns(bool) {
+    //     return StorageLib._getMainArena();
+    // }
+    function getMagicArena() external view returns(bool, uint256) {
+        return StorageLib._getMagicArena();
     }
 
     function enterMainArena(uint256 _playerId) public {
         StorageLib._enterMainArena(_playerId);
+        emit EnterMain(_playerId);
     }
 
     function fightMainArena(uint256 _challengerId) public {
-        StorageLib._fightMainArena(_challengerId);
+        uint256[] memory result = StorageLib._fightMainArena(_challengerId);
+        emit MainWin(result[0]);
+        emit MainLoss(result[1]);
     }
+
     function enterMagicArena(uint256 _playerId) public {
         StorageLib._enterMagicArena(_playerId);
+        emit EnterMagic(_playerId);
     }
 
     function fightMagicArena(uint256 _challengerId) public {
         StorageLib._fightMagicArena(_challengerId);
     }
 
+
+    function getTotalWins(uint256 _playerId) public view returns(uint256) {
+        return StorageLib._getTotalWins(_playerId);
+    }
+    function getMagicArenaWins(uint256 _playerId) public view returns(uint256) {
+        return StorageLib._getMagicArenaWins(_playerId);
+    }
+    function getMainArenaWins(uint256 _playerId) public view returns(uint256) {
+        return StorageLib._getMainArenaWins(_playerId);
+    }
+    function getTotalLosses(uint256 _playerId) public view returns(uint256) {
+        return StorageLib._getTotalLosses(_playerId);
+    }
+    function getMagicArenaLosses(uint256 _playerId) public view returns(uint256) {
+        return StorageLib._getMagicArenaLosses(_playerId);
+    }
+    function getMainArenaLosses(uint256 _playerId) public view returns(uint256) {
+        return StorageLib._getMainArenaLosses(_playerId);
+    }
     
 
 

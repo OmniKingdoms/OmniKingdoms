@@ -56,6 +56,8 @@ export default function PlayerCard() {
       case 2:
         return <span className="text-error">questing</span>;
       case 3:
+        return <span className="text-error">crafting</span>;
+      case 4:
         return <span className="text-error">fighting</span>;
       default:
         return <span className="text-success">ready</span>;
@@ -117,11 +119,11 @@ export default function PlayerCard() {
               <div className="stat-desc text-purple-800 font-bold">
                 level: {store.player?.level.toNumber()}
               </div>
-              <progress
+              {/* <progress
                 className="progress w-full progress-success"
                 value="50"
                 max="100"
-              ></progress>
+              ></progress> */}
             </div>
           </div>
           <div className=" my-auto">
@@ -147,7 +149,7 @@ export default function PlayerCard() {
           </div>
           <div className=" my-auto ">
             <div
-              className=" flex justify-center items-center text-3xl text-purple-900 tooltip tooltip"
+              className=" flex justify-center items-center text-3xl text-purple-900 tooltip"
               data-tip="mana"
             >
               <GiPotionBall />0{store.player?.mana.toNumber()}
