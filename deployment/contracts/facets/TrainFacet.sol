@@ -158,26 +158,28 @@ library StorageLib {
 
 contract TrainFacet {
 
-    event BeginTraining(address indexed _playerAddress, uint256 _id);
-    event EndTraining(address indexed _playerAddress, uint256 _id);
+    event BeginTrainingCombat(address indexed _playerAddress, uint256 _id);
+    event EndTrainingCombat(address indexed _playerAddress, uint256 _id);
+    event BeginTrainingMana(address indexed _playerAddress, uint256 _id);
+    event EndTrainingMana(address indexed _playerAddress, uint256 _id);
 
     function startTrainingCombat(uint256 _tokenId) external {
         StorageLib._startTrainingCombat(_tokenId);
-        emit BeginTraining(msg.sender, _tokenId);
+        emit BeginTrainingCombat(msg.sender, _tokenId);
     }
 
     function endTrainingCombat(uint256 _tokenId) external {
         StorageLib._endTrainingCombat(_tokenId);
-        emit EndTraining(msg.sender, _tokenId);
+        emit EndTrainingCombat(msg.sender, _tokenId);
     }
     function startTrainingMana(uint256 _tokenId) external {
         StorageLib._startTrainingMana(_tokenId);
-        emit BeginTraining(msg.sender, _tokenId);
+        emit BeginTrainingMana(msg.sender, _tokenId);
     }
 
     function endTrainingMana(uint256 _tokenId) external {
         StorageLib._endTrainingMana(_tokenId);
-        emit EndTraining(msg.sender, _tokenId);
+        emit EndTrainingMana(msg.sender, _tokenId);
     }
 
     function getCombatStart(uint256 _playerId) external view returns(uint256) {

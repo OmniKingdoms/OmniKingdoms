@@ -135,7 +135,8 @@ library PlayerStorageLib {
 
 contract PlayerFacet {
 
-    event Mint(uint256 indexed _id, string indexed, string indexed);
+    event Mint(uint256 indexed id, address indexed owner, string indexed name, string uri);
+    event NameChange(address indexed owner, uint256 indexed id, string indexed newName);
 
 
     function playerCount() public view returns(uint256) {
@@ -145,11 +146,12 @@ contract PlayerFacet {
     function mint(string memory _name, string memory _uri, bool _isMale) external {
         PlayerStorageLib._mint(_name, _uri, _isMale);
         uint256 count = playerCount();
-        emit Mint(count, _name, _uri);
+        emit Mint(count, msg.sender, _name, _uri);
     }
 
     function changeName(uint256 _id, string memory _newName) external {
         PlayerStorageLib._changeName(_id, _newName);
+        emit NameChange(msg.sender, _id, _newName);
     }
 
     function getPlayer(uint256 _playerId) external view returns(Player memory player) {
