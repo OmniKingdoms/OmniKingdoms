@@ -9,10 +9,9 @@ const Player = require("./models/Player");
 const mongoose = require("mongoose");
 const { ethers } = require("ethers");
 require("dotenv").config();
-const ABI = require("./abi/abi.json");
+const ABI = require('../deployment/artifacts/hardhat-diamond-abi/HardhatDiamondABI.sol/DIAMOND-1-HARDHAT.json');
 const CONTRACT_ADDRESS = process.env.SMART_CONTRACT; // Replace with your contract address
-const provider = new ethers.JsonRpcProvider(
-process.env.RPC);
+const provider = new ethers.providers.JsonRpcProvider(process.env.RPC);
 
 // Create a contract instance
 const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, provider);
