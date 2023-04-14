@@ -221,7 +221,7 @@ library StorageLib {
         a.magicArena.hostAddress = payable(msg.sender);
     }
 
-    function _fightMagicArena(uint256 _challengerId) internal {
+    function _fightMagicArena(uint256 _challengerId) internal returns (uint256[] memory) {
         PlayerStorage storage s = diamondStoragePlayer();
         CoinStorage storage c = diamondStorageCoin();
         ArenaStorage storage a = diamondStorageArena();
@@ -229,13 +229,19 @@ library StorageLib {
         require(s.players[_challengerId].status == 0); //make sure player is idle
         require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
         uint256 winner = _simulateMagicFight(a.magicArena.hostId, _challengerId);
+        uint256 _winner;
+        uint256 _loser;
         if (winner == _challengerId) { //means the challenger won
+            _winner = _challengerId;
+            _loser = a.mainArena.hostId;
             a.magicArenaWins[_challengerId]++; //add main Arena wins
             a.totalArenaWins[_challengerId]++; //add total wins
             a.magicArenaLosses[a.mainArena.hostId]++; //add main Arena losses
             a.totalArenaLosses[a.mainArena.hostId]++; //add total losses
             c.goldBalance[msg.sender] += 1; //increase gold
         } else { //means the host won
+            _loser = _challengerId;
+            _winner = a.mainArena.hostId;
             a.magicArenaWins[a.mainArena.hostId]++; //add main Arena wins
             a.totalArenaWins[a.mainArena.hostId]++; //add total wins
             a.magicArenaLosses[_challengerId]++; //add main Arena losses
@@ -245,6 +251,10 @@ library StorageLib {
         }
         a.magicArena.open = true;
         s.players[a.magicArena.hostId].status = 0; // set the host to idle
+        uint256[] memory result;
+        result[0] = _winner;
+        result[1] = _loser;
+        return result;
     }
 
     function _simulateMagicFight(uint256 _hostId, uint256 _challengerId) internal view returns (uint256) {
@@ -364,7 +374,9 @@ contract ArenaFacet {
     }
 
     function fightMagicArena(uint256 _challengerId) public {
-        StorageLib._fightMagicArena(_challengerId);
+        uint256[] memory result = StorageLib._fightMagicArena(_challengerId);
+        emit MagicWin(result[0]);
+        emit MagicLoss(result[1]);
     }
 
 

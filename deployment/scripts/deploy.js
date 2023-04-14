@@ -69,7 +69,7 @@ async function deployDiamond () {
   console.log()
   console.log('Diamond deployed:', diamond.address)
 
-  await verifyDiamond(diamond, facetCuts, diamondArgs);
+  //await verifyDiamond(diamond, facetCuts, diamondArgs);
  
   // returning the address of the diamond
   return diamond.address
