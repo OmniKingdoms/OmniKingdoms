@@ -1,21 +1,20 @@
 const express = require("express");
 const redis = require("redis");
 const util = require("util");
-const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
 
 const Player = require("./models/Player");
 const mongoose = require("mongoose");
-const Web3 = require("web3");
+const { ethers } = require("ethers");
 require("dotenv").config();
-const ABI = require("./abi/abi.json");
-const CONTRACT_ADDRESS = "0xe79C627c41746bd5D013c855c6f89645a34de6F5"; // Replace with your contract address
-const web3 = new Web3("https://alpha-rpc.scroll.io/l2"); // Replace with your Infura project ID and network
+const ABI = require('./abi/abi.json');
+const CONTRACT_ADDRESS = process.env.SMART_CONTRACT; // Replace with your contract address
+const provider = new ethers.providers.JsonRpcProvider(process.env.RPC);
+
 // Create a contract instance
-const contract = new web3.eth.Contract(ABI.abi, CONTRACT_ADDRESS);
+const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, provider);
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -39,61 +38,200 @@ const redisGet = util.promisify(redisClient.get).bind(redisClient);
 const redisSet = util.promisify(redisClient.set).bind(redisClient);
 
 const leaderboardUpdate = async () => {
-  console.log("leaderboard Update");
-  const playerCount = parseInt(await contract.methods.playerCount().call());
-  console.log(playerCount);
-
-  if (playerCount) {
-    console.log("cache boutta hit");
-
-    const batchSize = 100;
-    const batches = Math.ceil(playerCount / batchSize);
-    // Connect to MongoDB using Mongoose
-
-    const bulkOps = [];
-
-    for (let batch = 0; batch < batches; batch++) {
-      const batchStart = batch * batchSize + 1;
-      const batchEnd = Math.min((batch + 1) * batchSize, playerCount);
-      const batchIds = Array.from(
-        { length: batchEnd - batchStart + 1 },
-        (_, i) => batchStart + i
-      );
-
-      const playerData = await Promise.all(
-        batchIds.map(async (id) => {
-          const response = await contract.methods.getPlayer(id).call();
-          return {
-            id: id,
-            name: response.name,
-            strength: parseInt(response.strength),
-            magic: parseInt(response.magic),
-            health: parseInt(response.health),
-            status: response.status,
-            image: response.uri,
-            xp: parseInt(response.xp),
-          };
-        })
-      );
-
-      playerData.forEach((player) => {
-        bulkOps.push({
-          updateOne: {
-            filter: { id: player.id },
-            update: { $set: player },
-            upsert: true,
-          },
-        });
-      });
-
-      // Execute bulk update operation for each batch using Mongoose
-      await Player.bulkWrite(bulkOps, { ordered: false });
-
-      // Clear bulk operations array
-      bulkOps.length = 0;
+  contract.on('Mint', async (id, owner, name, uri) => {
+    try {
+      // Check if player already exists in database
+      let player = await Player.findOne({ id:parseInt(id) });
+      if (player) {
+        // Player already exists, update owner, name, and uri
+        player.owner = owner;
+        player.name = name;
+        player.uri = uri;
+        await player.save();
+      } else {
+        // Player does not exist, create new player in database
+        player = new Player({ id, owner, name, uri });
+        await player.save();
+      }
+      console.log(`Player ${id} minted by ${owner} with name "${name}" and URI "${uri}"`);
+    } catch (error) {
+      console.error(error);
     }
-    console.log("done");
-  }
+  });
+
+  contract.on("BeginTrainingCombat", async (playerAddress, id) => {
+    try {
+      // Find player by id
+      const player = await Player.findOne({ id: parseInt(id) });
+
+      if (player) {
+        // Update player status
+        player.status = 1;
+        await player.save();
+
+        console.log(
+          `Player with id ${player.id} and name ${player.name} is now training`
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on('NameChange', async (owner, id, newName) => {
+    try {
+      // Find player by id and update name
+      const player = await Player.findOneAndUpdate({ id:parseInt(id) }, { name: newName }, { new: true });
+      console.log(`Player ${id} name changed to "${newName}" by ${owner}`);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+  contract.on('BeginTrainingMana', async (playerAddress, id) => {
+    try {
+      // Find player by id and update trainingInProgress and trainingStartTime
+      const player = await Player.findOne({ id: parseInt(id) });
+
+      if (player) {
+        // Update player status
+        player.status = 1;
+        await player.save();
+
+        console.log(
+          `Player with id ${player.id} and name ${player.name} is now training`
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  
+  contract.on('EndTrainingMana', async (playerAddress, id) => {
+    try {
+      // Find player by id and update trainingInProgress and trainingEndTime
+      const player = await Player.findOne({ id: parseInt(id) });
+
+      if (player) {
+        // Update player status
+        player.status = 0;
+        player.mana += 1;
+        await player.save();
+
+        console.log(
+          `Player with id ${player.id} and name ${player.name} is now ended training`
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  // Listen for EndTraining events
+  contract.on("EndTrainingCombat", async (playerAddress, id) => {
+    try {
+      // Find player by id
+      const player = await Player.findOne({ id: parseInt(id) });
+
+      if (player) {
+        // Update player status
+        player.status = 0;
+        player.strength += 1;
+        await player.save();
+
+        console.log(
+          `Player with id ${player.id} and name ${player.name} is now  ended training`
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on("MainWin", async (playerId) => {
+    try {
+      // Find player in database
+      const player = await Player.findOne({ id: playerId });
+      if (!player) {
+        console.log(`Player with id ${playerId} not found`);
+        return;
+      }
+
+      // Update player wins
+      player.wins += 1;
+      player.Mainwins += 1;
+      await player.save();
+
+      console.log(`Player with id ${playerId} has ${player.wins} wins`);
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on("MagicWin", async (playerId) => {
+    try {
+      // Find player by id
+      const player = await Player.findOne({ id: playerId });
+      // If player exists, update wins count
+      if (player) {
+        player.wins += 1;
+        player.Magicwins += 1;
+        await player.save();
+        console.log(`Player ${player.id} wins updated to ${player.wins}`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on("MainLoss", async (playerId) => {
+    try {
+      // Find player by id
+      const player = await Player.findOne({ id: playerId });
+      // If player exists, do nothing
+      if (player) {
+        player.losses += 1;
+        player.Mainlosses += 1;
+        console.log(`Player ${player.id} suffered a main loss`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on("MagicLoss", async (playerId) => {
+    try {
+      // Find player by id
+      const player = await Player.findOne({ id: playerId });
+      // If player exists, do nothing
+      if (player) {
+        player.losses += 1;
+        player.Magiclosses += 1;
+        console.log(`Player ${player.id} suffered a magic loss`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on("EnterMain", async (playerId) => {
+    try {
+      // Find player by id
+      const player = await Player.findOne({ id: playerId });
+      // If player exists, do nothing
+      if (player) {
+        player.status = 4;
+        console.log(`Player ${player.id} entered the main arena`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on("EnterMagic", async (playerId) => {
+    try {
+      // Find player by id
+      const player = await Player.findOne({ id: playerId });
+      // If player exists, do nothing
+      if (player) {
+        player.status = 4;
+        console.log(`Player ${player.id} entered the magic arena`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
 };
 app.get("/leaderboard", async (req, res) => {
   try {
@@ -135,8 +273,23 @@ app.get("/leaderboard", async (req, res) => {
     }
 
     // Fetch leaderboard from database
-    const players = await Player.find().sort({ xp: -1, strength: -1 });
-
+    const players = await Player.aggregate([
+      {
+        $addFields: {
+          totalMatches: { $add: ["$wins", "$losses"] },
+          winRatio: {
+            $cond: {
+              if: { $eq: ["$wins", 0] },
+              then: 0,
+              else: { $divide: ["$wins", { $add: ["$wins", "$losses"] }] },
+            },
+          },
+        },
+      },
+      {
+        $sort: { winRatio: -1 },
+      },
+    ]);
     // Calculate pagination values
     const totalPlayers = players.length;
     const totalPages = Math.ceil(totalPlayers / pageSize);
@@ -170,11 +323,10 @@ app.get("/leaderboard", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 const runLeaderboardUpdate = async () => {
   await leaderboardUpdate();
-  setTimeout(runLeaderboardUpdate, 10000);
 };
 
 runLeaderboardUpdate();
