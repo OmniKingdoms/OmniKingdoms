@@ -151,7 +151,7 @@ library StorageLib {
         a.mainArena.hostAddress = payable(msg.sender);
     }
 
-    function _fightMainArena(uint256 _challengerId) internal returns (uint256[] memory) {
+    function _fightMainArena(uint256 _challengerId) internal returns (uint256, uint256) {
         PlayerStorage storage s = diamondStoragePlayer();
         CoinStorage storage c = diamondStorageCoin();
         ArenaStorage storage a = diamondStorageArena();
@@ -181,10 +181,7 @@ library StorageLib {
         }
         a.mainArena.open = true;
         s.players[a.mainArena.hostId].status = 0; // set the host to idle
-        uint256[] memory result;
-        result[0] = _winner;
-        result[1] = _loser;
-        return result;
+        return (_winner, _loser);
     }
 
     function _simulateFight(uint256 _hostId, uint256 _challengerId) internal view returns (uint256) {
@@ -221,7 +218,7 @@ library StorageLib {
         a.magicArena.hostAddress = payable(msg.sender);
     }
 
-    function _fightMagicArena(uint256 _challengerId) internal returns (uint256[] memory) {
+    function _fightMagicArena(uint256 _challengerId) internal returns (uint256, uint256) {
         PlayerStorage storage s = diamondStoragePlayer();
         CoinStorage storage c = diamondStorageCoin();
         ArenaStorage storage a = diamondStorageArena();
@@ -251,10 +248,7 @@ library StorageLib {
         }
         a.magicArena.open = true;
         s.players[a.magicArena.hostId].status = 0; // set the host to idle
-        uint256[] memory result;
-        result[0] = _winner;
-        result[1] = _loser;
-        return result;
+        return (_winner, _loser);
     }
 
     function _simulateMagicFight(uint256 _hostId, uint256 _challengerId) internal view returns (uint256) {
@@ -363,9 +357,11 @@ contract ArenaFacet {
     }
 
     function fightMainArena(uint256 _challengerId) public {
-        uint256[] memory result = StorageLib._fightMainArena(_challengerId);
-        emit MainWin(result[0]);
-        emit MainLoss(result[1]);
+        uint256 _winner;
+        uint256 _loser;
+        (_winner, _loser) = StorageLib._fightMainArena(_challengerId);
+        emit MainWin(_winner);
+        emit MainLoss(_loser);
     }
 
     function enterMagicArena(uint256 _playerId) public {
@@ -374,9 +370,11 @@ contract ArenaFacet {
     }
 
     function fightMagicArena(uint256 _challengerId) public {
-        uint256[] memory result = StorageLib._fightMagicArena(_challengerId);
-        emit MagicWin(result[0]);
-        emit MagicLoss(result[1]);
+        uint256 _winner;
+        uint256 _loser;
+        (_winner, _loser) = StorageLib._fightMagicArena(_challengerId);
+        emit MagicWin(_winner);
+        emit MagicLoss(_loser);
     }
 
 

@@ -640,6 +640,13 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "mintCoins",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "bytes4",
@@ -1786,7 +1793,7 @@
           "type": "address"
         },
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "uint256",
           "name": "_id",
           "type": "uint256"
@@ -1805,7 +1812,7 @@
           "type": "address"
         },
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "uint256",
           "name": "_id",
           "type": "uint256"
@@ -1824,7 +1831,7 @@
           "type": "address"
         },
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "uint256",
           "name": "_id",
           "type": "uint256"
@@ -1843,7 +1850,7 @@
           "type": "address"
         },
         {
-          "indexed": false,
+          "indexed": true,
           "internalType": "uint256",
           "name": "_id",
           "type": "uint256"

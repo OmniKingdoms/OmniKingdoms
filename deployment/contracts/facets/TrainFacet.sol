@@ -157,10 +157,10 @@ library StorageLib {
 
 contract TrainFacet {
 
-    event BeginTrainingCombat(address indexed _playerAddress, uint256 _id);
-    event EndTrainingCombat(address indexed _playerAddress, uint256 _id);
-    event BeginTrainingMana(address indexed _playerAddress, uint256 _id);
-    event EndTrainingMana(address indexed _playerAddress, uint256 _id);
+    event BeginTrainingCombat(address indexed _playerAddress, uint256 indexed _id);
+    event EndTrainingCombat(address indexed _playerAddress, uint256 indexed _id);
+    event BeginTrainingMana(address indexed _playerAddress, uint256 indexed _id);
+    event EndTrainingMana(address indexed _playerAddress, uint256 indexed _id);
 
     function startTrainingCombat(uint256 _tokenId) external {
         StorageLib._startTrainingCombat(_tokenId);
