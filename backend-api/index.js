@@ -29,6 +29,10 @@ function connectToRedis() {
   redisClient.on("error", (err) => console.error(`Redis error: ${err}`));
   return redisClient;
 }
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 // Call connectToRedis function at start of application
 const redisClient = connectToRedis();
@@ -324,6 +328,7 @@ app.get("/leaderboard", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 const runLeaderboardUpdate = async () => {
   await leaderboardUpdate();
