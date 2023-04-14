@@ -49,11 +49,11 @@ const leaderboardUpdate = async () => {
         // Player already exists, update owner, name, and uri
         player.owner = owner;
         player.name = name;
-        player.uri = uri;
+        player.image = uri;
         await player.save();
       } else {
         // Player does not exist, create new player in database
-        player = new Player({ id, owner, name, uri });
+        player = new Player({ id, owner, name, image: uri });
         await player.save();
       }
       console.log(
