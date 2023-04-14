@@ -119,7 +119,7 @@ export default function Mint() {
       setIsLoading(false);
     }
   };
-  if (chain?.id === 80001) {
+  if (chain?.id !== 80001) {
     return (
       <>
         <form

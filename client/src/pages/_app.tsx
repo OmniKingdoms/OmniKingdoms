@@ -50,7 +50,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <WagmiProvider>
         <NextHead>
-          <title>Scroll Kingdom</title>
+          <title>Scroll Kingdoms</title>
         </NextHead>
         <main className={`${poppins.variable} `}>
           <Navbar />
@@ -59,7 +59,7 @@ export default function App({ Component, pageProps }: AppProps) {
               key={router.pathname}
               className="flex md:flex-row flex-col relative items-center "
             >
-              {router.pathname !== "/mint" && <PlayerCard />}
+              {router.pathname !== "/leaderboard" && <PlayerCard />}
               {mounted && <Component {...pageProps} />}
             </motion.div>
           </AnimatePresence>
