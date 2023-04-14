@@ -12,8 +12,7 @@ require("dotenv").config();
 const ABI = require("./abi/abi.json");
 const CONTRACT_ADDRESS = process.env.SMART_CONTRACT; // Replace with your contract address
 const provider = new ethers.JsonRpcProvider(
-  "https://alpha-rpc.scroll.io/l2"
-);
+process.env.RPC);
 
 // Create a contract instance
 const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI.abi, provider);
