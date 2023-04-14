@@ -29,7 +29,10 @@ function connectToRedis() {
   redisClient.on("error", (err) => console.error(`Redis error: ${err}`));
   return redisClient;
 }
-
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
 // Call connectToRedis function at start of application
 const redisClient = connectToRedis();
 
