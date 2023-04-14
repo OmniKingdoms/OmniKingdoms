@@ -130,7 +130,6 @@ library StorageLib {
         t.cooldown[_tokenId] = block.timestamp; //reset the cool down
     }
 
-
     function _startMeditation(uint256 _tokenId) internal {
         PlayerStorage storage s = diamondStoragePlayer();
         TrainStorage storage t = diamondStorageTrain();

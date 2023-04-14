@@ -135,7 +135,7 @@ library PlayerStorageLib {
 
 contract PlayerFacet {
 
-    event Mint(uint256 indexed id, address indexed owner, string indexed name, string uri);
+    event Mint(uint256 indexed id, address indexed owner, string name, string uri);
     event NameChange(address indexed owner, uint256 indexed id, string indexed newName);
 
 
