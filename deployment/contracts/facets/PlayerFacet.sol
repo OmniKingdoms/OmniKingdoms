@@ -65,7 +65,7 @@ library PlayerStorageLib {
     function _mint(string memory _name, string memory _uri, bool _isMale) internal {
         PlayerStorage storage s = diamondStorage();
         require(!s.usedNames[_name], "name is taken");
-        require(bytes(_name).length <= 8);
+        require(bytes(_name).length <= 10);
         require(bytes(_name).length >= 3);
         s.playerCount++;
         s.players[s.playerCount] = Player(1,0,0,1,10,1,1,1,1,1,1,1, 1,_name, _uri, _isMale, Slot(0,0,0,0,0,0));
@@ -90,8 +90,8 @@ library PlayerStorageLib {
         PlayerStorage storage s = diamondStorage();
         require(s.owners[_id] == msg.sender);
         require(!s.usedNames[_newName], "name is taken");
-        require(bytes(_newName).length > 0, "Cannot pass an empty hash");
-        require(bytes(_newName).length < 16, "Cannot be longer than 16 chars");
+        require(bytes(_newName).length > 3, "Cannot pass an empty hash");
+        require(bytes(_newName).length < 10, "Cannot be longer than 10 chars");
         string memory existingName = s.players[_id].name;
         if (bytes(existingName).length > 0) {
             delete s.usedNames[existingName];
@@ -135,8 +135,8 @@ library PlayerStorageLib {
 
 contract PlayerFacet {
 
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    event Mint(address indexed _to, uint256 _id);
+    event Mint(uint256 indexed id, address indexed owner, string name, string uri);
+    event NameChange(address indexed owner, uint256 indexed id, string indexed newName);
 
 
     function playerCount() public view returns(uint256) {
@@ -146,11 +146,12 @@ contract PlayerFacet {
     function mint(string memory _name, string memory _uri, bool _isMale) external {
         PlayerStorageLib._mint(_name, _uri, _isMale);
         uint256 count = playerCount();
-        emit Mint(msg.sender, count);
+        emit Mint(count, msg.sender, _name, _uri);
     }
 
     function changeName(uint256 _id, string memory _newName) external {
         PlayerStorageLib._changeName(_id, _newName);
+        emit NameChange(msg.sender, _id, _newName);
     }
 
     function getPlayer(uint256 _playerId) external view returns(Player memory player) {

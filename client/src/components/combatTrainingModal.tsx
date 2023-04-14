@@ -20,10 +20,8 @@ export default function CombatTrainingModal() {
       selectedPlayer
     )) as any;
     const startTime = blockTimestamp.toNumber() as any;
-    console.log(startTime);
     const curTime = (Date.now() / 1000).toFixed(0) as any;
     const time = curTime - startTime;
-    console.log(time);
     if (time < 120) {
       setCountdown(120 - time); // 2min
       setTimer(true);
@@ -32,15 +30,14 @@ export default function CombatTrainingModal() {
 
   useEffect(() => {
     combatTimer();
-    if (!player.status) {
+    if (!player?.status) {
       setEndTrain(false);
     } else {
-      console.log(player.status.toNumber());
       if (player.status.toNumber() === 1) {
         setEndTrain(true);
       }
     }
-  }, [player.status, timer]);
+  }, [player?.status, timer]);
 
   async function handleStartCombatTrain() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);

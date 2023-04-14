@@ -17,10 +17,8 @@ export default function GoldModal() {
   async function questTimer() {
     const blockTimestamp = (await diamond?.getGoldStart(selectedPlayer)) as any;
     const startTime = blockTimestamp.toNumber() as any;
-    console.log(startTime);
     const curTime = (Date.now() / 1000).toFixed(0) as any;
     const time = curTime - startTime;
-    console.log(time);
     if (time < 60) {
       setCountdown(60 - time);
       setTimer(true);
@@ -29,14 +27,14 @@ export default function GoldModal() {
 
   useEffect(() => {
     questTimer();
-    if (!player.status) {
+    if (!player?.status) {
       setEndQuest(false);
     } else {
       if (player.status.toNumber() === 2) {
         setEndQuest(true);
       }
     }
-  }, [player.status, timer]);
+  }, [player?.status, timer]);
 
   async function handleBeginGold() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
@@ -80,8 +78,6 @@ export default function GoldModal() {
     }
   }
   async function handleEndGold() {
-    console.log(player.status.toNumber());
-
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
 

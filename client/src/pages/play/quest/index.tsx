@@ -4,7 +4,6 @@ import contractStore from "@/store/contractStore";
 import Diamond from "@/contracts/data/diamond.json";
 import Image from "next/image";
 import Link from "next/link";
-import PlayerCard from "@/components/playerCard";
 import { ethers } from "ethers";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -47,7 +46,6 @@ export default function Quest() {
         height={800}
         className="rounded-3xl shadow-inner  mix-blend-	"
       />
-      <PlayerCard />
       <Link href={"/play"}>
         <span className=" absolute left-[10%] btn top-[5%] hover:cursor-pointer font-bold text-white rounded-lg bg-gray-600 py-1 px-2">
           Back

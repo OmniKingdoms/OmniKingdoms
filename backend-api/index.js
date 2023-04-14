@@ -9,7 +9,7 @@ const Player = require("./models/Player");
 const mongoose = require("mongoose");
 const { ethers } = require("ethers");
 require("dotenv").config();
-const ABI = require('./abi/abi.json');
+const ABI = require("../deployment/artifacts/hardhat-diamond-abi/HardhatDiamondABI.sol/DIAMOND-1-HARDHAT.json");
 const CONTRACT_ADDRESS = process.env.SMART_CONTRACT; // Replace with your contract address
 const provider = new ethers.providers.JsonRpcProvider(process.env.RPC);
 
@@ -30,10 +30,9 @@ function connectToRedis() {
   return redisClient;
 }
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader("Access-Control-Allow-Origin", "*");
   next();
 });
-
 // Call connectToRedis function at start of application
 const redisClient = connectToRedis();
 
@@ -42,10 +41,10 @@ const redisGet = util.promisify(redisClient.get).bind(redisClient);
 const redisSet = util.promisify(redisClient.set).bind(redisClient);
 
 const leaderboardUpdate = async () => {
-  contract.on('Mint', async (id, owner, name, uri) => {
+  contract.on("Mint", async (id, owner, name, uri) => {
     try {
       // Check if player already exists in database
-      let player = await Player.findOne({ id:parseInt(id) });
+      let player = await Player.findOne({ id: parseInt(id) });
       if (player) {
         // Player already exists, update owner, name, and uri
         player.owner = owner;
@@ -57,7 +56,9 @@ const leaderboardUpdate = async () => {
         player = new Player({ id, owner, name, uri });
         await player.save();
       }
-      console.log(`Player ${id} minted by ${owner} with name "${name}" and URI "${uri}"`);
+      console.log(
+        `Player ${id} minted by ${owner} with name "${name}" and URI "${uri}"`
+      );
     } catch (error) {
       console.error(error);
     }
@@ -81,16 +82,20 @@ const leaderboardUpdate = async () => {
       console.error(err);
     }
   });
-  contract.on('NameChange', async (owner, id, newName) => {
+  contract.on("NameChange", async (owner, id, newName) => {
     try {
       // Find player by id and update name
-      const player = await Player.findOneAndUpdate({ id:parseInt(id) }, { name: newName }, { new: true });
+      const player = await Player.findOneAndUpdate(
+        { id: parseInt(id) },
+        { name: newName },
+        { new: true }
+      );
       console.log(`Player ${id} name changed to "${newName}" by ${owner}`);
     } catch (error) {
       console.error(error);
     }
   });
-  contract.on('BeginTrainingMana', async (playerAddress, id) => {
+  contract.on("BeginTrainingMana", async (playerAddress, id) => {
     try {
       // Find player by id and update trainingInProgress and trainingStartTime
       const player = await Player.findOne({ id: parseInt(id) });
@@ -108,8 +113,8 @@ const leaderboardUpdate = async () => {
       console.error(err);
     }
   });
-  
-  contract.on('EndTrainingMana', async (playerAddress, id) => {
+
+  contract.on("EndTrainingMana", async (playerAddress, id) => {
     try {
       // Find player by id and update trainingInProgress and trainingEndTime
       const player = await Player.findOne({ id: parseInt(id) });

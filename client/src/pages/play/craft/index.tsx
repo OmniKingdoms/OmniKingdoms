@@ -4,7 +4,6 @@ import contractStore from "@/store/contractStore";
 import Diamond from "@/contracts/data/diamond.json";
 import Image from "next/image";
 import Link from "next/link";
-import PlayerCard from "@/components/playerCard";
 import { ethers } from "ethers";
 import { RiCoinLine } from "react-icons/ri";
 import { TbSword } from "react-icons/tb";
@@ -15,8 +14,6 @@ export default function Craft() {
   const store = contractStore();
 
   async function handleCraftSword() {
-    console.log(store.status);
-
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
     const signer = provider.getSigner();
@@ -63,8 +60,6 @@ export default function Craft() {
     }
   }
   async function handleCraftArmor() {
-    console.log(store.status);
-
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
     const signer = provider.getSigner();
@@ -144,7 +139,6 @@ export default function Craft() {
         height={800}
         className="rounded-3xl shadow-inner  mix-blend-	"
       />
-      <PlayerCard />
       <Link href={"/play"}>
         <span className=" absolute left-[10%] btn top-[5%] hover:cursor-pointer font-bold text-white rounded-lg bg-gray-600 py-1 px-2  ">
           Back

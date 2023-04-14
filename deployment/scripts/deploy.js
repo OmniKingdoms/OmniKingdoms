@@ -44,7 +44,7 @@ async function deployDiamond () {
       functionSelectors: getSelectors(facet)
     })
 
-    await verifyContract(facet, FacetName);
+    //await verifyContract(facet, FacetName);
   }
 
   // Creating a function call
@@ -69,7 +69,7 @@ async function deployDiamond () {
   console.log()
   console.log('Diamond deployed:', diamond.address)
 
-  await verifyContract(diamond, 'Diamond', [facetCuts, diamondArgs]);
+  //await verifyDiamond(diamond, facetCuts, diamondArgs);
  
   // returning the address of the diamond
   return diamond.address
@@ -112,4 +112,36 @@ async function verifyContract (diamond, FacetName, constructorArguments = []) {
   //   address: diamond.address,
   //   constructorArguments
   // })
+  
+}
+
+async function verifyDiamond (diamond, facetCuts, diamondArgs) {
+  const liveNetworks = ['mainnet', 'goerli', 'mumbai', 'scroll'];
+  if (!liveNetworks.includes(hre.network.name)) {
+    return; // Don't verify on test networks
+  }
+
+  try {
+    console.log("Waiting for 10 blocks to be mined...");
+    console.log('---------------')
+    console.log(facetCuts);
+    console.log(diamondArgs);
+    console.log('---------------')
+    await diamond.deployTransaction.wait(10);
+    console.log("Running verification");
+    await hre.run("verify:verify", {
+      address: diamond.address,
+      contract: "contracts/Diamond.sol:Diamond",
+      network: hardhatArguments.network,
+      arguments: [facetCuts, diamondArgs],
+    });
+  } catch (e) {
+    console.log("Verification failed: ", JSON.stringify(e, null, 2));
+  }
+
+  // hre.run('verify:verify', {
+  //   address: diamond.address,
+  //   constructorArguments
+  // })
+  
 }
