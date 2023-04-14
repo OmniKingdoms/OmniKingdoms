@@ -377,7 +377,6 @@ contract ArenaFacet {
         emit MagicLoss(_loser);
     }
 
-
     function getTotalWins(uint256 _playerId) public view returns(uint256) {
         return StorageLib._getTotalWins(_playerId);
     }

@@ -6,7 +6,7 @@ import { publicProvider } from "wagmi/providers/public";
 import "@rainbow-me/rainbowkit/styles.css";
 
 const { chains, provider } = configureChains(
-  [scrollTestnet, polygonMumbai, polygon, mainnet],
+  [scrollTestnet],
   [publicProvider()]
 );
 const { connectors } = getDefaultWallets({
@@ -27,7 +27,9 @@ export default function WagmiProvider({
   return (
     <>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+        <RainbowKitProvider chains={chains} initialChain={scrollTestnet}>
+          {children}
+        </RainbowKitProvider>
       </WagmiConfig>
     </>
   );

@@ -9,6 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.12.0",
+    "@hookform/resolvers": "^3.0.1",
     "@rainbow-me/rainbowkit": "^0.12.7",
     "@types/node": "18.15.5",
     "@types/react": "18.0.28",
@@ -32,6 +36,7 @@
     "three": "^0.150.1",
     "typescript": "5.0.2",
     "wagmi": "^0.12.10",
+    "zod": "^3.21.4",
     "zustand": "^4.3.6"
   },
   "devDependencies": {

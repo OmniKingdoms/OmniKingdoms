@@ -4,50 +4,48 @@ import { contractStore } from "@/store/contractStore";
 import { useState, useRef } from "react";
 import { ethers } from "ethers";
 import { ToastContainer, toast } from "react-toastify";
+import { useNetwork } from "wagmi";
 import "react-toastify/dist/ReactToastify.css";
 
-type Inputs = {
-  name: string;
-  gender: string;
-};
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
-type Player = {
-  name?: string;
-  gender?: boolean;
-  image?: string;
-};
 export default function Mint() {
+  const FormSchema = z.object({
+    name: z
+      .string()
+      .min(3, { message: "The name must be 3 characters or more" })
+      .max(10, { message: "The name must be 10 characters or less" })
+      .regex(/^[a-zA-Z0-9_]+$/, "only letters, numbers and underscore")
+      .refine(async (name) => {
+        const valid = await diamond?.nameAvailable(name);
+        return !valid;
+      }, "name already taken"),
+    gender: z.enum(["Male", "Female"]),
+  });
+  type FormInput = z.infer<typeof FormSchema>;
+
+  type Player = {
+    name?: string;
+    gender?: boolean;
+    image?: string;
+  };
+  const { chain } = useNetwork();
   const diamond = contractStore((state) => state.diamond);
-  const inputRef = useRef<HTMLInputElement>();
   const timeout: { current: NodeJS.Timeout | null } = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [nameAvailable, setNameAvailable] = useState(false);
 
   const {
-    formState: { isSubmitting },
     register,
     handleSubmit,
     reset,
-  } = useForm<Inputs>();
+    formState: { errors },
+  } = useForm<FormInput>({
+    resolver: zodResolver(FormSchema),
+  });
 
-  const handleNameValidate = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.value.trim()) {
-      setNameAvailable(false);
-    }
-    timeout.current && clearTimeout(timeout.current);
-    e.preventDefault();
-    timeout.current = setTimeout(async () => {
-      if (!e.target.value.trim()) {
-        setNameAvailable(false);
-      } else {
-        const name = await diamond?.nameAvailable(e.target.value.trim());
-        console.log(name);
-        setNameAvailable(!name as any);
-      }
-    }, 100);
-  };
-
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<FormInput> = async (data) => {
     setIsLoading(true);
     reset();
     const name = await diamond?.nameAvailable(data.name);
@@ -57,32 +55,32 @@ export default function Mint() {
 
     const player: Player = {};
     try {
-      const res = await fetch("/api/getimage");
-      console.log(res);
-      setIsLoading(false);
+      // const res = await fetch("/api/getimage");
+      // setIsLoading(false);
 
-      const json = await res.json();
-      console.log(json);
+      // const json = await res.json();
 
-      let imgblob = await fetch(json.img);
-      console.log(imgblob);
-      let imgn = await imgblob.blob();
-      console.log(imgn);
-      let file = new File([imgn], "test.jpg", json.metadata);
-      player.image = await uploadToIPFS(file);
-      console.log(player.image);
+      // let imgblob = await fetch(json.img);
+      // let imgn = await imgblob.blob();
+      // let file = new File([imgn], "test.jpg", json.metadata);
+      // player.image = await uploadToIPFS(file);
       player.name = data.name.trim();
 
       if (data.gender === "Male") {
         player.gender = true;
+        player.image =
+          "https://infura-ipfs.io/ipfs/QmVQPguk3yttbq9inEyFNrADpZpHUTxAmgBv44i1zyLor7";
       } else {
         player.gender = false;
+        player.image =
+          "https://infura-ipfs.io/ipfs/QmbcRntJWvu6XJM89YZcPMgvEPQmyv1yJtmaFihYrbrkJC";
       }
       const mint = await diamond?.mint(
         player.name,
         player.image as any,
         player.gender
       );
+      setIsLoading(false);
       toast.promise(provider.waitForTransaction(mint?.hash as any), {
         pending: "Tx pending: " + mint?.hash,
         success: {
@@ -92,8 +90,6 @@ export default function Mint() {
         },
         error: "Tx failed",
       });
-
-      setIsLoading(false);
     } catch (error: any) {
       reset();
 
@@ -120,52 +116,47 @@ export default function Mint() {
           theme: "dark",
         });
       }
-      console.log(error);
       setIsLoading(false);
     }
   };
-  return (
-    <>
-      <form
-        className="flex flex-col mb-4 gap-2"
-        onSubmit={handleSubmit(onSubmit)}
-        autoComplete="off"
-      >
-        <input
-          className="input bg-primary select-primary text-white"
-          placeholder="Player Name"
-          type="text"
-          {...register("name", {
-            required: true,
-            onChange: handleNameValidate,
-          })}
-        />
-        {!nameAvailable && (
-          <span className="text-xs text-red-500">
-            empty name or name already taken
-          </span>
+  if (chain?.id !== 80001) {
+    return (
+      <>
+        <form
+          className="flex flex-col mb-4 gap-2"
+          onSubmit={handleSubmit(onSubmit)}
+          autoComplete="off"
+        >
+          <input
+            className="input bg-primary select-primary text-white"
+            placeholder="Player Name"
+            type="text"
+            {...register("name", {
+              required: true,
+            })}
+          />
+          {errors.name && (
+            <span className="text-xs text-red-500">{errors.name.message}</span>
+          )}{" "}
+          <select
+            className="input select-primary text-white bg-primary"
+            {...register("gender", { required: true })}
+          >
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+          <button disabled={isLoading} className="btn btn-primary text-white">
+            {" "}
+            Mint Player
+          </button>
+        </form>
+        {isLoading && (
+          <div>
+            <span className="relative inset-0 inline-flex h-6 w-6 animate-spin items-center justify-center rounded-full border-2 border-gray-300 after:absolute after:h-8 after:w-8 after:rounded-full after:border-2 after:border-y-indigo-500 after:border-x-transparent"></span>
+          </div>
         )}
-        <select
-          className="input select-primary text-white bg-primary"
-          {...register("gender", { required: true })}
-        >
-          <option>Male</option>
-          <option>Female</option>
-        </select>
-        <button
-          disabled={!nameAvailable || isLoading}
-          className="btn btn-primary text-white"
-        >
-          {" "}
-          Mint Player
-        </button>
-      </form>
-      {isLoading && (
-        <div>
-          <span className="relative inset-0 inline-flex h-6 w-6 animate-spin items-center justify-center rounded-full border-2 border-gray-300 after:absolute after:h-8 after:w-8 after:rounded-full after:border-2 after:border-y-indigo-500 after:border-x-transparent"></span>
-        </div>
-      )}
-      <ToastContainer theme="dark" />
-    </>
-  );
+        <ToastContainer theme="dark" />
+      </>
+    );
+  }
 }
