@@ -66,6 +66,10 @@ module.exports = {
       gasLimit: 50000000000000,
       url: "https://rpc-mumbai.maticvigil.com",
       accounts: [keys]
+    },
+    mantletest: {
+      url: "https://rpc.testnet.mantle.xyz/",
+      accounts: [keys], // Uses the private key from the .env file
     }
   },
   settings: {

@@ -121,7 +121,7 @@ library StorageLib {
         require(s.owners[_tokenId] == msg.sender);
         require(s.players[_tokenId].status == 1); //require that they are training
         require(
-            block.timestamp >= t.mana[_tokenId] + 1,
+            block.timestamp >= t.mana[_tokenId] + 300,
             "it's too early to pull out"
         );
         s.players[_tokenId].status = 0;
@@ -129,7 +129,6 @@ library StorageLib {
         s.players[_tokenId].mana++; 
         t.cooldown[_tokenId] = block.timestamp; //reset the cool down
     }
-
 
     function _startMeditation(uint256 _tokenId) internal {
         PlayerStorage storage s = diamondStoragePlayer();
@@ -158,26 +157,28 @@ library StorageLib {
 
 contract TrainFacet {
 
-    event BeginTraining(address indexed _playerAddress, uint256 _id);
-    event EndTraining(address indexed _playerAddress, uint256 _id);
+    event BeginTrainingCombat(address indexed _playerAddress, uint256 _id);
+    event EndTrainingCombat(address indexed _playerAddress, uint256 _id);
+    event BeginTrainingMana(address indexed _playerAddress, uint256 _id);
+    event EndTrainingMana(address indexed _playerAddress, uint256 _id);
 
     function startTrainingCombat(uint256 _tokenId) external {
         StorageLib._startTrainingCombat(_tokenId);
-        emit BeginTraining(msg.sender, _tokenId);
+        emit BeginTrainingCombat(msg.sender, _tokenId);
     }
 
     function endTrainingCombat(uint256 _tokenId) external {
         StorageLib._endTrainingCombat(_tokenId);
-        emit EndTraining(msg.sender, _tokenId);
+        emit EndTrainingCombat(msg.sender, _tokenId);
     }
     function startTrainingMana(uint256 _tokenId) external {
         StorageLib._startTrainingMana(_tokenId);
-        emit BeginTraining(msg.sender, _tokenId);
+        emit BeginTrainingMana(msg.sender, _tokenId);
     }
 
     function endTrainingMana(uint256 _tokenId) external {
         StorageLib._endTrainingMana(_tokenId);
-        emit EndTraining(msg.sender, _tokenId);
+        emit EndTrainingMana(msg.sender, _tokenId);
     }
 
     function getCombatStart(uint256 _playerId) external view returns(uint256) {
