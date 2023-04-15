@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-
 struct Player {
     uint256 level;
     uint256 xp;
@@ -39,6 +38,15 @@ struct Slot {
 //     4: pants;
 //     5: feet;
 // }
+
+// status {
+//     0: idle;
+//     1: combatTrain;
+//     2: manaTrain;
+//     3: goldQuest;
+//     4: arena;
+//     5: gemQuest;
+// } 
 
 library StorageLib {
 

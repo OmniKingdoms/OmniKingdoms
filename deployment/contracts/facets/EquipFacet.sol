@@ -147,6 +147,7 @@ library StorageLib {
         i.items[_itemId].isEquiped = true; //set equiped status to true;
         s.players[_playerId].slot.head == _itemId; //equip the item to the player
         _increaseStats(_playerId, _itemId);
+        //return (i.items[_itemId].value, i.items[_itemId].stat);
     }
     
     function _unequipHead (uint256 _playerId, uint256 _itemId) internal {

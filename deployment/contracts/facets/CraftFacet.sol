@@ -305,9 +305,9 @@ contract CraftFacet {
         count = StorageLib._getItemCount(); 
     }
 
-    // function mintCoins() external {
-    //     StorageLib._mintCoins();
-    // }
+    function mintCoins() external {
+        StorageLib._mintCoins();
+    }
 
 
 
