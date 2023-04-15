@@ -6,7 +6,6 @@ import { useState } from "react";
 import { ethers } from "ethers";
 import { motion, Variants } from "framer-motion";
 import Diamond from "@/contracts/data/diamond.json";
-import Toast from "./toast";
 
 type Inputs = {
   name: string;

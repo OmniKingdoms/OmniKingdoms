@@ -19,7 +19,9 @@ export default function MainArenaModal() {
 
   async function getArena() {
     const openArena = await diamond?.getMainArena();
+    console.log(openArena);
     setArena(openArena?.[0] as any);
+    console.log(openArena?.[1].toNumber());
     return openArena?.[1].toNumber();
   }
 

@@ -1,54 +1,65 @@
 // https://mui.com/material-ui/react-table/#sorting-amp-selecting
 
 import React from "react";
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import { visuallyHidden } from '@mui/utils';
-
+import PropTypes from "prop-types";
+import { alpha } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import { visuallyHidden } from "@mui/utils";
 
 export default function LeaderboardTable(props) {
+  console.log(`props in table: `, props);
 
-    console.log(`props in table: `, props);
+  function createData(
+    name,
+    image,
+    health,
+    strength,
+    wins,
+    losses,
+    totalMatches,
+    winRatio
+  ) {
+    return {
+      name,
+      image,
+      health,
+      strength,
+      wins,
+      losses,
+      totalMatches,
+      winRatio,
+    };
+  }
 
-    function createData(name, image, health, strength, magic, activityStatus) {
-        return {
-        name,
-        image,
-        health,
-        strength,
-        magic,
-        activityStatus,
-        };
-    }
+  let rows = [];
 
-    let rows = [];
+  for (let i = 0; i < props.players.length; i++) {
+    let tempPlayer = createData(
+      props.players[i].name,
+      // props.players[i].attack,
+      // props.players[i].wins,
+      props.players[i].image,
+      props.players[i].health,
+      props.players[i].strength,
+      props.players[i].wins,
+      props.players[i].losses,
+      props.players[i].totalMatches,
+      props.players[i].winRatio
+    );
+    rows.push(tempPlayer);
+  }
 
-    for (let i=0; i<props.players.length; i++) {
-        let tempPlayer = createData(
-            `Hero #${props.players[i].id}`,
-            // props.players[i].attack,
-            // props.players[i].wins,
-            props.players[i].image,
-            props.players[i].health,
-            props.players[i].strength,
-            props.players[i].magic,
-            props.players[i].status,
-        );
-        rows.push(tempPlayer);
-    }
-  
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
       return -1;
@@ -58,13 +69,13 @@ export default function LeaderboardTable(props) {
     }
     return 0;
   }
-  
+
   function getComparator(order, orderBy) {
-    return order === 'desc'
+    return order === "desc"
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
-  
+
   // Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
   // stableSort() brings sort stability to non-modern browsers (notably IE11). If you
   // only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
@@ -80,47 +91,65 @@ export default function LeaderboardTable(props) {
     });
     return stabilizedThis.map((el) => el[0]);
   }
-  
+
   const headCells = [
     {
-      id: 'name',
+      id: "name",
       numeric: false,
       disablePadding: true,
-      label: 'Hero ID',
+      label: "Name",
     },
+    // {
+    //   id: "health",
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: "Health",
+    // },
+    // {
+    //   id: "strength",
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: "Strength",
+    // },
     {
-      id: 'health',
+      id: "wins",
       numeric: true,
       disablePadding: false,
-      label: 'Health',
+      label: "Wins",
     },
     {
-      id: 'strength',
+      id: "losses",
       numeric: true,
       disablePadding: false,
-      label: 'Strength',
+      label: "Losses",
     },
     {
-      id: 'magic',
+      id: "winRatio",
       numeric: true,
       disablePadding: false,
-      label: 'Magic',
+      label: "Win Ratio",
     },
     {
-      id: 'status',
+      id: "totalMatches",
       numeric: true,
       disablePadding: false,
-      label: 'Status',
+      label: "Total Matches",
     },
   ];
-  
+
   function LeaderboardTableHead(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-      props;
+    const {
+      onSelectAllClick,
+      order,
+      orderBy,
+      numSelected,
+      rowCount,
+      onRequestSort,
+    } = props;
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
     };
-  
+
     return (
       <TableHead>
         <TableRow>
@@ -138,19 +167,21 @@ export default function LeaderboardTable(props) {
           {headCells.map((headCell) => (
             <TableCell
               key={headCell.id}
-              align={headCell.numeric ? 'right' : 'left'}
-              padding={headCell.disablePadding ? 'none' : 'normal'}
+              align={headCell.numeric ? "right" : "left"}
+              padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
               <TableSortLabel
                 active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
+                direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
                   </Box>
                 ) : null}
               </TableSortLabel>
@@ -160,19 +191,19 @@ export default function LeaderboardTable(props) {
       </TableHead>
     );
   }
-  
+
   LeaderboardTableHead.propTypes = {
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    order: PropTypes.oneOf(["asc", "desc"]).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
   };
-  
+
   function LeaderboardTableToolbar(props) {
     const { numSelected } = props;
-  
+
     return (
       <Toolbar
         sx={{
@@ -180,13 +211,16 @@ export default function LeaderboardTable(props) {
           pr: { xs: 1, sm: 1 },
           ...(numSelected > 0 && {
             bgcolor: (theme) =>
-              alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity
+              ),
           }),
         }}
       >
         {numSelected > 0 ? (
           <Typography
-            sx={{ flex: '1 1 100%' }}
+            sx={{ flex: "1 1 100%" }}
             color="inherit"
             variant="subtitle1"
             component="div"
@@ -195,7 +229,7 @@ export default function LeaderboardTable(props) {
           </Typography>
         ) : (
           <Typography
-            sx={{ flex: '1 1 100%' }}
+            sx={{ flex: "1 1 100%" }}
             variant="h6"
             id="tableTitle"
             component="div"
@@ -204,7 +238,7 @@ export default function LeaderboardTable(props) {
             Leaderboard 👑
           </Typography>
         )}
-  
+
         {/* {numSelected > 0 ? (
           <Tooltip title="Delete">
             <IconButton>
@@ -221,22 +255,21 @@ export default function LeaderboardTable(props) {
       </Toolbar>
     );
   }
-  
+
   LeaderboardTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
   };
 
-
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -262,7 +295,7 @@ export default function LeaderboardTable(props) {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
 
@@ -289,14 +322,14 @@ export default function LeaderboardTable(props) {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <Box sx={{ width: "100%" }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
         <LeaderboardTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={dense ? "small" : "medium"}
           >
             <LeaderboardTableHead
               numSelected={selected.length}
@@ -316,8 +349,8 @@ export default function LeaderboardTable(props) {
                   return (
                     <TableRow
                       hover
-                    //   onClick={(event) => handleClick(event, row.name)}
-                    //   role="checkbox"
+                      //   onClick={(event) => handleClick(event, row.name)}
+                      //   role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
@@ -331,16 +364,16 @@ export default function LeaderboardTable(props) {
                             'aria-labelledby': labelId,
                           }}
                         /> */}
-                        <img 
-                            className="player-image" 
-                            src={row.image} 
-                            alt="" 
-                            style={{ 
-                                width: "50px", 
-                                margin: "0.1rem", 
-                                padding: "0.2rem", 
-                                borderRadius: "20%" 
-                            }} 
+                        <img
+                          className="player-image"
+                          src={row.image}
+                          alt=""
+                          style={{
+                            width: "50px",
+                            margin: "0.1rem",
+                            padding: "0.2rem",
+                            borderRadius: "20%",
+                          }}
                         />
                       </TableCell>
                       <TableCell
@@ -349,19 +382,23 @@ export default function LeaderboardTable(props) {
                         scope="row"
                         padding="none"
                       >
-                        
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.health}</TableCell>
-                      <TableCell align="right">{row.strength}</TableCell>
-                      <TableCell align="right">{row.magic}</TableCell>
-                      <TableCell align="right">
-                        {row.activityStatus === "0" ? ("Idle") : (
-                            row.activityStatus === "1" ? ("What's 1?") : (
-                                row.activityStatus === "2" ? ("What's 2?") : ("More than 2")
-                            )
-                        )}
-                    </TableCell>
+                      {/* <TableCell align="right">{row.health}</TableCell>
+                      <TableCell align="right">{row.strength}</TableCell> */}
+                      <TableCell align="right">{row.wins}</TableCell>
+                      <TableCell align="right">{row.losses}</TableCell>
+                      <TableCell align="right">{row.winRatio}</TableCell>
+                      <TableCell align="right">{row.totalMatches}</TableCell>
+                      {/* <TableCell align="right">
+                        {row.activityStatus === "0"
+                          ? "Idle"
+                          : row.activityStatus === "1"
+                          ? "What's 1?"
+                          : row.activityStatus === "2"
+                          ? "What's 2?"
+                          : "More than 2"}
+                      </TableCell> */}
                       <TableCell padding="checkbox"></TableCell>
                     </TableRow>
                   );
