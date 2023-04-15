@@ -195,6 +195,7 @@ const leaderboardUpdate = async () => {
       if (player) {
         player.losses += 1;
         player.Mainlosses += 1;
+        await player.save();
         console.log(`Player ${player.id} suffered a main loss`);
       }
     } catch (err) {
@@ -209,6 +210,7 @@ const leaderboardUpdate = async () => {
       if (player) {
         player.losses += 1;
         player.Magiclosses += 1;
+        await player.save();
         console.log(`Player ${player.id} suffered a magic loss`);
       }
     } catch (err) {
@@ -222,6 +224,7 @@ const leaderboardUpdate = async () => {
       // If player exists, do nothing
       if (player) {
         player.status = 4;
+        await player.save();
         console.log(`Player ${player.id} entered the main arena`);
       }
     } catch (err) {
@@ -235,6 +238,7 @@ const leaderboardUpdate = async () => {
       // If player exists, do nothing
       if (player) {
         player.status = 4;
+        await player.save();
         console.log(`Player ${player.id} entered the magic arena`);
       }
     } catch (err) {
@@ -298,9 +302,16 @@ app.get("/leaderboard", async (req, res) => {
       {
         $sort: { winRatio: -1 },
       },
+      {
+        $skip: (page - 1) * pageSize,
+      },
+      {
+        $limit: pageSize,
+      },
     ]);
+
     // Calculate pagination values
-    const totalPlayers = players.length;
+    const totalPlayers = await Player.countDocuments();
     const totalPages = Math.ceil(totalPlayers / pageSize);
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;

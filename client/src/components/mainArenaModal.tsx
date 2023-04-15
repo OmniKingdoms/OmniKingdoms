@@ -84,6 +84,7 @@ export default function MainArenaModal() {
       }
     }
   }
+
   async function handleFightArena() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer

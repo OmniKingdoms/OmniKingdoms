@@ -44,7 +44,7 @@ async function deployDiamond () {
       functionSelectors: getSelectors(facet)
     })
 
-    //await verifyContract(facet, FacetName);
+    await verifyContract(facet, FacetName);
   }
 
   // Creating a function call
