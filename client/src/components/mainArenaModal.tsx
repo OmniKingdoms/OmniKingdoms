@@ -22,7 +22,9 @@ export default function MainArenaModal() {
     setArena(openArena?.[0] as any);
     return openArena?.[1].toNumber();
   }
-
+  async function openArena(){
+     await diamond?.openArenas();
+  }
   async function getHost() {
     const hostId = await getArena();
     const player = await diamond?.getPlayer(hostId as any);
@@ -43,7 +45,6 @@ export default function MainArenaModal() {
       getHost();
     }
   }, [player?.status, arena]);
-
   async function handleEnterArena() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     try {
