@@ -2,7 +2,7 @@
 
 ### Contract Address - Scroll Alpha
 
-[0xe79C627c41746bd5D013c855c6f89645a34de6F5](https://blockscout.scroll.io/address/0xe79C627c41746bd5D013c855c6f89645a34de6F5)
+[0x545Ad75E4A297Ff1cdb85147F5D0C8DFA0bA21E1](https://blockscout.scroll.io/address/0x545Ad75E4A297Ff1cdb85147F5D0C8DFA0bA21E1)
 
 ### Live preview 
 https://clientpv2.vercel.app/
