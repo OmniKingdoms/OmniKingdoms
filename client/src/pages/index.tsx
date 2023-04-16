@@ -1,10 +1,9 @@
 import Play from "./play/index";
-import { contractStore } from "@/store/contractStore";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  const store = contractStore();
+  const router = useRouter();
 
-  console.log(store);
-
+  router.push("/play");
   return <Play />;
 }

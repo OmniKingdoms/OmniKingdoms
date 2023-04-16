@@ -59,7 +59,7 @@ export default function App({ Component, pageProps }: AppProps) {
               key={router.pathname}
               className="flex md:flex-row flex-col relative items-center "
             >
-              {router.pathname !== "/leaderboard" && <PlayerCard />}
+              {router.pathname.includes("play") ? <PlayerCard /> : ""}
               {mounted && <Component {...pageProps} />}
             </motion.div>
           </AnimatePresence>

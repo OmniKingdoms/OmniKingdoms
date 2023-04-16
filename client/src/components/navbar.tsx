@@ -44,6 +44,7 @@ export default function Navbar() {
                   href={
                     "https://scroll-kingdoms-1.gitbook.io/game-play/game-play"
                   }
+                  target="_blank"
                 >
                   Docs
                 </Link>
@@ -79,6 +80,7 @@ export default function Navbar() {
                 href={
                   "https://scroll-kingdoms-1.gitbook.io/game-play/game-play"
                 }
+                target="_blank"
               >
                 Docs
               </Link>
