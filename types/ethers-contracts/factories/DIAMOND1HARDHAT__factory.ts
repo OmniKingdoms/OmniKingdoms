@@ -179,18 +179,116 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "_owner",
-        type: "address",
-      },
-      {
-        indexed: false,
         internalType: "uint256",
-        name: "_player",
+        name: "_playerId",
         type: "uint256",
       },
     ],
-    name: "ItemCrafted",
+    name: "EnterMagic",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "EnterMain",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "EnterSecond",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "MagicLoss",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "MagicWin",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "MainLoss",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "MainWin",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "SecondLoss",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "SecondWin",
     type: "event",
   },
   {
@@ -223,6 +321,19 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "enterSecondArena",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
         name: "_challengerId",
         type: "uint256",
       },
@@ -246,6 +357,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_challengerId",
+        type: "uint256",
+      },
+    ],
+    name: "fightSecondArena",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "getMagicArena",
     outputs: [
@@ -253,6 +377,49 @@ const _abi = [
         internalType: "bool",
         name: "",
         type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "getMagicArenaLosses",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "getMagicArenaWins",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -267,6 +434,100 @@ const _abi = [
         name: "",
         type: "bool",
       },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "getMainArenaLosses",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "getMainArenaWins",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getSecondArena",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "getTotalLosses",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_playerId",
+        type: "uint256",
+      },
+    ],
+    name: "getTotalWins",
+    outputs: [
       {
         internalType: "uint256",
         name: "",
@@ -337,6 +598,19 @@ const _abi = [
       },
     ],
     name: "craftHelmet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "craftShield",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1120,15 +1394,27 @@ const _abi = [
     inputs: [
       {
         indexed: true,
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
+        indexed: true,
         internalType: "address",
-        name: "_to",
+        name: "owner",
         type: "address",
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "_id",
-        type: "uint256",
+        internalType: "string",
+        name: "name",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "uri",
+        type: "string",
       },
     ],
     name: "Mint",
@@ -1140,23 +1426,23 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
-        name: "_from",
+        name: "owner",
         type: "address",
       },
       {
         indexed: true,
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        indexed: false,
         internalType: "uint256",
-        name: "_value",
+        name: "id",
         type: "uint256",
       },
+      {
+        indexed: true,
+        internalType: "string",
+        name: "newName",
+        type: "string",
+      },
     ],
-    name: "Transfer",
+    name: "NameChange",
     type: "event",
   },
   {
@@ -1597,13 +1883,13 @@ const _abi = [
         type: "address",
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: "uint256",
         name: "_id",
         type: "uint256",
       },
     ],
-    name: "BeginTraining",
+    name: "BeginTrainingCombat",
     type: "event",
   },
   {
@@ -1616,13 +1902,51 @@ const _abi = [
         type: "address",
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: "uint256",
         name: "_id",
         type: "uint256",
       },
     ],
-    name: "EndTraining",
+    name: "BeginTrainingMana",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_playerAddress",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_id",
+        type: "uint256",
+      },
+    ],
+    name: "EndTrainingCombat",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_playerAddress",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_id",
+        type: "uint256",
+      },
+    ],
+    name: "EndTrainingMana",
     type: "event",
   },
   {

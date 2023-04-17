@@ -183,6 +183,53 @@ library StorageLib {
         s.players[a.mainArena.hostId].status = 0; // set the host to idle
         return (_winner, _loser);
     }
+    function _enterSecondArena(uint256 _playerId) internal {
+        PlayerStorage storage s = diamondStoragePlayer();
+        CoinStorage storage c = diamondStorageCoin();
+        ArenaStorage storage a = diamondStorageArena();
+        require(a.secondArena.open, "arena is closed"); //check that the arena is open
+        require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
+        require(s.players[_playerId].status == 0); //make sure player is idle
+        require(s.owners[_playerId] == msg.sender); //ownerOf
+        c.goldBalance[msg.sender] -= 1; //deduct one gold from their balance
+        s.players[_playerId].status = 4; //set the host's status to being in the arena
+        a.secondArena.open = false;
+        a.secondArena.hostId = _playerId;
+        a.secondArena.hostAddress = payable(msg.sender);
+    }
+
+    function _fightSecondArena(uint256 _challengerId) internal returns (uint256, uint256) {
+        PlayerStorage storage s = diamondStoragePlayer();
+        CoinStorage storage c = diamondStorageCoin();
+        ArenaStorage storage a = diamondStorageArena();
+        require(!a.secondArena.open, "arena is empty");
+        require(s.players[_challengerId].status == 0); //make sure player is idle
+        require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
+        uint256 winner = _simulateFight(a.secondArena.hostId, _challengerId);
+        uint256 _winner;
+        uint256 _loser;
+        if (winner == _challengerId) { //means the challenger won
+            _winner = _challengerId;
+            _loser = a.secondArena.hostId;
+            a.secondArenaWins[_challengerId]++; //add main Arena wins
+            a.totalArenaWins[_challengerId]++; //add total wins
+            a.secondArenaLosses[a.secondArena.hostId]++; //add main Arena losses
+            a.totalArenaLosses[a.secondArena.hostId]++; //add total losses
+            c.goldBalance[msg.sender] += 1; //increase gold
+        } else { //means the host won
+            _loser = _challengerId;
+            _winner = a.secondArena.hostId;
+            a.secondArenaWins[a.secondArena.hostId]++; //add main Arena wins
+            a.totalArenaWins[a.secondArena.hostId]++; //add total wins
+            a.secondArenaLosses[_challengerId]++; //add main Arena losses
+            a.totalArenaLosses[_challengerId]++; //add total losses
+            c.goldBalance[a.secondArena.hostAddress] += 2; //increase gold of the host
+            c.goldBalance[msg.sender] -= 1; //decrease gold
+        }
+        a.secondArena.open = true;
+        s.players[a.secondArena.hostId].status = 0; // set the host to idle
+        return (_winner, _loser);
+    }
 
     function _simulateFight(uint256 _hostId, uint256 _challengerId) internal view returns (uint256) {
         PlayerStorage storage s = diamondStoragePlayer();
@@ -327,11 +374,14 @@ library StorageLib {
 contract ArenaFacet {
 
     event MainWin(uint256 indexed _playerId);
+    event SecondWin(uint256 indexed _playerId);
     event MagicWin(uint256 indexed _playerId);
     event MainLoss(uint256 indexed _playerId);
+    event SecondLoss(uint256 indexed _playerId);
     event MagicLoss(uint256 indexed _playerId);
     
     event EnterMain(uint256 indexed _playerId);
+    event EnterSecond(uint256 indexed _playerId);
     event EnterMagic(uint256 indexed _playerId);
 
     function openArenas() public {
@@ -341,9 +391,9 @@ contract ArenaFacet {
     function getMainArena() external view returns(bool, uint256) {
         return StorageLib._getMainArena();
     }
-    // function getSecondArena() external view returns(bool) {
-    //     return StorageLib._getMainArena();
-    // }
+    function getSecondArena() external view returns(bool, uint256) {
+        return StorageLib._getMainArena();
+    }
     // function getThirdArena() external view returns(bool) {
     //     return StorageLib._getMainArena();
     // }
@@ -362,6 +412,18 @@ contract ArenaFacet {
         (_winner, _loser) = StorageLib._fightMainArena(_challengerId);
         emit MainWin(_winner);
         emit MainLoss(_loser);
+    }
+    function enterSecondArena(uint256 _playerId) public {
+        StorageLib._enterSecondArena(_playerId);
+        emit EnterSecond(_playerId);
+    }
+
+    function fightSecondArena(uint256 _challengerId) public {
+        uint256 _winner;
+        uint256 _loser;
+        (_winner, _loser) = StorageLib._fightSecondArena(_challengerId);
+        emit SecondWin(_winner);
+        emit SecondLoss(_loser);
     }
 
     function enterMagicArena(uint256 _playerId) public {
