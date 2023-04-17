@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { TbSword } from "react-icons/tb";
 import CombatTrainingModal from "@/components/combatTrainingModal";
+import { GiPotionBall } from "react-icons/gi";
+import ManaTrainingModal from "@/components/manaTrainingModal";
 
 export default function Train() {
   const store = contractStore();
@@ -48,7 +50,7 @@ export default function Train() {
       </Link>
 
       <label
-        htmlFor="my-modal-4"
+        htmlFor="combat-train"
         className="absolute left-[46%] top-[30%] btn mt-2 bg-[#9696ea] btn-accent gap-4"
       >
         Combat Training
@@ -57,7 +59,18 @@ export default function Train() {
           <TbSword />
         </div>
       </label>
+      <label
+        htmlFor="mana-train"
+        className="absolute left-[46%] top-[40%] btn mt-2 bg-[#9696ea] btn-accent gap-4"
+      >
+        Mana Training
+        <div className="badge gap-2 text-amber-300 ">
+          +1
+          <GiPotionBall />
+        </div>
+      </label>
       <CombatTrainingModal />
+      <ManaTrainingModal />
     </motion.div>
   );
 }

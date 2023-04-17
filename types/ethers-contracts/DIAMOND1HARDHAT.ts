@@ -168,14 +168,24 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
   functions: {
     "enterMagicArena(uint256)": FunctionFragment;
     "enterMainArena(uint256)": FunctionFragment;
+    "enterSecondArena(uint256)": FunctionFragment;
     "fightMagicArena(uint256)": FunctionFragment;
     "fightMainArena(uint256)": FunctionFragment;
+    "fightSecondArena(uint256)": FunctionFragment;
     "getMagicArena()": FunctionFragment;
+    "getMagicArenaLosses(uint256)": FunctionFragment;
+    "getMagicArenaWins(uint256)": FunctionFragment;
     "getMainArena()": FunctionFragment;
+    "getMainArenaLosses(uint256)": FunctionFragment;
+    "getMainArenaWins(uint256)": FunctionFragment;
+    "getSecondArena()": FunctionFragment;
+    "getTotalLosses(uint256)": FunctionFragment;
+    "getTotalWins(uint256)": FunctionFragment;
     "openArenas()": FunctionFragment;
     "craftArmor(uint256)": FunctionFragment;
     "craftGuitar(uint256)": FunctionFragment;
     "craftHelmet(uint256)": FunctionFragment;
+    "craftShield(uint256)": FunctionFragment;
     "craftSorcerShoes(uint256)": FunctionFragment;
     "craftSword(uint256)": FunctionFragment;
     "getItem(uint256)": FunctionFragment;
@@ -183,10 +193,16 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     "getItems(address)": FunctionFragment;
     "mintCoins()": FunctionFragment;
     "diamondCut((address,uint8,bytes4[])[],address,bytes)": FunctionFragment;
+    "diamondCut((address,uint8,bytes4[])[],address,bytes)": FunctionFragment;
+    "facetAddress(bytes4)": FunctionFragment;
     "facetAddress(bytes4)": FunctionFragment;
     "facetAddresses()": FunctionFragment;
+    "facetAddresses()": FunctionFragment;
+    "facetFunctionSelectors(address)": FunctionFragment;
     "facetFunctionSelectors(address)": FunctionFragment;
     "facets()": FunctionFragment;
+    "facets()": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "equipBody(uint256,uint256)": FunctionFragment;
     "equipHead(uint256,uint256)": FunctionFragment;
@@ -198,6 +214,8 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     "crateListing(uint256,uint256)": FunctionFragment;
     "purchasePlayer(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
+    "owner()": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "changeName(uint256,string)": FunctionFragment;
     "getBlocktime()": FunctionFragment;
@@ -228,14 +246,24 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "enterMagicArena"
       | "enterMainArena"
+      | "enterSecondArena"
       | "fightMagicArena"
       | "fightMainArena"
+      | "fightSecondArena"
       | "getMagicArena"
+      | "getMagicArenaLosses"
+      | "getMagicArenaWins"
       | "getMainArena"
+      | "getMainArenaLosses"
+      | "getMainArenaWins"
+      | "getSecondArena"
+      | "getTotalLosses"
+      | "getTotalWins"
       | "openArenas"
       | "craftArmor"
       | "craftGuitar"
       | "craftHelmet"
+      | "craftShield"
       | "craftSorcerShoes"
       | "craftSword"
       | "getItem"
@@ -301,6 +329,10 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "enterSecondArena",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "fightMagicArena",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -309,12 +341,44 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "fightSecondArena",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getMagicArena",
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getMagicArenaLosses",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMagicArenaWins",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getMainArena",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMainArenaLosses",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMainArenaWins",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSecondArena",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTotalLosses",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTotalWins",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "openArenas",
@@ -330,6 +394,10 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "craftHelmet",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "craftShield",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -552,6 +620,10 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "enterSecondArena",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "fightMagicArena",
     data: BytesLike
   ): Result;
@@ -560,11 +632,43 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "fightSecondArena",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getMagicArena",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getMagicArenaLosses",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMagicArenaWins",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getMainArena",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMainArenaLosses",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMainArenaWins",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSecondArena",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTotalLosses",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTotalWins",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "openArenas", data: BytesLike): Result;
@@ -575,6 +679,10 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "craftHelmet",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "craftShield",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -747,27 +855,47 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "init", data: BytesLike): Result;
 
   events: {
+    "EnterMagic(uint256)": EventFragment;
+    "EnterMain(uint256)": EventFragment;
+    "EnterSecond(uint256)": EventFragment;
+    "MagicLoss(uint256)": EventFragment;
+    "MagicWin(uint256)": EventFragment;
+    "MainLoss(uint256)": EventFragment;
+    "MainWin(uint256)": EventFragment;
+    "SecondLoss(uint256)": EventFragment;
+    "SecondWin(uint256)": EventFragment;
     "ItemCrafted(address,uint256)": EventFragment;
+    "DiamondCut(tuple[],address,bytes)": EventFragment;
+    "DiamondCut(tuple[],address,bytes)": EventFragment;
+    "DiamondCut(tuple[],address,bytes)": EventFragment;
     "DiamondCut(tuple[],address,bytes)": EventFragment;
     "ItemEquiped(address,uint256,uint256)": EventFragment;
     "ItemUnequiped(address,uint256,uint256)": EventFragment;
     "List(address,uint256,uint256)": EventFragment;
     "Purchase(address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "Mint(address,uint256)": EventFragment;
-    "Transfer(address,address,uint256)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "Mint(uint256,address,string,string)": EventFragment;
+    "NameChange(address,uint256,string)": EventFragment;
     "BeginQuesting(address,uint256)": EventFragment;
     "EndQuesting(address,uint256)": EventFragment;
-    "BeginTraining(address,uint256)": EventFragment;
-    "EndTraining(address,uint256)": EventFragment;
+    "BeginTrainingCombat(address,uint256)": EventFragment;
+    "BeginTrainingMana(address,uint256)": EventFragment;
+    "EndTrainingCombat(address,uint256)": EventFragment;
+    "EndTrainingMana(address,uint256)": EventFragment;
   };
 
-  getEvent(
-    nameOrSignatureOrTopic: "ItemCrafted(address,uint256)"
-  ): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "ItemCrafted(address,uint256)"
-  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EnterMagic"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EnterMain"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EnterSecond"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MagicLoss"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MagicWin"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MainLoss"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MainWin"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SecondLoss"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SecondWin"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ItemCrafted"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "DiamondCut(tuple[],address,bytes)"
   ): EventFragment;
@@ -794,29 +922,88 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     nameOrSignatureOrTopic: "OwnershipTransferred(address,address)"
   ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NameChange"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeginQuesting"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "EndQuesting"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "BeginTraining"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "EndTraining"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BeginTrainingCombat"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BeginTrainingMana"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EndTrainingCombat"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EndTrainingMana"): EventFragment;
 }
 
-export interface ItemCrafted_address_uint256_EventObject {
+export interface EnterMagicEventObject {
+  _playerId: BigNumber;
+}
+export type EnterMagicEvent = TypedEvent<[BigNumber], EnterMagicEventObject>;
+
+export type EnterMagicEventFilter = TypedEventFilter<EnterMagicEvent>;
+
+export interface EnterMainEventObject {
+  _playerId: BigNumber;
+}
+export type EnterMainEvent = TypedEvent<[BigNumber], EnterMainEventObject>;
+
+export type EnterMainEventFilter = TypedEventFilter<EnterMainEvent>;
+
+export interface EnterSecondEventObject {
+  _playerId: BigNumber;
+}
+export type EnterSecondEvent = TypedEvent<[BigNumber], EnterSecondEventObject>;
+
+export type EnterSecondEventFilter = TypedEventFilter<EnterSecondEvent>;
+
+export interface MagicLossEventObject {
+  _playerId: BigNumber;
+}
+export type MagicLossEvent = TypedEvent<[BigNumber], MagicLossEventObject>;
+
+export type MagicLossEventFilter = TypedEventFilter<MagicLossEvent>;
+
+export interface MagicWinEventObject {
+  _playerId: BigNumber;
+}
+export type MagicWinEvent = TypedEvent<[BigNumber], MagicWinEventObject>;
+
+export type MagicWinEventFilter = TypedEventFilter<MagicWinEvent>;
+
+export interface MainLossEventObject {
+  _playerId: BigNumber;
+}
+export type MainLossEvent = TypedEvent<[BigNumber], MainLossEventObject>;
+
+export type MainLossEventFilter = TypedEventFilter<MainLossEvent>;
+
+export interface MainWinEventObject {
+  _playerId: BigNumber;
+}
+export type MainWinEvent = TypedEvent<[BigNumber], MainWinEventObject>;
+
+export type MainWinEventFilter = TypedEventFilter<MainWinEvent>;
+
+export interface SecondLossEventObject {
+  _playerId: BigNumber;
+}
+export type SecondLossEvent = TypedEvent<[BigNumber], SecondLossEventObject>;
+
+export type SecondLossEventFilter = TypedEventFilter<SecondLossEvent>;
+
+export interface SecondWinEventObject {
+  _playerId: BigNumber;
+}
+export type SecondWinEvent = TypedEvent<[BigNumber], SecondWinEventObject>;
+
+export type SecondWinEventFilter = TypedEventFilter<SecondWinEvent>;
+
+export interface ItemCraftedEventObject {
   _owner: string;
   _player: BigNumber;
 }
-export type ItemCrafted_address_uint256_Event = TypedEvent<
+export type ItemCraftedEvent = TypedEvent<
   [string, BigNumber],
-  ItemCrafted_address_uint256_EventObject
+  ItemCraftedEventObject
 >;
 
-export type ItemCrafted_address_uint256_EventFilter =
-  TypedEventFilter<ItemCrafted_address_uint256_Event>;
-
-export interface ItemCrafted_address_uint256_EventObject {
-  _owner: string;
-  _player: BigNumber;
-}
+export type ItemCraftedEventFilter = TypedEventFilter<ItemCraftedEvent>;
 
 export interface DiamondCut_tuple_array_address_bytes_EventObject {
   _diamondCut: IDiamond.FacetCutStructOutput[];
@@ -836,18 +1023,39 @@ export interface DiamondCut_tuple_array_address_bytes_EventObject {
   _init: string;
   _calldata: string;
 }
+export type DiamondCut_tuple_array_address_bytes_Event = TypedEvent<
+  [IDiamond.FacetCutStructOutput[], string, string],
+  DiamondCut_tuple_array_address_bytes_EventObject
+>;
+
+export type DiamondCut_tuple_array_address_bytes_EventFilter =
+  TypedEventFilter<DiamondCut_tuple_array_address_bytes_Event>;
 
 export interface DiamondCut_tuple_array_address_bytes_EventObject {
   _diamondCut: IDiamond.FacetCutStructOutput[];
   _init: string;
   _calldata: string;
 }
+export type DiamondCut_tuple_array_address_bytes_Event = TypedEvent<
+  [IDiamond.FacetCutStructOutput[], string, string],
+  DiamondCut_tuple_array_address_bytes_EventObject
+>;
+
+export type DiamondCut_tuple_array_address_bytes_EventFilter =
+  TypedEventFilter<DiamondCut_tuple_array_address_bytes_Event>;
 
 export interface DiamondCut_tuple_array_address_bytes_EventObject {
   _diamondCut: IDiamond.FacetCutStructOutput[];
   _init: string;
   _calldata: string;
 }
+export type DiamondCut_tuple_array_address_bytes_Event = TypedEvent<
+  [IDiamond.FacetCutStructOutput[], string, string],
+  DiamondCut_tuple_array_address_bytes_EventObject
+>;
+
+export type DiamondCut_tuple_array_address_bytes_EventFilter =
+  TypedEventFilter<DiamondCut_tuple_array_address_bytes_Event>;
 
 export interface ItemEquipedEventObject {
   _owner: string;
@@ -900,11 +1108,25 @@ export interface OwnershipTransferred_address_address_EventObject {
   previousOwner: string;
   newOwner: string;
 }
+export type OwnershipTransferred_address_address_Event = TypedEvent<
+  [string, string],
+  OwnershipTransferred_address_address_EventObject
+>;
+
+export type OwnershipTransferred_address_address_EventFilter =
+  TypedEventFilter<OwnershipTransferred_address_address_Event>;
 
 export interface OwnershipTransferred_address_address_EventObject {
   previousOwner: string;
   newOwner: string;
 }
+export type OwnershipTransferred_address_address_Event = TypedEvent<
+  [string, string],
+  OwnershipTransferred_address_address_EventObject
+>;
+
+export type OwnershipTransferred_address_address_EventFilter =
+  TypedEventFilter<OwnershipTransferred_address_address_Event>;
 
 export interface OwnershipTransferred_address_address_EventObject {
   previousOwner: string;
@@ -919,24 +1141,29 @@ export type OwnershipTransferred_address_address_EventFilter =
   TypedEventFilter<OwnershipTransferred_address_address_Event>;
 
 export interface MintEventObject {
-  _to: string;
-  _id: BigNumber;
+  id: BigNumber;
+  owner: string;
+  name: string;
+  uri: string;
 }
-export type MintEvent = TypedEvent<[string, BigNumber], MintEventObject>;
+export type MintEvent = TypedEvent<
+  [BigNumber, string, string, string],
+  MintEventObject
+>;
 
 export type MintEventFilter = TypedEventFilter<MintEvent>;
 
-export interface TransferEventObject {
-  _from: string;
-  _to: string;
-  _value: BigNumber;
+export interface NameChangeEventObject {
+  owner: string;
+  id: BigNumber;
+  newName: string;
 }
-export type TransferEvent = TypedEvent<
-  [string, string, BigNumber],
-  TransferEventObject
+export type NameChangeEvent = TypedEvent<
+  [string, BigNumber, string],
+  NameChangeEventObject
 >;
 
-export type TransferEventFilter = TypedEventFilter<TransferEvent>;
+export type NameChangeEventFilter = TypedEventFilter<NameChangeEvent>;
 
 export interface BeginQuestingEventObject {
   _playerAddress: string;
@@ -960,27 +1187,52 @@ export type EndQuestingEvent = TypedEvent<
 
 export type EndQuestingEventFilter = TypedEventFilter<EndQuestingEvent>;
 
-export interface BeginTrainingEventObject {
+export interface BeginTrainingCombatEventObject {
   _playerAddress: string;
   _id: BigNumber;
 }
-export type BeginTrainingEvent = TypedEvent<
+export type BeginTrainingCombatEvent = TypedEvent<
   [string, BigNumber],
-  BeginTrainingEventObject
+  BeginTrainingCombatEventObject
 >;
 
-export type BeginTrainingEventFilter = TypedEventFilter<BeginTrainingEvent>;
+export type BeginTrainingCombatEventFilter =
+  TypedEventFilter<BeginTrainingCombatEvent>;
 
-export interface EndTrainingEventObject {
+export interface BeginTrainingManaEventObject {
   _playerAddress: string;
   _id: BigNumber;
 }
-export type EndTrainingEvent = TypedEvent<
+export type BeginTrainingManaEvent = TypedEvent<
   [string, BigNumber],
-  EndTrainingEventObject
+  BeginTrainingManaEventObject
 >;
 
-export type EndTrainingEventFilter = TypedEventFilter<EndTrainingEvent>;
+export type BeginTrainingManaEventFilter =
+  TypedEventFilter<BeginTrainingManaEvent>;
+
+export interface EndTrainingCombatEventObject {
+  _playerAddress: string;
+  _id: BigNumber;
+}
+export type EndTrainingCombatEvent = TypedEvent<
+  [string, BigNumber],
+  EndTrainingCombatEventObject
+>;
+
+export type EndTrainingCombatEventFilter =
+  TypedEventFilter<EndTrainingCombatEvent>;
+
+export interface EndTrainingManaEventObject {
+  _playerAddress: string;
+  _id: BigNumber;
+}
+export type EndTrainingManaEvent = TypedEvent<
+  [string, BigNumber],
+  EndTrainingManaEventObject
+>;
+
+export type EndTrainingManaEventFilter = TypedEventFilter<EndTrainingManaEvent>;
 
 export interface DIAMOND1HARDHAT extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -1019,6 +1271,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    enterSecondArena(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     fightMagicArena(
       _challengerId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1029,9 +1286,46 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    getMagicArena(overrides?: CallOverrides): Promise<[boolean]>;
+    fightSecondArena(
+      _challengerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    getMagicArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
+
+    getMagicArenaLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getMagicArenaWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getMainArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
+
+    getMainArenaLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getMainArenaWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getSecondArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
+
+    getTotalLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getTotalWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     openArenas(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1048,6 +1342,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
     ): Promise<ContractTransaction>;
 
     craftHelmet(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    craftShield(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -1122,13 +1421,17 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string[]] & { facetFunctionSelectors_: string[] }>;
 
-    "facets()"(overrides?: CallOverrides): Promise<
+    "facets()"(
+      overrides?: CallOverrides
+    ): Promise<
       [IDiamondLoupe.FacetStructOutput[]] & {
         facets_: IDiamondLoupe.FacetStructOutput[];
       }
     >;
 
-    "facets()"(overrides?: CallOverrides): Promise<
+    "facets()"(
+      overrides?: CallOverrides
+    ): Promise<
       [IDiamondLoupe.FacetStructOutput[]] & {
         facets_: IDiamondLoupe.FacetStructOutput[];
       }
@@ -1336,6 +1639,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  enterSecondArena(
+    _playerId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   fightMagicArena(
     _challengerId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1346,9 +1654,46 @@ export interface DIAMOND1HARDHAT extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  getMagicArena(overrides?: CallOverrides): Promise<boolean>;
+  fightSecondArena(
+    _challengerId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  getMagicArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
+
+  getMagicArenaLosses(
+    _playerId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getMagicArenaWins(
+    _playerId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getMainArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
+
+  getMainArenaLosses(
+    _playerId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getMainArenaWins(
+    _playerId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getSecondArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
+
+  getTotalLosses(
+    _playerId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getTotalWins(
+    _playerId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   openArenas(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1365,6 +1710,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
   ): Promise<ContractTransaction>;
 
   craftHelmet(
+    _tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  craftShield(
     _tokenId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -1639,6 +1989,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    enterSecondArena(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     fightMagicArena(
       _challengerId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1649,9 +2004,46 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    getMagicArena(overrides?: CallOverrides): Promise<boolean>;
+    fightSecondArena(
+      _challengerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    getMagicArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
+
+    getMagicArenaLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getMagicArenaWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getMainArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
+
+    getMainArenaLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getMainArenaWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSecondArena(overrides?: CallOverrides): Promise<[boolean, BigNumber]>;
+
+    getTotalLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTotalWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     openArenas(overrides?: CallOverrides): Promise<void>;
 
@@ -1666,6 +2058,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
     ): Promise<void>;
 
     craftHelmet(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    craftShield(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1927,14 +2324,78 @@ export interface DIAMOND1HARDHAT extends BaseContract {
   };
 
   filters: {
+    "EnterMagic(uint256)"(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): EnterMagicEventFilter;
+    EnterMagic(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): EnterMagicEventFilter;
+
+    "EnterMain(uint256)"(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): EnterMainEventFilter;
+    EnterMain(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): EnterMainEventFilter;
+
+    "EnterSecond(uint256)"(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): EnterSecondEventFilter;
+    EnterSecond(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): EnterSecondEventFilter;
+
+    "MagicLoss(uint256)"(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): MagicLossEventFilter;
+    MagicLoss(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): MagicLossEventFilter;
+
+    "MagicWin(uint256)"(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): MagicWinEventFilter;
+    MagicWin(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): MagicWinEventFilter;
+
+    "MainLoss(uint256)"(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): MainLossEventFilter;
+    MainLoss(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): MainLossEventFilter;
+
+    "MainWin(uint256)"(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): MainWinEventFilter;
+    MainWin(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): MainWinEventFilter;
+
+    "SecondLoss(uint256)"(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): SecondLossEventFilter;
+    SecondLoss(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): SecondLossEventFilter;
+
+    "SecondWin(uint256)"(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): SecondWinEventFilter;
+    SecondWin(
+      _playerId?: PromiseOrValue<BigNumberish> | null
+    ): SecondWinEventFilter;
+
     "ItemCrafted(address,uint256)"(
       _owner?: PromiseOrValue<string> | null,
       _player?: null
-    ): ItemCrafted_address_uint256_EventFilter;
-    "ItemCrafted(address,uint256)"(
+    ): ItemCraftedEventFilter;
+    ItemCrafted(
       _owner?: PromiseOrValue<string> | null,
       _player?: null
-    ): ItemCrafted_address_uint256_EventFilter;
+    ): ItemCraftedEventFilter;
+
     "DiamondCut(tuple[],address,bytes)"(
       _diamondCut?: null,
       _init?: null,
@@ -2011,22 +2472,29 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferred_address_address_EventFilter;
 
-    "Mint(address,uint256)"(
-      _to?: PromiseOrValue<string> | null,
-      _id?: null
+    "Mint(uint256,address,string,string)"(
+      id?: PromiseOrValue<BigNumberish> | null,
+      owner?: PromiseOrValue<string> | null,
+      name?: null,
+      uri?: null
     ): MintEventFilter;
-    Mint(_to?: PromiseOrValue<string> | null, _id?: null): MintEventFilter;
+    Mint(
+      id?: PromiseOrValue<BigNumberish> | null,
+      owner?: PromiseOrValue<string> | null,
+      name?: null,
+      uri?: null
+    ): MintEventFilter;
 
-    "Transfer(address,address,uint256)"(
-      _from?: PromiseOrValue<string> | null,
-      _to?: PromiseOrValue<string> | null,
-      _value?: null
-    ): TransferEventFilter;
-    Transfer(
-      _from?: PromiseOrValue<string> | null,
-      _to?: PromiseOrValue<string> | null,
-      _value?: null
-    ): TransferEventFilter;
+    "NameChange(address,uint256,string)"(
+      owner?: PromiseOrValue<string> | null,
+      id?: PromiseOrValue<BigNumberish> | null,
+      newName?: PromiseOrValue<string> | null
+    ): NameChangeEventFilter;
+    NameChange(
+      owner?: PromiseOrValue<string> | null,
+      id?: PromiseOrValue<BigNumberish> | null,
+      newName?: PromiseOrValue<string> | null
+    ): NameChangeEventFilter;
 
     "BeginQuesting(address,uint256)"(
       _playerAddress?: PromiseOrValue<string> | null,
@@ -2046,23 +2514,41 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       _id?: null
     ): EndQuestingEventFilter;
 
-    "BeginTraining(address,uint256)"(
+    "BeginTrainingCombat(address,uint256)"(
       _playerAddress?: PromiseOrValue<string> | null,
-      _id?: null
-    ): BeginTrainingEventFilter;
-    BeginTraining(
+      _id?: PromiseOrValue<BigNumberish> | null
+    ): BeginTrainingCombatEventFilter;
+    BeginTrainingCombat(
       _playerAddress?: PromiseOrValue<string> | null,
-      _id?: null
-    ): BeginTrainingEventFilter;
+      _id?: PromiseOrValue<BigNumberish> | null
+    ): BeginTrainingCombatEventFilter;
 
-    "EndTraining(address,uint256)"(
+    "BeginTrainingMana(address,uint256)"(
       _playerAddress?: PromiseOrValue<string> | null,
-      _id?: null
-    ): EndTrainingEventFilter;
-    EndTraining(
+      _id?: PromiseOrValue<BigNumberish> | null
+    ): BeginTrainingManaEventFilter;
+    BeginTrainingMana(
       _playerAddress?: PromiseOrValue<string> | null,
-      _id?: null
-    ): EndTrainingEventFilter;
+      _id?: PromiseOrValue<BigNumberish> | null
+    ): BeginTrainingManaEventFilter;
+
+    "EndTrainingCombat(address,uint256)"(
+      _playerAddress?: PromiseOrValue<string> | null,
+      _id?: PromiseOrValue<BigNumberish> | null
+    ): EndTrainingCombatEventFilter;
+    EndTrainingCombat(
+      _playerAddress?: PromiseOrValue<string> | null,
+      _id?: PromiseOrValue<BigNumberish> | null
+    ): EndTrainingCombatEventFilter;
+
+    "EndTrainingMana(address,uint256)"(
+      _playerAddress?: PromiseOrValue<string> | null,
+      _id?: PromiseOrValue<BigNumberish> | null
+    ): EndTrainingManaEventFilter;
+    EndTrainingMana(
+      _playerAddress?: PromiseOrValue<string> | null,
+      _id?: PromiseOrValue<BigNumberish> | null
+    ): EndTrainingManaEventFilter;
   };
 
   estimateGas: {
@@ -2072,6 +2558,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
     ): Promise<BigNumber>;
 
     enterMainArena(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    enterSecondArena(
       _playerId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -2086,9 +2577,46 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    fightSecondArena(
+      _challengerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     getMagicArena(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getMagicArenaLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getMagicArenaWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getMainArena(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getMainArenaLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getMainArenaWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSecondArena(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTotalLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTotalWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     openArenas(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2105,6 +2633,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
     ): Promise<BigNumber>;
 
     craftHelmet(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    craftShield(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -2376,6 +2909,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    enterSecondArena(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     fightMagicArena(
       _challengerId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2386,9 +2924,46 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    fightSecondArena(
+      _challengerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     getMagicArena(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getMagicArenaLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getMagicArenaWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getMainArena(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getMainArenaLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getMainArenaWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSecondArena(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getTotalLosses(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTotalWins(
+      _playerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     openArenas(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2405,6 +2980,11 @@ export interface DIAMOND1HARDHAT extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     craftHelmet(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    craftShield(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

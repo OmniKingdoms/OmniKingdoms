@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 
-export default function CombatTrainingModal() {
+export default function ManaTrainingModal() {
   const player = playerStore((state) => state.player);
   const selectedPlayer = playerStore((state) => state.selectedPlayer);
   const diamond = contractStore((state) => state.diamond);
@@ -15,21 +15,19 @@ export default function CombatTrainingModal() {
   const [timer, setTimer] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
-  async function combatTimer() {
-    const blockTimestamp = (await diamond?.getCombatStart(
-      selectedPlayer
-    )) as any;
+  async function manaTimer() {
+    const blockTimestamp = (await diamond?.getManaStart(selectedPlayer)) as any;
     const startTime = blockTimestamp.toNumber() as any;
     const curTime = (Date.now() / 1000).toFixed(0) as any;
     const time = curTime - startTime;
-    if (time < 120) {
-      setCountdown(120 - time); // 2min
+    if (time < 300) {
+      setCountdown(300 - time); // 5min
       setTimer(true);
     }
   }
 
   useEffect(() => {
-    combatTimer();
+    manaTimer();
     if (!player?.status) {
       setEndTrain(false);
     } else {
@@ -39,11 +37,11 @@ export default function CombatTrainingModal() {
     }
   }, [player?.status, timer]);
 
-  async function handleStartCombatTrain() {
+  async function handleStartManaTrain() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
 
     try {
-      const train = await diamond?.startTrainingCombat(selectedPlayer);
+      const train = await diamond?.startTrainingMana(selectedPlayer);
       toast.promise(provider.waitForTransaction(train?.hash as any), {
         pending: "Tx pending: " + train?.hash,
         success: {
@@ -81,11 +79,11 @@ export default function CombatTrainingModal() {
       }
     }
   }
-  async function handleEndCombatTrain() {
+  async function handleEndManaTrain() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
 
     try {
-      const train = await diamond?.endTrainingCombat(selectedPlayer);
+      const train = await diamond?.endTrainingMana(selectedPlayer);
 
       toast.promise(provider.waitForTransaction(train?.hash as any), {
         pending: "Tx pending: " + train?.hash,
@@ -127,16 +125,16 @@ export default function CombatTrainingModal() {
 
   return (
     <>
-      <input type="checkbox" id="combat-train" className="modal-toggle" />
-      <label htmlFor="combat-train" className="modal cursor-pointer">
+      <input type="checkbox" id="mana-train" className="modal-toggle" />
+      <label htmlFor="mana-train" className="modal cursor-pointer">
         <label className="modal-box relative" htmlFor="">
           <h3 className="text-lg font-bold text-center mb-2 text-purple-900">
-            Training to earn strengh
+            Training to earn mana
           </h3>
           <div className="flex flex-col w-full lg:flex-row">
             <button
               className="btn grid flex-grow h-12 card  rounded-box place-items-center bg-[#9696ea] btn-accent "
-              onClick={handleStartCombatTrain}
+              onClick={handleStartManaTrain}
               disabled={endTrain}
             >
               Begin Training
@@ -144,7 +142,7 @@ export default function CombatTrainingModal() {
             <div className="divider lg:divider-horizontal"></div>
             <button
               className="btn grid flex-grow h-12 card  rounded-box place-items-center bg-[#9696ea] btn-accent"
-              onClick={handleEndCombatTrain}
+              onClick={handleEndManaTrain}
               disabled={timer || !endTrain}
             >
               {timer ? (
