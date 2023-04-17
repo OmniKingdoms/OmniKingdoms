@@ -313,14 +313,10 @@ app.get("/leaderboard", async (req, res) => {
     // Calculate pagination values
     const totalPlayers = await Player.countDocuments();
     const totalPages = Math.ceil(totalPlayers / pageSize);
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const playersOnPage = players.slice(startIndex, endIndex);
-
     // Send response with leaderboard and pagination values
     res.status(200).json({
       success: true,
-      players: playersOnPage,
+      players: players,
       page,
       pageSize,
       totalPages,
