@@ -7,11 +7,11 @@ const upgradeExample = async () => {
     const Facet = await ethers.getContractFactory(FacetName)
     const facet = await Facet.deploy()
     await facet.deployed()
-    console.log(`${FacetName} deployed: ${facet.address}`)
+    console.log(`${FacetName} deployed: ${facet.address}`);
 
     await verifyContract(facet, FacetName);
 
-    const diamondAddress = "0x9d949DF19f5b838Cd9A57B8da858dC607e566E7F"; //current v2
+    const diamondAddress = "0x545Ad75E4A297Ff1cdb85147F5D0C8DFA0bA21E1"; //current v2
     const newFacetAddress = facet.address;
 
     const diamondCutFacet = await ethers.getContractAt(

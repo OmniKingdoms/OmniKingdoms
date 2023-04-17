@@ -22,8 +22,8 @@ async function deployDiamond () {
   const FacetNames = [
     'DiamondCutFacet',
     'DiamondLoupeFacet',
-    'OwnershipFacet'
-    // 'PlayerFacet',
+    'OwnershipFacet',
+    'PlayerFacet',
     // 'QuestFacet',
     // 'CraftFacet',
     // 'TrainFacet',
@@ -44,7 +44,7 @@ async function deployDiamond () {
       functionSelectors: getSelectors(facet)
     })
 
-    await verifyContract(facet, FacetName);
+    //await verifyContract(facet, FacetName);
   }
 
   // Creating a function call
