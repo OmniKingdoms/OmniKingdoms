@@ -1180,13 +1180,7 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "password",
-          "type": "string"
-        }
-      ],
+      "inputs": [],
       "name": "forceUnEquip",
       "outputs": [],
       "stateMutability": "nonpayable",

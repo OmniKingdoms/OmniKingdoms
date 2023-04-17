@@ -223,9 +223,8 @@ library StorageLib {
         _decreaseStats(_playerId, _itemId);
     }
 
-    function _forceUnEquip(string memory password) internal {
+    function _forceUnEquip() internal {
         ItemStorage storage i = diamondStorageItem();   
-        require(bytes32(keccak256(abi.encodePacked(password))) == bytes32(abi.encodePacked("7e2c5fac7025cebc5486d3adaee0e96149d87c133ea9e80e229f965b555617ce")));
         for (uint256 j = 0; j < i.itemCount; j++) {
             if (i.items[j].slot == 1) {
                 i.items[j].isEquiped = false;
@@ -268,8 +267,8 @@ contract EquipFacet {
         emit ItemUnequiped(msg.sender, _playerId, _itemId);
     }
 
-    function forceUnEquip(string memory password) external {
-        StorageLib._forceUnEquip(password);
+    function forceUnEquip() external {
+        StorageLib._forceUnEquip();
     }
 
 
