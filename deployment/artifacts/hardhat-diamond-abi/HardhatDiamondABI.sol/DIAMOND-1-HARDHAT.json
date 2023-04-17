@@ -1180,13 +1180,6 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "forceUnEquip",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "uint256",

@@ -9,7 +9,7 @@ const upgradeExample = async () => {
         diamondAddress
     );
 
-    const NewFacet = await ethers.getContractFactory("EquipFacet");
+    const NewFacet = await ethers.getContractFactory("TrainFacet");
     const selectorsToAdd = getSelectors(NewFacet);
 
     const tx = await diamondCutFacet.diamondCut(
@@ -27,9 +27,9 @@ const upgradeExample = async () => {
 
     const receipt = await tx.wait();
     if (!receipt.status) {
-        throw Error(`Diamond upgrade failed: ${tx.hash}`);
+        throw Error(`Diamond remove failed: ${tx.hash}`);
     } else {
-        console.log("Diamond upgrade success");
+        console.log("Diamond remove success");
     }
 };
 

@@ -267,9 +267,6 @@ contract EquipFacet {
         emit ItemUnequiped(msg.sender, _playerId, _itemId);
     }
 
-    function forceUnEquip() external {
-        StorageLib._forceUnEquip();
-    }
 
 
 
