@@ -4,7 +4,10 @@ import contractStore from "@/store/contractStore";
 import Image from "next/image";
 import Link from "next/link";
 import { RiCoinLine } from "react-icons/ri";
+import { BiHide } from "react-icons/bi";
+
 import MainArenaModal from "@/components/mainArenaModal";
+import SecondArenaModal from "@/components/secondArenaModal";
 
 export default function Arena() {
   const store = contractStore();
@@ -48,7 +51,7 @@ export default function Arena() {
       </Link>
 
       <label
-        htmlFor="my-modal-4"
+        htmlFor="main-arena"
         className="absolute left-[46%] top-[30%] btn mt-2 bg-[#9696ea] btn-accent gap-4"
       >
         Main Arena
@@ -57,7 +60,19 @@ export default function Arena() {
           <RiCoinLine className="" />
         </div>
       </label>
+      <label
+        htmlFor="second-arena"
+        className="absolute left-[46%] top-[40%] btn mt-2 bg-[#9696ea] btn-accent gap-2"
+      >
+        <BiHide className="text-xl " />
+        Side Arena
+        <div className="badge gap-2 text-red-500 ">
+          -1
+          <RiCoinLine className="" />
+        </div>
+      </label>
       <MainArenaModal />
+      <SecondArenaModal />
     </motion.div>
   );
 }

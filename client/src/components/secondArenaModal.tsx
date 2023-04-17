@@ -8,7 +8,7 @@ import Image from "next/image";
 import { AiOutlineHeart } from "react-icons/ai";
 import { TbSword } from "react-icons/tb";
 
-export default function MainArenaModal() {
+export default function SecondArenaModal() {
   const player = playerStore((state) => state.player);
   const selectedPlayer = playerStore((state) => state.selectedPlayer);
   const diamond = contractStore((state) => state.diamond);
@@ -18,7 +18,7 @@ export default function MainArenaModal() {
   const [host, setHost] = useState<PlayerStructOutput | undefined>();
 
   async function getArena() {
-    const openArena = await diamond?.getMainArena();
+    const openArena = await diamond?.getSecondArena();
     setArena(openArena?.[0] as any);
     return openArena?.[1].toNumber();
   }
@@ -47,7 +47,7 @@ export default function MainArenaModal() {
   async function handleEnterArena() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     try {
-      const quest = await diamond?.enterMainArena(selectedPlayer);
+      const quest = await diamond?.enterSecondArena(selectedPlayer);
       toast.promise(provider.waitForTransaction(quest?.hash as any), {
         pending: "Tx pending: " + quest?.hash,
         success: {
@@ -90,7 +90,7 @@ export default function MainArenaModal() {
     // Get signer
 
     try {
-      const quest = await diamond?.fightMainArena(selectedPlayer);
+      const quest = await diamond?.fightSecondArena(selectedPlayer);
       toast.promise(provider.waitForTransaction(quest?.hash as any), {
         pending: "Tx pending: " + quest?.hash,
         success: {
@@ -132,8 +132,8 @@ export default function MainArenaModal() {
 
   return (
     <>
-      <input type="checkbox" id="main-arena" className="modal-toggle" />
-      <label htmlFor="main-arena" className="modal cursor-pointer">
+      <input type="checkbox" id="second-arena" className="modal-toggle" />
+      <label htmlFor="second-arena" className="modal cursor-pointer">
         <label className="modal-box relative" htmlFor="">
           <h3 className="text-lg font-bold text-center mb-2 text-purple-900">
             Fight for gold in the Arena!
