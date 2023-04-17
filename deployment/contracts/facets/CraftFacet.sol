@@ -195,11 +195,11 @@ library StorageLib {
         PlayerStorage storage s = diamondStoragePlayer();
         ItemStorage storage i = diamondStorageItem();
         CoinStorage storage c = diamondStorageCoin();
-        require(s.players[_tokenId].status == 0); //make sure player is idle
-        require(s.owners[_tokenId] == msg.sender); //ownerOf
-        require(s.players[_tokenId].mana >= 1); //make sure player has at least 1 mana
-        require(c.goldBalance[msg.sender] >= 3); //check user has enough gold
-        require(c.gemBalance[msg.sender] >= 1); //check user has enough gem
+        require(s.players[_tokenId].status == 0, "You must be Idle to Craft"); //make sure player is idle
+        require(s.owners[_tokenId] == msg.sender, "You are not the owner"); //ownerOf
+        require(s.players[_tokenId].mana >= 1, "Requires one Mana"); //make sure player has at least 1 mana
+        require(c.goldBalance[msg.sender] >= 3, "Requires 3 Gold"); //check user has enough gold
+        require(c.gemBalance[msg.sender] >= 1, "Requires 1 Gem"); //check user has enough gem
         c.goldBalance[msg.sender] -= 3; //deduct 3 gold from the address' balance
         c.gemBalance[msg.sender] -= 1; //deduct 1 gem from the address' balance
         s.players[_tokenId].mana -= 1; //deduct 51 mana from the player

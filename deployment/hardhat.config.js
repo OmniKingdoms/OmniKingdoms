@@ -55,6 +55,16 @@ module.exports = {
     ]
   },
   networks: {
+    hardhat: {
+      forking: {
+        url: scrollUrl,
+        blockNumber: 1374325
+      }
+    },
+    localhost: {
+      url: "http://127.0.0.1:8545/",
+      accounts: [keys]
+    },
     scroll: {
       url: scrollUrl,
       accounts: [keys]

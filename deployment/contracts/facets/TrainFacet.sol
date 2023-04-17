@@ -121,7 +121,7 @@ library StorageLib {
         require(s.owners[_tokenId] == msg.sender);
         require(s.players[_tokenId].status == 1); //require that they are training
         require(
-            block.timestamp >= t.mana[_tokenId] + 300,
+            block.timestamp >= t.mana[_tokenId] + 300, //5 mins
             "it's too early to pull out"
         );
         s.players[_tokenId].status = 0;
@@ -185,7 +185,7 @@ contract TrainFacet {
         return StorageLib._getCombatStart(_playerId);
     }
     function getManaStart(uint256 _playerId) external view returns(uint256) {
-        return StorageLib._getCombatStart(_playerId);
+        return StorageLib._getManaStart(_playerId);
     }
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
