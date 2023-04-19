@@ -165,6 +165,27 @@ const leaderboardUpdate = async () => {
       // Update player wins
       player.wins += 1;
       player.Mainwins += 1;
+      player.status = 0;
+      await player.save();
+
+      console.log(`Player with id ${playerId} has ${player.wins} wins`);
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on("SecondWin", async (playerId) => {
+    try {
+      // Find player in database
+      const player = await Player.findOne({ id: playerId });
+      if (!player) {
+        console.log(`Player with id ${playerId} not found`);
+        return;
+      }
+
+      // Update player wins
+      player.wins += 1;
+      player.Secondwins += 1;
+      player.status = 0;
       await player.save();
 
       console.log(`Player with id ${playerId} has ${player.wins} wins`);
@@ -180,6 +201,7 @@ const leaderboardUpdate = async () => {
       if (player) {
         player.wins += 1;
         player.Magicwins += 1;
+        player.status = 0;
         await player.save();
         console.log(`Player ${player.id} wins updated to ${player.wins}`);
       }
@@ -195,6 +217,23 @@ const leaderboardUpdate = async () => {
       if (player) {
         player.losses += 1;
         player.Mainlosses += 1;
+        player.status = 0;
+        await player.save();
+        console.log(`Player ${player.id} suffered a main loss`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on("SecondLoss", async (playerId) => {
+    try {
+      // Find player by id
+      const player = await Player.findOne({ id: playerId });
+      // If player exists, do nothing
+      if (player) {
+        player.losses += 1;
+        player.Secondlosses += 1;
+        player.status = 0;
         await player.save();
         console.log(`Player ${player.id} suffered a main loss`);
       }
@@ -210,6 +249,7 @@ const leaderboardUpdate = async () => {
       if (player) {
         player.losses += 1;
         player.Magiclosses += 1;
+        player.status = 0;
         await player.save();
         console.log(`Player ${player.id} suffered a magic loss`);
       }
@@ -218,6 +258,20 @@ const leaderboardUpdate = async () => {
     }
   });
   contract.on("EnterMain", async (playerId) => {
+    try {
+      // Find player by id
+      const player = await Player.findOne({ id: playerId });
+      // If player exists, do nothing
+      if (player) {
+        player.status = 4;
+        await player.save();
+        console.log(`Player ${player.id} entered the main arena`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  contract.on("EnterSecond", async (playerId) => {
     try {
       // Find player by id
       const player = await Player.findOne({ id: playerId });
