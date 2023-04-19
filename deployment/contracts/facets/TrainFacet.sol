@@ -165,6 +165,7 @@ library StorageLib {
 }
 
 
+
 contract TrainFacet {
 
     event BeginTrainingCombat(address indexed _playerAddress, uint256 indexed _id);
@@ -195,7 +196,7 @@ contract TrainFacet {
         return StorageLib._getCombatStart(_playerId);
     }
     function getManaStart(uint256 _playerId) external view returns(uint256) {
-        return StorageLib._getCombatStart(_playerId);
+        return StorageLib._getManaStart(_playerId);
     }
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
