@@ -39,14 +39,14 @@ struct Slot {
 //     5: feet;
 // }
 
-// status {
+// StatusCodes {
 //     0: idle;
 //     1: combatTrain;
-//     2: manaTrain;
-//     3: goldQuest;
-//     4: arena;
+//     2: goldQuest;
+//     3: manaTrain;
+//     4: Arena;
 //     5: gemQuest;
-// } 
+// }
 
 library StorageLib {
 
@@ -132,7 +132,7 @@ library StorageLib {
         require(s.owners[_tokenId] == msg.sender); //ownerOf
         require(block.timestamp >= q.cooldowns[_tokenId] + 60); //make sure that they have waited 5 mins for gem
 
-        s.players[_tokenId].status = 2; //set quest status
+        s.players[_tokenId].status = 5; //set gemQuest status
         q.gemQuest[_tokenId] = block.timestamp; //set start time
     }
 
@@ -141,7 +141,7 @@ library StorageLib {
         CoinStorage storage c = diamondStorageCoin();
         QuestStorage storage q = diamondStorageQuest();
         require(s.owners[_tokenId] == msg.sender);
-        require(s.players[_tokenId].status == 2);
+        require(s.players[_tokenId].status == 5);
         require(
             block.timestamp >= q.gemQuest[_tokenId] + 60, //must wait 5 mins
             "it's too early to pull out"

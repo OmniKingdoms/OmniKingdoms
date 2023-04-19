@@ -40,6 +40,17 @@ struct Slot {
 //     5: feet;
 // }
 
+
+// StatusCodes {
+//     0: idle;
+//     1: combatTrain;
+//     2: goldQuest;
+//     3: manaTrain;
+//     4: Arena;
+//     5: gemQuest;
+// }
+
+
 library StorageLib {
 
     bytes32 constant PLAYER_STORAGE_POSITION = keccak256("player.test.storage.a");
@@ -110,7 +121,7 @@ library StorageLib {
         require(s.owners[_tokenId] == msg.sender); // ownerOf
         require(block.timestamp >= t.cooldown[_tokenId] + 1); //check time requirement
 
-        s.players[_tokenId].status = 1;
+        s.players[_tokenId].status = 3;
         t.mana[_tokenId] = block.timestamp;
         delete t.cooldown[_tokenId];
     }
@@ -119,9 +130,9 @@ library StorageLib {
         PlayerStorage storage s = diamondStoragePlayer();
         TrainStorage storage t = diamondStorageTrain();
         require(s.owners[_tokenId] == msg.sender);
-        require(s.players[_tokenId].status == 1); //require that they are training
+        require(s.players[_tokenId].status == 3); //require that they are training mana
         require(
-            block.timestamp >= t.mana[_tokenId] + 300, //5 mins
+            block.timestamp >= t.mana[_tokenId] + 300,
             "it's too early to pull out"
         );
         s.players[_tokenId].status = 0;
@@ -154,7 +165,6 @@ library StorageLib {
 }
 
 
-
 contract TrainFacet {
 
     event BeginTrainingCombat(address indexed _playerAddress, uint256 indexed _id);
@@ -185,7 +195,7 @@ contract TrainFacet {
         return StorageLib._getCombatStart(_playerId);
     }
     function getManaStart(uint256 _playerId) external view returns(uint256) {
-        return StorageLib._getManaStart(_playerId);
+        return StorageLib._getCombatStart(_playerId);
     }
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}

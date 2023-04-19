@@ -723,13 +723,6 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "mintCoins",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "bytes4",

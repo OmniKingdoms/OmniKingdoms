@@ -177,6 +177,33 @@ library StorageLib {
         i.addressToItems[msg.sender].push(i.itemCount);
     }
 
+    function _craftGemArmor(uint256 _playerId, uint256 _shieldOne, uint256 _shieldTwo, uint256 _shieldThree) internal {
+        PlayerStorage storage s = diamondStoragePlayer();
+        ItemStorage storage i = diamondStorageItem();
+        CoinStorage storage c = diamondStorageCoin();
+        require(s.players[_playerId].status == 0, "You must be Idle to Craft"); //make sure player is idle
+        require(s.owners[_playerId] == msg.sender, "You are not the owner"); //ownerOf
+        require(i.owners[_shieldOne] == msg.sender); //make sure player owns the shield
+        require(i.owners[_shieldTwo] == msg.sender); //make sure player owns the shield
+        require(i.owners[_shieldThree] == msg.sender); //make sure player owns the shield
+        require(!i.items[_shieldOne].isEquiped, "this item is equiped already"); //require item isn't equiped
+        require(!i.items[_shieldTwo].isEquiped, "this item is equiped already"); //require item isn't equiped
+        require(!i.items[_shieldThree].isEquiped); //require item isn't equiped
+        require(keccak256(abi.encodePacked(i.items[_shieldOne].name)) == keccak256(abi.encodePacked("Shield")), "this is not a shield"); //require item isn't equiped
+        require(keccak256(abi.encodePacked(i.items[_shieldTwo].name)) == keccak256(abi.encodePacked("Shield")), "this is not a shield"); //require item isn't equiped
+        require(keccak256(abi.encodePacked(i.items[_shieldThree].name)) == keccak256(abi.encodePacked("Shield")), "this is not a shield"); //require item isn't equiped
+        require(c.gemBalance[msg.sender] >= 5, "you need 5 gem"); //check user has enough gem
+        require(s.players[_playerId].mana >= 5, "you must have at least 5 mana"); //make sure their mana is at least 5
+        c.gemBalance[msg.sender] -= 5; //deduct 3 gem from the user;
+        s.players[_playerId].mana -= 5; //deduct 5 mana from the player
+        i.itemCount++;
+        i.owners[i.itemCount] = msg.sender;
+        i.items[i.itemCount] = Item(1, 2, 300, 1, "Armor", msg.sender, false);  // slot, rank, value, stat
+        i.addressToItems[msg.sender].push(i.itemCount);
+    }
+
+
+
     function _craftHelmet(uint256 _tokenId) internal {
         PlayerStorage storage s = diamondStoragePlayer();
         ItemStorage storage i = diamondStorageItem();
@@ -253,13 +280,13 @@ library StorageLib {
         return i.itemCount;
     }
 
-    function _mintCoins() internal {
-        CoinStorage storage c = diamondStorageCoin();
-        c.goldBalance[msg.sender] += 100; //mint one gold
-        c.gemBalance[msg.sender] += 100; //mint one gold
-        c.diamondBalance[msg.sender] += 100; //mint one gold
-        c.totemBalance[msg.sender] += 100; //mint one gold
-    }
+    // function _mintCoins() internal {
+    //     CoinStorage storage c = diamondStorageCoin();
+    //     c.goldBalance[msg.sender] += 100; //mint one gold
+    //     c.gemBalance[msg.sender] += 100; //mint one gold
+    //     c.diamondBalance[msg.sender] += 100; //mint one gold
+    //     c.totemBalance[msg.sender] += 100; //mint one gold
+    // }
 
 
 }
@@ -305,9 +332,7 @@ contract CraftFacet {
         count = StorageLib._getItemCount(); 
     }
 
-    function mintCoins() external {
-        StorageLib._mintCoins();
-    }
+
 
 
 

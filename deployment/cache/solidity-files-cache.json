@@ -80,6 +80,41 @@
         "LibDiamond"
       ]
     },
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamondLoupe.sol": {
+      "lastModificationDate": 1679806917526,
+      "contentHash": "a471cd6a18e337530aa0fb37a1dd2294",
+      "sourceName": "contracts/interfaces/IDiamondLoupe.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IDiamondLoupe"
+      ]
+    },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamondCut.sol": {
       "lastModificationDate": 1679806917526,
       "contentHash": "74d1e316ccff781e1e23bcfed30d7a05",
@@ -117,10 +152,10 @@
         "IDiamondCut"
       ]
     },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamondLoupe.sol": {
-      "lastModificationDate": 1679806917526,
-      "contentHash": "a471cd6a18e337530aa0fb37a1dd2294",
-      "sourceName": "contracts/interfaces/IDiamondLoupe.sol",
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IERC165.sol": {
+      "lastModificationDate": 1679806917527,
+      "contentHash": "f8f9ee2c76e1678bfead7a3fad131934",
+      "sourceName": "contracts/interfaces/IERC165.sol",
       "solcConfig": {
         "version": "0.8.17",
         "settings": {
@@ -149,7 +184,7 @@
         "^0.8.0"
       ],
       "artifacts": [
-        "IDiamondLoupe"
+        "IERC165"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IERC173.sol": {
@@ -185,41 +220,6 @@
       ],
       "artifacts": [
         "IERC173"
-      ]
-    },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IERC165.sol": {
-      "lastModificationDate": 1679806917527,
-      "contentHash": "f8f9ee2c76e1678bfead7a3fad131934",
-      "sourceName": "contracts/interfaces/IERC165.sol",
-      "solcConfig": {
-        "version": "0.8.17",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC165"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamond.sol": {
@@ -298,81 +298,6 @@
         "DiamondInit"
       ]
     },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/upgradeInitializers/DiamondMultiInit.sol": {
-      "lastModificationDate": 1679806917525,
-      "contentHash": "201ae7dd97a5423925b266ebd457c6e7",
-      "sourceName": "contracts/upgradeInitializers/DiamondMultiInit.sol",
-      "solcConfig": {
-        "version": "0.8.17",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../libraries/LibDiamond.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "DiamondMultiInit"
-      ]
-    },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/OwnershipFacet.sol": {
-      "lastModificationDate": 1679806917523,
-      "contentHash": "3ecfa87738e59d567e6c44c1708b9a7d",
-      "sourceName": "contracts/facets/OwnershipFacet.sol",
-      "solcConfig": {
-        "version": "0.8.17",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../libraries/LibDiamond.sol",
-        "../interfaces/IERC173.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "OwnershipFacet"
-      ]
-    },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/DiamondLoupeFacet.sol": {
       "lastModificationDate": 1679806917524,
       "contentHash": "62eeb4e3b43c94cc8e30c718dee3ce49",
@@ -410,6 +335,43 @@
       ],
       "artifacts": [
         "DiamondLoupeFacet"
+      ]
+    },
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/upgradeInitializers/DiamondMultiInit.sol": {
+      "lastModificationDate": 1679806917525,
+      "contentHash": "201ae7dd97a5423925b266ebd457c6e7",
+      "sourceName": "contracts/upgradeInitializers/DiamondMultiInit.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../libraries/LibDiamond.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "DiamondMultiInit"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/DiamondCutFacet.sol": {
@@ -450,9 +412,47 @@
         "DiamondCutFacet"
       ]
     },
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/OwnershipFacet.sol": {
+      "lastModificationDate": 1679806917523,
+      "contentHash": "3ecfa87738e59d567e6c44c1708b9a7d",
+      "sourceName": "contracts/facets/OwnershipFacet.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../libraries/LibDiamond.sol",
+        "../interfaces/IERC173.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "OwnershipFacet"
+      ]
+    },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/ArenaFacet.sol": {
-      "lastModificationDate": 1681577676785,
-      "contentHash": "be1afb646729b1ee31adfb08f5f435df",
+      "lastModificationDate": 1681864772947,
+      "contentHash": "f79fe3a60e1530613c1af89bd42204a4",
       "sourceName": "contracts/facets/ArenaFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -487,8 +487,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/CraftFacet.sol": {
-      "lastModificationDate": 1681697531792,
-      "contentHash": "8edba65a43330528a7f659171db7bf84",
+      "lastModificationDate": 1681704661695,
+      "contentHash": "b8b4aa715726b627ff293e9b7378fb67",
       "sourceName": "contracts/facets/CraftFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -631,8 +631,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/QuestFacet.sol": {
-      "lastModificationDate": 1681577777621,
-      "contentHash": "f3622fc7818c22b47e4d48bf782310b6",
+      "lastModificationDate": 1681864707554,
+      "contentHash": "77058e5b2d9f34d19d89e1c3b17bec0f",
       "sourceName": "contracts/facets/QuestFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -667,8 +667,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/TrainFacet.sol": {
-      "lastModificationDate": 1681702837799,
-      "contentHash": "f0d6a2b5d608fe42f9ac17db2179eceb",
+      "lastModificationDate": 1681864633794,
+      "contentHash": "b3d838dcc16e3c1cd3491919281552da",
       "sourceName": "contracts/facets/TrainFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -703,7 +703,7 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/node_modules/hardhat-diamond-abi/dist/contract.sol": {
-      "lastModificationDate": 1681702906831,
+      "lastModificationDate": 1681864849927,
       "contentHash": "f0899ccf3452b0b76299b9fb99d6bbf2",
       "sourceName": "hardhat-diamond-abi/HardhatDiamondABI.sol",
       "solcConfig": {
