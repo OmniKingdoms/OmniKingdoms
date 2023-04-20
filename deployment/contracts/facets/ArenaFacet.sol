@@ -383,14 +383,14 @@ library StorageLib {
         return (_winner, _loser);
     }
 
-    function _simulateMagicFight(uint256 _hostId, uint256 _challengerId) internal view returns (uint256) {
-        PlayerStorage storage s = diamondStoragePlayer();
-
+    function _simulateMagicFight(uint256 _hostId, uint256 _challengerId) internal returns (uint256) {
+       PlayerStorage storage s = diamondStoragePlayer();
         Player storage host = s.players[_hostId];
         Player storage challenger = s.players[_challengerId];
-        uint hostPoints = (host.health * (_randomMainArena(_hostId) % 5)) - (challenger.magic  * (_randomMainArena(_challengerId) % 4));
-        uint challengerPoints = (challenger.health * (_randomMainArena(_challengerId) % 5)) - (host.magic  * (_randomMainArena(_hostId) % 5));
-        if ( hostPoints >= challengerPoints ) {
+        uint hostPoints = host.health + host.magic;
+        uint challengerPoints = challenger.health + challenger.magic;
+        uint256 winner = _fightCalc(hostPoints, challengerPoints);
+        if (winner == hostPoints) {
             return _hostId;
         } else {
             return _challengerId;
@@ -486,7 +486,7 @@ contract ArenaFacet {
         return StorageLib._getMainArena();
     }
     function getSecondArena() external view returns(bool, uint256) {
-        return StorageLib._getMainArena();
+        return StorageLib._getSecondArena();
     }
     // function getThirdArena() external view returns(bool) {
     //     return StorageLib._getMainArena();
@@ -532,6 +532,12 @@ contract ArenaFacet {
         emit MagicWin(_winner);
         emit MagicLoss(_loser);
     }
+
+    function leaveMainArena(uint256 _playerId) public {
+        StorageLib._leaveMainArena(_playerId);
+    }
+
+
 
     function getTotalWins(uint256 _playerId) public view returns(uint256) {
         return StorageLib._getTotalWins(_playerId);
