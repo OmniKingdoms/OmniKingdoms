@@ -93,6 +93,7 @@ library StorageLib {
 
     struct ArenaStorage {
         bool open;
+        uint256 arenaCounter;
         Arena mainArena;
         Arena secondArena;
         Arena thirdArena;
@@ -158,7 +159,7 @@ library StorageLib {
         require(!a.mainArena.open, "arena is empty");
         require(s.players[_challengerId].status == 0); //make sure player is idle
         require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
-        uint256 winner = _simulateFight(a.mainArena.hostId, _challengerId);
+        uint256 winner = _simulateAlternateFight(a.mainArena.hostId, _challengerId);
         uint256 _winner;
         uint256 _loser;
         if (winner == _challengerId) { //means the challenger won
@@ -181,6 +182,7 @@ library StorageLib {
         }
         a.mainArena.open = true;
         s.players[a.mainArena.hostId].status = 0; // set the host to idle
+        a.mainArena.hostId = 0; //set the id to 0
         return (_winner, _loser);
     }
     function _enterSecondArena(uint256 _playerId) internal {
@@ -205,7 +207,7 @@ library StorageLib {
         require(!a.secondArena.open, "arena is empty");
         require(s.players[_challengerId].status == 0); //make sure player is idle
         require(c.goldBalance[msg.sender] >= 1, "not enough gold"); //check to make sure the user has enough gold
-        uint256 winner = _simulateFight(a.secondArena.hostId, _challengerId);
+        uint256 winner = _simulateAlternateFight(a.secondArena.hostId, _challengerId);
         uint256 _winner;
         uint256 _loser;
         if (winner == _challengerId) { //means the challenger won
@@ -228,12 +230,12 @@ library StorageLib {
         }
         a.secondArena.open = true;
         s.players[a.secondArena.hostId].status = 0; // set the host to idle
+        a.secondArena.hostId = 0; //set the id to 0
         return (_winner, _loser);
     }
 
     function _simulateFight(uint256 _hostId, uint256 _challengerId) internal view returns (uint256) {
         PlayerStorage storage s = diamondStoragePlayer();
-
         Player storage host = s.players[_hostId];
         Player storage challenger = s.players[_challengerId];
         uint hostPoints = (host.health * (_randomMainArena(_hostId) % 5)) - (challenger.strength  * (_randomMainArena(_challengerId) % 4));
@@ -245,10 +247,93 @@ library StorageLib {
         }
     }
 
+    function _simulateAlternateFight(uint256 _hostId, uint256 _challengerId) internal returns (uint256) {
+        PlayerStorage storage s = diamondStoragePlayer();
+        Player storage host = s.players[_hostId];
+        Player storage challenger = s.players[_challengerId];
+        uint hostPoints = host.health + host.strength;
+        uint challengerPoints = challenger.health + challenger.strength;
+        uint256 winner = _fightCalc(hostPoints, challengerPoints);
+        if (winner == hostPoints) {
+            return _hostId;
+        } else {
+            return _challengerId;
+        }
+    }
+
+    function probs(uint256 nonce) internal returns (uint256 output) {
+        uint256 rand = _random(nonce);
+        output = rand % 10;
+    }
+
+    function _random(uint256 nonce) internal returns(uint256) {
+        ArenaStorage storage a = diamondStorageArena();
+        a.arenaCounter++;
+        return uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, nonce, a.arenaCounter)));
+    }
+
+    function _fightCalc(uint256 x, uint256 y) internal returns (uint256) {
+        if (x > y) {
+            if (x / y == 1) {
+                if (probs(x) >= 4) { //60% higher odds wins
+                    return x;
+                } else {
+                    return y;
+                }
+            } else if (x / y == 2) {
+                if (probs(x) >= 3) { //70% higher odds wins
+                    return x;
+                } else {
+                    return y;
+                }
+            } else if ( x / y == 3) {
+                if (probs(x) >= 2) { //80% higher odds wins
+                    return x;
+                } else {
+                    return y;
+                }
+            } else {
+                if (probs(x) >= 1) { //90% higher odds wins
+                    return x;
+                } else {
+                    return y;
+                }
+            }
+        } else {
+            if (y / x == 1) {
+                if (probs(y) >= 4) { //60% higher odds wins
+                    return y;
+                } else {
+                    return x;
+                }
+            } else if (y / x == 2) {
+                if (probs(y) >= 3) { //70% higher odds wins
+                    return y;
+                } else {
+                    return x;
+                }
+            } else if ( y / x == 3) { //80% higher odds
+                if (probs(y) >= 2) { //80% higher odds wins
+                    return y;
+                } else {
+                    return x;
+                }
+            } else {
+                if (probs(y) >= 1) { //90% higher odds wins
+                    return y;
+                } else {
+                    return x;
+                }
+            }        
+        }
+    } 
+
+
     function _randomMainArena (uint _tokenId) internal view returns(uint256) {
         PlayerStorage storage s = diamondStoragePlayer();
         return uint256(keccak256(abi.encodePacked(block.timestamp + s.playerCount + _tokenId)));
     }
+
 
     function _enterMagicArena(uint256 _playerId) internal {
         PlayerStorage storage s = diamondStoragePlayer();
@@ -298,14 +383,14 @@ library StorageLib {
         return (_winner, _loser);
     }
 
-    function _simulateMagicFight(uint256 _hostId, uint256 _challengerId) internal view returns (uint256) {
-        PlayerStorage storage s = diamondStoragePlayer();
-
+    function _simulateMagicFight(uint256 _hostId, uint256 _challengerId) internal returns (uint256) {
+       PlayerStorage storage s = diamondStoragePlayer();
         Player storage host = s.players[_hostId];
         Player storage challenger = s.players[_challengerId];
-        uint hostPoints = (host.health * (_randomMainArena(_hostId) % 5)) - (challenger.magic  * (_randomMainArena(_challengerId) % 4));
-        uint challengerPoints = (challenger.health * (_randomMainArena(_challengerId) % 5)) - (host.magic  * (_randomMainArena(_hostId) % 5));
-        if ( hostPoints >= challengerPoints ) {
+        uint hostPoints = host.health + host.magic;
+        uint challengerPoints = challenger.health + challenger.magic;
+        uint256 winner = _fightCalc(hostPoints, challengerPoints);
+        if (winner == hostPoints) {
             return _hostId;
         } else {
             return _challengerId;
@@ -356,6 +441,15 @@ library StorageLib {
         return a.magicArenaLosses[_playerId];   
     }
 
+    function _leaveMainArena(uint256 _hostId) internal {
+        ArenaStorage storage a = diamondStorageArena();
+        PlayerStorage storage s = diamondStoragePlayer();
+        require(a.mainArena.hostId == _hostId, "you are not the host"); //plerys is the current host
+        require(s.players[_hostId].status == 4, "you are not in the arena"); //check if they are in arena
+        a.mainArena.hostId = 0; //reset the id of arena
+        s.players[_hostId].status = 0; //set satus og host back to idle
+    }
+
 
     function _openArenas () internal {
         ArenaStorage storage a = diamondStorageArena();
@@ -392,7 +486,7 @@ contract ArenaFacet {
         return StorageLib._getMainArena();
     }
     function getSecondArena() external view returns(bool, uint256) {
-        return StorageLib._getMainArena();
+        return StorageLib._getSecondArena();
     }
     // function getThirdArena() external view returns(bool) {
     //     return StorageLib._getMainArena();
@@ -438,6 +532,12 @@ contract ArenaFacet {
         emit MagicWin(_winner);
         emit MagicLoss(_loser);
     }
+
+    function leaveMainArena(uint256 _playerId) public {
+        StorageLib._leaveMainArena(_playerId);
+    }
+
+
 
     function getTotalWins(uint256 _playerId) public view returns(uint256) {
         return StorageLib._getTotalWins(_playerId);
