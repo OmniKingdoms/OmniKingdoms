@@ -13,6 +13,7 @@ import { GoLightBulb } from "react-icons/go";
 import { SiGhost } from "react-icons/si";
 import { TfiEye } from "react-icons/tfi";
 import { RiCoinLine } from "react-icons/ri";
+import { IoDiamondOutline } from "react-icons/io5";
 import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 
 import InventoryModal from "./inventoryModal";
@@ -40,6 +41,8 @@ export default function PlayerCard() {
         store.setStatus(await player.status.toNumber());
         const gold = await contract.getGoldBalance(address);
         store.setGold(await gold.toNumber());
+        const gem = await contract.getGemBalance(address);
+        store.setGem(await gem.toNumber());
       };
       loadContract();
     }
@@ -189,6 +192,12 @@ export default function PlayerCard() {
               data-tip="gold"
             >
               <RiCoinLine className="pr-2" />0{store.gold}
+            </div>
+            <div
+              className=" flex  justify-center items-center sm:text-3xl text-cyan-500 tooltip "
+              data-tip="gem"
+            >
+              <IoDiamondOutline className="pr-2" />0{store.gem}
             </div>
             <label
               htmlFor="my-modal"

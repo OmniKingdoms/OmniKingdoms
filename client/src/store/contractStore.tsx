@@ -12,6 +12,8 @@ type TplayerStore = {
   setPlayer: (player: PlayerStructOutput | undefined) => void;
   gold: number | undefined;
   setGold: (gold: number | undefined) => void;
+  gem: number | undefined;
+  setGem: (gem: number | undefined) => void;
   status: number;
   setStatus: (status: number) => void;
   selectedPlayer: number;
@@ -23,11 +25,13 @@ const playerStore = persist<TplayerStore>(
     players: [],
     player: undefined,
     gold: 1,
+    gem: 1,
     status: 0,
     selectedPlayer: 0,
     setPlayers: (players) => set(() => ({ players: players })),
     setPlayer: (player) => set(() => ({ player: player })),
     setGold: (gold) => set(() => ({ gold: gold })),
+    setGem: (gem) => set(() => ({ gem: gem })),
     setStatus: (status) => set(() => ({ status: status })),
     setSelectedPlayer: (selectedPlayer) =>
       set(() => ({ selectedPlayer: selectedPlayer })),

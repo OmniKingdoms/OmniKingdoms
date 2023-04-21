@@ -3,46 +3,61 @@ import playerStore, { contractStore } from "@/store/contractStore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
-import { PlayerStructOutput } from "../../../types/ethers-contracts/DIAMOND1HARDHAT";
-import Image from "next/image";
-import { AiOutlineHeart } from "react-icons/ai";
-import { TbSword } from "react-icons/tb";
+import Countdown from "react-countdown";
 
-export default function SecondArenaModal() {
+export default function GemModal() {
   const player = playerStore((state) => state.player);
   const selectedPlayer = playerStore((state) => state.selectedPlayer);
   const diamond = contractStore((state) => state.diamond);
 
   const [endQuest, setEndQuest] = useState(false);
-  const [arena, setArena] = useState(false);
+  const [timer, setTimer] = useState(false);
+  const [beginTimer, setBeginTimer] = useState(false);
+  const [countdown, setCountdown] = useState(0);
 
-  async function getArena() {
-    const openArena = await diamond?.getSecondArena();
-    setArena(openArena?.[0] as any);
-    return openArena?.[1].toNumber();
+  async function questTimer() {
+    const blockTimestamp = (await diamond?.getGemStart(selectedPlayer)) as any;
+    const startTime = blockTimestamp.toNumber() as any;
+    const curTime = (Date.now() / 1000).toFixed(0) as any;
+    const time = curTime - startTime;
+    if (time < 80) {
+      setCountdown(80 - time);
+      setTimer(true);
+    }
+  }
+  async function CooldownTimer() {
+    const blockTimestamp = (await diamond?.getCooldown(selectedPlayer)) as any;
+    const startTime = blockTimestamp.toNumber() as any;
+    const curTime = (Date.now() / 1000).toFixed(0) as any;
+    const time = curTime - startTime;
+    if (time < 80) {
+      setCountdown(80 - time);
+      setBeginTimer(true);
+    }
   }
 
   useEffect(() => {
-    getArena();
-
+    CooldownTimer();
+    questTimer();
     if (!player?.status) {
       setEndQuest(false);
-    } else if (player.status.toNumber() != 0) {
-      setEndQuest(true);
     } else {
-      setEndQuest(false);
+      if (player.status.toNumber() === 2) {
+        setEndQuest(true);
+      }
     }
-  }, [player?.status, arena]);
+  }, [player?.status, timer, beginTimer]);
 
-  async function handleEnterArena() {
+  async function handleBeginGem() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     try {
-      const quest = await diamond?.enterSecondArena(selectedPlayer);
+      const quest = await diamond?.startQuestGem(selectedPlayer);
       toast.promise(provider.waitForTransaction(quest?.hash as any), {
         pending: "Tx pending: " + quest?.hash,
         success: {
           render() {
             setEndQuest(true);
+            setTimer(true);
             return "Success: " + quest?.hash;
           },
         },
@@ -74,19 +89,18 @@ export default function SecondArenaModal() {
       }
     }
   }
-
-  async function handleFightArena() {
+  async function handleEndGem() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
 
     try {
-      const quest = await diamond?.fightSecondArena(selectedPlayer);
+      const quest = await diamond?.endQuestGem(selectedPlayer);
       toast.promise(provider.waitForTransaction(quest?.hash as any), {
         pending: "Tx pending: " + quest?.hash,
         success: {
           render() {
             setEndQuest(false);
-            setArena(true);
+            setBeginTimer(true);
 
             return "Success: " + quest?.hash;
           },
@@ -122,62 +136,58 @@ export default function SecondArenaModal() {
 
   return (
     <>
-      <input type="checkbox" id="second-arena" className="modal-toggle" />
-      <label htmlFor="second-arena" className="modal cursor-pointer">
+      <input type="checkbox" id="gem-quest" className="modal-toggle" />
+      <label htmlFor="gem-quest" className="modal cursor-pointer">
         <label className="modal-box relative" htmlFor="">
           <h3 className="text-lg font-bold text-center mb-2 text-purple-900">
-            Fight for gold in the Side Arena!
+            Quest to earn Gem!
           </h3>
-          <div className="flex flex-col w-full ">
+          <div className="flex flex-col w-full lg:flex-row">
             <button
               className="btn grid flex-grow h-12 card  rounded-box place-items-center bg-[#9696ea] btn-accent "
-              onClick={handleEnterArena}
-              disabled={endQuest || !arena}
+              onClick={handleBeginGem}
+              disabled={beginTimer || endQuest}
             >
-              Enter Arena
+              {beginTimer ? (
+                <Countdown
+                  date={Date.now() + 1000 * countdown} // 1sec * seconds
+                  onComplete={() => {
+                    setBeginTimer(false);
+                  }}
+                  renderer={(props) => (
+                    <>
+                      0{props.minutes}:{props.seconds}
+                    </>
+                  )}
+                />
+              ) : (
+                "Begin Quest"
+              )}
             </button>
-            <div className="divider "></div>
-          </div>
-          {(endQuest || !arena) && (
-            <div className="flex mt-4 justify-center items-center gap-4">
-              {/* <div className="avatar p-4 ">
-                <div className="w-6 sm:w-16 rounded-full ">
-                  <Image
-                    alt="player"
-                    src={host?.uri as any}
-                    fill
-                    className="rounded-full"
-                  />
-                </div>
-              </div>
-              <div>
-                <div className=" sm:text-2xl font-bold text-red-700 ">
-                  {host?.name}
-                </div>
+            <div className="divider lg:divider-horizontal"></div>
 
-                <div
-                  className=" flex justify-center items-center sm:text-2xl text-red-700 tooltip"
-                  data-tip="health"
-                >
-                  <AiOutlineHeart />
-                  {host?.health.toNumber()}
-                </div>
-                <div
-                  className=" flex justify-center items-center sm:text-2xl text-red-700  tooltip"
-                  data-tip="strength"
-                >
-                  <TbSword />0{host?.strength.toNumber()}
-                </div>
-              </div> */}
-              <button
-                className="btn grid flex-grow h-12 card  rounded-box place-items-center bg-[#9696ea] btn-accent"
-                onClick={handleFightArena}
-                disabled={endQuest || arena}
-              >
-                Challenge
-              </button>
-            </div>
-          )}
+            <button
+              className="btn grid flex-grow h-12 card  rounded-box place-items-center bg-[#9696ea] btn-accent"
+              onClick={handleEndGem}
+              disabled={timer || !endQuest}
+            >
+              {timer ? (
+                <Countdown
+                  date={Date.now() + 1000 * countdown} // 1sec * seconds
+                  onComplete={() => {
+                    setTimer(false);
+                  }}
+                  renderer={(props) => (
+                    <>
+                      0{props.minutes}:{props.seconds}
+                    </>
+                  )}
+                />
+              ) : (
+                "End Quest"
+              )}
+            </button>
+          </div>
         </label>
         <ToastContainer theme="dark" />
       </label>

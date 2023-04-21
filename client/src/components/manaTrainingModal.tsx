@@ -18,10 +18,11 @@ export default function ManaTrainingModal() {
   async function manaTimer() {
     const blockTimestamp = (await diamond?.getManaStart(selectedPlayer)) as any;
     const startTime = blockTimestamp.toNumber() as any;
+    console.log(startTime);
     const curTime = (Date.now() / 1000).toFixed(0) as any;
     const time = curTime - startTime;
-    if (time < 300) {
-      setCountdown(300 - time); // 5min
+    if (time < 315) {
+      setCountdown(315 - time); // 5min
       setTimer(true);
     }
   }
@@ -31,7 +32,7 @@ export default function ManaTrainingModal() {
     if (!player?.status) {
       setEndTrain(false);
     } else {
-      if (player.status.toNumber() === 1) {
+      if (player.status.toNumber() === 3) {
         setEndTrain(true);
       }
     }

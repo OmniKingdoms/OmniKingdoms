@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import GoldModal from "@/components/goldModal";
 import { RiCoinLine } from "react-icons/ri";
+import { IoDiamondOutline } from "react-icons/io5";
+import GemModal from "@/components/gemModal";
 
 export default function Quest() {
   const store = contractStore();
@@ -53,7 +55,7 @@ export default function Quest() {
       </Link>
 
       <label
-        htmlFor="my-modal-4"
+        htmlFor="gold-quest"
         className="absolute left-[46%] top-[30%] btn mt-2 bg-[#9696ea] btn-accent gap-4"
       >
         Gold Quest
@@ -62,7 +64,18 @@ export default function Quest() {
           <RiCoinLine className="" />
         </div>
       </label>
+      <label
+        htmlFor="gem-quest"
+        className="absolute left-[46%] top-[40%] btn mt-2 bg-[#9696ea] btn-accent gap-4"
+      >
+        Gem Quest
+        <div className="badge gap-2 text-cyan-300 ">
+          +1
+          <IoDiamondOutline className="" />
+        </div>
+      </label>
       <GoldModal />
+      <GemModal />
     </motion.div>
   );
 }
