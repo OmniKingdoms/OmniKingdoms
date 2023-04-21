@@ -170,6 +170,10 @@ library StorageLib {
         QuestStorage storage q = diamondStorageQuest();
         return q.gemQuest[_playerId];
     }
+    function _getCooldown(uint256 _playerId) internal view returns(uint256) {
+        QuestStorage storage q = diamondStorageQuest();
+        return q.cooldowns[_playerId];
+    }
 
 
 }
@@ -213,6 +217,9 @@ contract QuestFacet {
     }
     function getGemStart(uint256 _playerId) external view returns(uint256) {
         return StorageLib._getGemStart(_playerId);
+    }
+    function getCooldown(uint256 _playerId) external view returns(uint256) {
+        return StorageLib._getCooldown(_playerId);
     }
 
 

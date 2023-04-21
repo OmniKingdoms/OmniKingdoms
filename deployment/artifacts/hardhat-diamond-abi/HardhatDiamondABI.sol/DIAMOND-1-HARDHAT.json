@@ -1773,6 +1773,25 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "_playerId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCooldown",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "_address",
           "type": "address"
@@ -1868,6 +1887,13 @@
         }
       ],
       "name": "startQuestGold",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "openSecondArena",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
