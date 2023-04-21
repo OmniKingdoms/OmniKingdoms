@@ -35,14 +35,13 @@ export default function GemModal() {
       setBeginTimer(true);
     }
   }
-
   useEffect(() => {
     CooldownTimer();
     questTimer();
     if (!player?.status) {
       setEndQuest(false);
     } else {
-      if (player.status.toNumber() === 2) {
+      if (player.status.toNumber() === 5) {
         setEndQuest(true);
       }
     }
