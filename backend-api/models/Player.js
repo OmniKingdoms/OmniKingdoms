@@ -16,7 +16,9 @@ const playerSchema = new mongoose.Schema({
   Magicwins: { type: Number, required: true, default: 0 },
   Magiclosses: { type: Number, required: true, default: 0 },
   Mainwins: { type: Number, required: true, default: 0 },
+  Secondwins: { type: Number, required: true, default: 0 },
   Mainlosses: { type: Number, required: true, default: 0 },
+  Secondlosses: { type: Number, required: true, default: 0 },
   mana:{type:Number,required:true,default:1},
  
 },{ timestamps: true });

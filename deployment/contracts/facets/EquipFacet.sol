@@ -167,12 +167,12 @@ library StorageLib {
     function _equipBody (uint256 _playerId, uint256 _itemId) internal {
         ItemStorage storage i = diamondStorageItem();   
         PlayerStorage storage s = diamondStoragePlayer();
-        // require(i.owners[_itemId] == msg.sender); //require owner of Item
-        // require(s.players[_playerId].status == 0); //make sure player is idle
-        // require(s.owners[_playerId] == msg.sender); //ownerOf player
-        // require(i.items[_itemId].slot == 1); //require item body
-        // require(!i.items[_itemId].isEquiped); //require item isn't equiped
-        // require(s.players[_playerId].slot.body == 0); //require that player doesnt have a body item on
+        require(i.owners[_itemId] == msg.sender); //require owner of Item
+        require(s.players[_playerId].status == 0); //make sure player is idle
+        require(s.owners[_playerId] == msg.sender); //ownerOf player
+        require(i.items[_itemId].slot == 1); //require item body
+        require(!i.items[_itemId].isEquiped); //require item isn't equiped
+        require(s.players[_playerId].slot.body == 0); //require that player doesnt have a body item on
 
         i.items[_itemId].isEquiped = true; //set equiped status to true;
         s.players[_playerId].slot.body = _itemId; //equip the item to the player
@@ -223,6 +223,15 @@ library StorageLib {
         _decreaseStats(_playerId, _itemId);
     }
 
+    function _forceUnEquip() internal {
+        ItemStorage storage i = diamondStorageItem();   
+        for (uint256 j = 0; j < i.itemCount; j++) {
+            if (i.items[j].slot == 1) {
+                i.items[j].isEquiped = false;
+            }
+        }
+    }
+
 
 }
 
@@ -257,8 +266,6 @@ contract EquipFacet {
         StorageLib._unequipRightHand(_playerId, _itemId);
         emit ItemUnequiped(msg.sender, _playerId, _itemId);
     }
-
-
 
 
 
