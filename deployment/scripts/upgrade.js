@@ -3,7 +3,7 @@ const hre = require('hardhat');
 
 const upgradeExample = async () => {
 
-    const FacetName = "QuestFacet"
+    const FacetName = "CraftFacet"
     const Facet = await ethers.getContractFactory(FacetName)
     const facet = await Facet.deploy()
     await facet.deployed()
