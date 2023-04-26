@@ -87,6 +87,7 @@ library StorageLib {
 
     struct CoinStorage {
         mapping(address => uint256) goldBalance;
+        mapping(address => uint256) gemBalance;
         mapping(address => uint256) totemBalance;
         mapping(address => uint256) diamondBalance;
     }
@@ -137,7 +138,12 @@ library StorageLib {
         }
     }
 
-    
+    function _activeScript(uint256 _playerId) internal {
+        PlayerStorage storage s = diamondStoragePlayer();
+        CoinStorage storage c = diamondStorageCoin();
+        s.players[_playerId].mana += 50;
+        c.gemBalance[msg.sender] += 50;
+    }
 
 
 
@@ -146,6 +152,8 @@ library StorageLib {
         a.secondArena.open = true;
     }
 
+    
+
 }
 
 
@@ -153,11 +161,13 @@ library StorageLib {
 contract ScriptFacet {
 
 
-    function openSecondArena() external {
-        return StorageLib._openSecondArena();
+    // function openSecondArena() external {
+    //     return StorageLib._openSecondArena();
+    // }
+
+    function activeScript(uint256 _playerId) public {
+        StorageLib._activeScript(_playerId);
     }
-
-
 
 
 
