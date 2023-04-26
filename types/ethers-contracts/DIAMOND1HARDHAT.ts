@@ -186,9 +186,9 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     "craftArmor(uint256)": FunctionFragment;
     "craftGuitar(uint256)": FunctionFragment;
     "craftHelmet(uint256)": FunctionFragment;
-    "craftShield(uint256)": FunctionFragment;
     "craftSorcerShoes(uint256)": FunctionFragment;
     "craftSword(uint256)": FunctionFragment;
+    "craftWizardHat(uint256)": FunctionFragment;
     "getItem(uint256)": FunctionFragment;
     "getItemCount()": FunctionFragment;
     "getItems(address)": FunctionFragment;
@@ -266,9 +266,9 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
       | "craftArmor"
       | "craftGuitar"
       | "craftHelmet"
-      | "craftShield"
       | "craftSorcerShoes"
       | "craftSword"
+      | "craftWizardHat"
       | "getItem"
       | "getItemCount"
       | "getItems"
@@ -405,15 +405,15 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "craftShield",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "craftSorcerShoes",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "craftSword",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "craftWizardHat",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -701,14 +701,14 @@ export interface DIAMOND1HARDHATInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "craftShield",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "craftSorcerShoes",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "craftSword", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "craftWizardHat",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getItem", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getItemCount",
@@ -1377,17 +1377,17 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    craftShield(
-      _tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     craftSorcerShoes(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     craftSword(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    craftWizardHat(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -1755,17 +1755,17 @@ export interface DIAMOND1HARDHAT extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  craftShield(
-    _tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   craftSorcerShoes(
     _tokenId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   craftSword(
+    _tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  craftWizardHat(
     _tokenId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -2113,17 +2113,17 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    craftShield(
-      _tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     craftSorcerShoes(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     craftSword(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    craftWizardHat(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -2698,17 +2698,17 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    craftShield(
-      _tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     craftSorcerShoes(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     craftSword(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    craftWizardHat(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -3055,17 +3055,17 @@ export interface DIAMOND1HARDHAT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    craftShield(
-      _tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     craftSorcerShoes(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     craftSword(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    craftWizardHat(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

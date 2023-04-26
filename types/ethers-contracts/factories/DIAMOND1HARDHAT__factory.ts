@@ -623,19 +623,6 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "craftShield",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
     name: "craftSorcerShoes",
     outputs: [],
     stateMutability: "nonpayable",
@@ -650,6 +637,19 @@ const _abi = [
       },
     ],
     name: "craftSword",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "craftWizardHat",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import craftmap from "../../../../public/images/craft1.png";
-import contractStore from "@/store/contractStore";
+import playerStore, { contractStore } from "@/store/contractStore";
 import Diamond from "@/contracts/data/diamond.json";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,25 +10,24 @@ import { TbSword } from "react-icons/tb";
 import { AiOutlineHeart } from "react-icons/ai";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { SlEnergy } from "react-icons/sl";
+import { IoDiamondOutline } from "react-icons/io5";
+import { GiPotionBall } from "react-icons/gi";
 export default function Craft() {
-  const store = contractStore();
+  const store = playerStore();
+  const diamond = contractStore((state) => state.diamond);
 
   async function handleCraftSword() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
-    const signer = provider.getSigner();
-    const contract = await new ethers.Contract(
-      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-      Diamond.abi,
-      signer
-    );
+
     try {
-      const craft = await contract.craftSword(store.selectedPlayer);
-      toast.promise(provider.waitForTransaction(craft.hash), {
-        pending: "Tx pending: " + craft.hash,
+      const craft = await diamond?.craftSword(store.selectedPlayer);
+      toast.promise(provider.waitForTransaction(craft?.hash as any), {
+        pending: "Tx pending: " + craft?.hash,
         success: {
           render() {
-            return "Success: " + craft.hash;
+            return "Success: " + craft?.hash;
           },
         },
         error: "Tx failed",
@@ -62,20 +61,55 @@ export default function Craft() {
   async function handleCraftArmor() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     // Get signer
-    const signer = provider.getSigner();
-    const contract = await new ethers.Contract(
-      process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
-      Diamond.abi,
-      signer
-    );
 
     try {
-      const craft = await contract.craftArmor(store.selectedPlayer);
-      toast.promise(provider.waitForTransaction(craft.hash), {
-        pending: "Tx pending: " + craft.hash,
+      const craft = await diamond?.craftArmor(store.selectedPlayer);
+      toast.promise(provider.waitForTransaction(craft?.hash as any), {
+        pending: "Tx pending: " + craft?.hash,
         success: {
           render() {
-            return "Success: " + craft.hash;
+            return "Success: " + craft?.hash;
+          },
+        },
+        error: "Tx failed",
+      });
+    } catch (error: any) {
+      if (error.data) {
+        toast.error(error.data.message as string, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else {
+        toast.error(error.reason as string, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    }
+  }
+  async function handleCraftWizHat() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    // Get signer
+
+    try {
+      const craft = await diamond?.craftWizardHat(store.selectedPlayer);
+      toast.promise(provider.waitForTransaction(craft?.hash as any), {
+        pending: "Tx pending: " + craft?.hash,
+        success: {
+          render() {
+            return "Success: " + craft?.hash;
           },
         },
         error: "Tx failed",
@@ -180,6 +214,29 @@ export default function Craft() {
           <div className="flex items-center gap-1">
             <span className="text-amber-300">+1</span>
             <AiOutlineHeart className="text-amber-300 " />
+          </div>
+        </div>
+      </button>
+      <button
+        disabled={store.status !== 0}
+        className="absolute left-[45%] top-[70%] flex-col disabled:text-zinc-100 disabled:bg-opacity-90 disabled:text-opacity-100 btn mt-2 bg-[#9696ea] btn-accent gap-1"
+        onClick={() => {
+          handleCraftWizHat();
+        }}
+      >
+        <div>Craft Wizard Hat</div>
+        <div className="badge gap-4 text-amber-300 ">
+          <div className="flex items-center gap-1">
+            <span className="text-red-500">-10</span>
+            <IoDiamondOutline className="text-red-500" />
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-red-500">-10</span>
+            <GiPotionBall className="text-red-500" />
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-amber-300">+5</span>
+            <SlEnergy className="text-amber-300 " />
           </div>
         </div>
       </button>

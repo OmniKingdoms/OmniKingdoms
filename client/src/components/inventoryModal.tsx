@@ -1,6 +1,7 @@
 import Image from "next/image";
 import playerStore, { contractStore } from "@/store/contractStore";
 import bodyarmor from "../../public/images/bodyarmor.jpeg";
+import wizardhat from "../../public/images/wizardhat.jpeg";
 import sword from "../../public/images/sword.jpeg";
 
 import { useEffect, useState } from "react";
@@ -36,6 +37,7 @@ export default function InventoryModal() {
   const startIndex = currentPage * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, itens.length);
   const displayedItems = itens.slice(startIndex, endIndex);
+  console.log(player?.slot.head.toNumber());
 
   return (
     <>
@@ -55,7 +57,14 @@ export default function InventoryModal() {
               className="w-12 h-12 left-5 top-9 rounded-md ring-2  bg-gray-300  bg-opacity-25 opacity-90 absolute tooltip tooltip-left"
               data-tip="head"
             >
-              {player?.slot.head.toNumber() === 0 ? null : <></>}
+              {player?.slot.head.toNumber() === 0 ? null : (
+                <Image
+                  src={wizardhat}
+                  width={1000}
+                  alt="wizard hat"
+                  className="rounded-md"
+                />
+              )}
             </div>
             <div
               className="w-12 h-12 left-5 top-44 rounded-md ring-2  bg-gray-300 bg-opacity-25 opacity-90 absolute tooltip tooltip-left "

@@ -3,6 +3,8 @@ import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import bodyarmor from "../../public/images/bodyarmor.jpeg";
+import wizardhat from "../../public/images/wizardhat.jpeg";
+
 import sword from "../../public/images/sword.jpeg";
 import playerStore, { contractStore } from "@/store/contractStore";
 import { toast, ToastContainer } from "react-toastify";
@@ -31,6 +33,44 @@ export default function ItemCard({ itemId }: any) {
     if (item?.slot.toNumber() === 1) {
       try {
         const equip = await diamond?.equipBody(selectedPlayer, itemId);
+        toast.promise(provider.waitForTransaction(equip?.hash as any), {
+          pending: "Tx pending: " + equip?.hash,
+          success: {
+            render() {
+              return "Success: " + equip?.hash;
+            },
+          },
+          error: "Tx failed",
+        });
+      } catch (error: any) {
+        if (error.data) {
+          toast.error(error.data.message as string, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        } else {
+          toast.error(error.reason as string, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+      }
+    }
+    if (item?.slot.toNumber() === 0) {
+      try {
+        const equip = await diamond?.equipHead(selectedPlayer, itemId);
         toast.promise(provider.waitForTransaction(equip?.hash as any), {
           pending: "Tx pending: " + equip?.hash,
           success: {
@@ -147,6 +187,44 @@ export default function ItemCard({ itemId }: any) {
         }
       }
     }
+    if (item?.slot.toNumber() === 0) {
+      try {
+        const equip = await diamond?.unequipHead(selectedPlayer, itemId);
+        toast.promise(provider.waitForTransaction(equip?.hash as any), {
+          pending: "Tx pending: " + equip?.hash,
+          success: {
+            render() {
+              return "Success: " + equip?.hash;
+            },
+          },
+          error: "Tx failed",
+        });
+      } catch (error: any) {
+        if (error.data) {
+          toast.error(error.data.message as string, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        } else {
+          toast.error(error.reason as string, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+      }
+    }
     if (item?.slot.toNumber() === 2 || item?.slot.toNumber() === 3) {
       try {
         const equip = await diamond?.unequipRightHand(selectedPlayer, itemId);
@@ -186,6 +264,7 @@ export default function ItemCard({ itemId }: any) {
       }
     }
   }
+  console.log(itemId);
 
   return (
     <div
@@ -203,6 +282,11 @@ export default function ItemCard({ itemId }: any) {
           <Image src={sword} className="rounded-md" alt={item?.name} />
         </div>
       )}
+      {item?.name === "WizHat" && (
+        <div tabIndex={itemId}>
+          <Image src={wizardhat} className="rounded-md" alt={item?.name} />
+        </div>
+      )}
       <ul
         tabIndex={itemId}
         className=" dropdown-content menu p-2 shadow bg-base-100 rounded-box flex items-center  "
@@ -210,6 +294,7 @@ export default function ItemCard({ itemId }: any) {
         <li className="">
           {item.stat.toNumber() === 0 && "strength: " + item.value.toNumber()}
           {item.stat.toNumber() === 1 && "health: " + item.value.toNumber()}
+          {item.stat.toNumber() === 3 && "magic: " + item.value.toNumber()}
         </li>
         <li>
           {item.isEquiped ? (
