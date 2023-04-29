@@ -7,23 +7,44 @@ struct Player {
     uint256 status;
     uint256 strength;
     uint256 health;
-    uint256 stamina;
+    uint256 magic;
     uint256 mana;
     uint256 agility;
     uint256 luck;
     uint256 wisdom;
     uint256 haki;
     uint256 perception;
+    uint256 defense;
     string name;
     string uri;
     bool male;
+    Slot slot;
 }
 
 struct PlayerListing {
     address payable seller;
     uint256 playerId;
     uint256 price;
+    uint256 pointer;
 }
+
+struct Slot {
+    uint256 head;
+    uint256 body;
+    uint256 leftHand;
+    uint256 rightHand;
+    uint256 pants;
+    uint256 feet;
+}
+
+// slots {
+//     0: head;
+//     1: body;
+//     2: lefthand;
+//     3: rightHand;
+//     4: pants;
+//     5: feet;
+// }
 
 library ExchangeStorageLib {
 
@@ -43,8 +64,9 @@ library ExchangeStorageLib {
     }
 
     struct ExStorage {
-        mapping(uint256 => PlayerListing) listings;
-        mapping(address => uint256[]) addressToListiongs;
+        mapping(uint256 => PlayerListing) listingsMap;
+        mapping(address => uint256[]) addressToListings;
+        uint256[] listingsArray;
     }
 
     struct CoinStorage {
@@ -72,15 +94,17 @@ library ExchangeStorageLib {
         }
     }
 
-    function _crateListing(uint256 _id, uint256 _price) internal {
+    function _createListing(uint256 _id, uint256 _price) internal {
         PlayerStorage storage s = diamondStoragePlayer();
         ExStorage storage e = diamondStorageEx();
-        require(s.owners[_id] == msg.sender); //ownerOf
-        require(s.players[_id].status == 0); //make sure player is idle
-        e.listings[_id] = PlayerListing(payable(msg.sender), _id, _price);
-
-        for (uint256 i = 0; i < s.balances[msg.sender]; i++) {
+        require(s.owners[_id] == msg.sender, "Not owner of player"); //ownerOf
+        require(s.players[_id].status == 0, "Player is not idle"); //make sure player is idle
+        e.listingsMap[_id] = PlayerListing(payable(msg.sender), _id, _price, e.listingsArray.length); //create the listing and map
+        e.listingsArray.push(_id); //add new value of the listing array
+        uint256 balances = s.balances[msg.sender];
+        for (uint256 i; i < balances; ++i) {
             if (s.addressToPlayers[msg.sender][i] == _id) {
+                delete s.owners[_id];
                 delete s.addressToPlayers[msg.sender][i];
                 break;
             }
@@ -88,24 +112,40 @@ library ExchangeStorageLib {
         s.balances[msg.sender]--;
     }
 
+
     function _purchasePlayer(uint256 _listingId) internal {
         PlayerStorage storage s = diamondStoragePlayer();
         ExStorage storage e = diamondStorageEx();
         CoinStorage storage c = diamondStorageCoin(); 
-        require(c.goldBalance[msg.sender] >= e.listings[_listingId].price); //check if buyer has enough value
-        s.owners[e.listings[_listingId].playerId] = msg.sender; //transfer ownership
-        s.addressToPlayers[msg.sender].push(e.listings[_listingId].playerId); //add id to players array
-        c.goldBalance[msg.sender] -= e.listings[_listingId].price; //deduct balance from buys
-        c.goldBalance[e.listings[_listingId].seller] += e.listings[_listingId].price; //increase balance from buys
-        delete e.listings[_listingId];
+        require(c.goldBalance[msg.sender] >= e.listingsMap[_listingId].price); //check if buyer has enough value
+        s.owners[e.listingsMap[_listingId].playerId] = msg.sender; //transfer ownership
+        s.addressToPlayers[msg.sender].push(e.listingsMap[_listingId].playerId); //add id to players array
+        c.goldBalance[msg.sender] -= e.listingsMap[_listingId].price; //deduct balance from buys
+        c.goldBalance[e.listingsMap[_listingId].seller] += e.listingsMap[_listingId].price; //increase balance from buys
+        uint256 rowToDelete = e.listingsMap[_listingId].pointer;
+        uint256 keyToMove = e.listingsArray[e.listingsArray.length-1];
+        e.listingsArray[rowToDelete] = keyToMove;
+        e.listingsMap[keyToMove].pointer = rowToDelete;
+        e.listingsArray.pop();
+        delete e.listingsMap[_listingId];
         s.balances[msg.sender]++; //increment the balance
     }
 
-    function _getListing(address _address) internal view returns (uint256[] memory) {
+    function _getListings(address _address) internal view returns (uint256[] memory) {
         ExStorage storage e = diamondStorageEx();
-        return e.addressToListiongs[_address];
+        return e.addressToListings[_address];
     }
 
+    function _getListing(uint256 _listingId) internal view returns (address payable seller, uint256 playerId, uint256 price) {
+        ExStorage storage e = diamondStorageEx();
+        PlayerListing memory listing = e.listingsMap[_listingId];
+        return (payable(listing.seller), listing.playerId, listing.price);
+    }
+
+    function _getAllListings() internal view returns (uint256[] memory) {
+        ExStorage storage e = diamondStorageEx();
+        return e.listingsArray;
+    }
 
 
 }
@@ -116,7 +156,7 @@ contract ExchangeFacet {
     event Purchase(address indexed _to, uint256 _id);
 
     function crateListing(uint256 _id, uint256 _price) public {
-        ExchangeStorageLib._crateListing(_id, _price);
+        ExchangeStorageLib._createListing(_id, _price);
         emit List(msg.sender, _id, _price);
     }
 
@@ -125,11 +165,17 @@ contract ExchangeFacet {
         emit Purchase(msg.sender, _listingId);
     }
 
-    function _getListing(address _address) public view {
-        ExchangeStorageLib._getListing(_address);
+    function getListings(address _address) public view returns (uint256[] memory) {
+        return ExchangeStorageLib._getListings(_address);
     }
 
+    function getLisitng(uint256 _listingId) public view returns (address payable seller, uint256 playerId, uint256 price) {
+        return ExchangeStorageLib._getListing(_listingId);
+    }
 
+    function getAllListings() public view returns (uint256[] memory) {
+        return ExchangeStorageLib._getAllListings();
+    }
  
 
 

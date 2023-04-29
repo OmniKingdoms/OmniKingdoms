@@ -145,7 +145,7 @@ library StorageLib {
         require(s.players[_playerId].slot.head == 0); //require that player doesnt have a head item on
 
         i.items[_itemId].isEquiped = true; //set equiped status to true;
-        s.players[_playerId].slot.head == _itemId; //equip the item to the player
+        s.players[_playerId].slot.head = _itemId; //equip the item to the player
         _increaseStats(_playerId, _itemId);
         //return (i.items[_itemId].value, i.items[_itemId].stat);
     }
@@ -161,7 +161,7 @@ library StorageLib {
         require(s.players[_playerId].slot.head == _itemId); //require that player has the same item on
 
         i.items[_itemId].isEquiped = false; //set isEquiped status to false;
-        s.players[_playerId].slot.head == 0; //reset the slot value to 0
+        s.players[_playerId].slot.head = 0; //reset the slot value to 0
         _decreaseStats(_playerId, _itemId);
     }
     function _equipBody (uint256 _playerId, uint256 _itemId) internal {
@@ -221,15 +221,6 @@ library StorageLib {
         i.items[_itemId].isEquiped = false; //set isEquiped status to false;
         s.players[_playerId].slot.rightHand = 0; //reset the slot value to 0
         _decreaseStats(_playerId, _itemId);
-    }
-
-    function _forceUnEquip() internal {
-        ItemStorage storage i = diamondStorageItem();   
-        for (uint256 j = 0; j < i.itemCount; j++) {
-            if (i.items[j].slot == 1) {
-                i.items[j].isEquiped = false;
-            }
-        }
     }
 
 

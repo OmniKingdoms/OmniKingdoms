@@ -71,7 +71,7 @@ library StorageLib {
     bytes32 constant PLAYER_STORAGE_POSITION = keccak256("player.test.storage.a");
     bytes32 constant COIN_STORAGE_POSITION = keccak256("coin.test.storage.a");
     bytes32 constant ARENA_STORAGE_POSITION = keccak256("Arena.test.storage.a");
-
+    bytes32 constant ITEM_STORAGE_POSITION = keccak256("item.test.storage.a");
 
     struct PlayerStorage {
         uint256 totalSupply;
@@ -90,6 +90,14 @@ library StorageLib {
         mapping(address => uint256) gemBalance;
         mapping(address => uint256) totemBalance;
         mapping(address => uint256) diamondBalance;
+    }
+
+    struct ItemStorage {
+        uint256 itemCount;
+        mapping(uint256 => address) owners;
+        mapping(uint256 => Item) items;
+        mapping(address => uint256[]) addressToItems;
+        mapping(uint256 => uint256) cooldown;
     }
 
     struct ArenaStorage {
@@ -138,11 +146,19 @@ library StorageLib {
         }
     }
 
+    function diamondStorageItem() internal pure returns (ItemStorage storage ds) {
+        bytes32 position = ITEM_STORAGE_POSITION;
+        assembly {
+            ds.slot := position
+        }
+    }
+
     function _activeScript(uint256 _playerId) internal {
         PlayerStorage storage s = diamondStoragePlayer();
         CoinStorage storage c = diamondStorageCoin();
         s.players[_playerId].mana += 50;
         c.gemBalance[msg.sender] += 50;
+        c.goldBalance[msg.sender] += 500;
     }
 
 
@@ -152,7 +168,14 @@ library StorageLib {
         a.secondArena.open = true;
     }
 
-    
+    function _forceUnEquip() internal {
+        ItemStorage storage i = diamondStorageItem();   
+        for (uint256 j = 0; j < i.itemCount; j++) {
+            if (i.items[j].slot == 0) {
+                i.items[j].isEquiped = false;
+            }
+        }
+    }
 
 }
 
@@ -167,6 +190,10 @@ contract ScriptFacet {
 
     function activeScript(uint256 _playerId) public {
         StorageLib._activeScript(_playerId);
+    }
+
+    function forceUnEquip() public {
+        StorageLib._forceUnEquip();
     }
 
 

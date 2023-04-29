@@ -29,7 +29,8 @@ async function deployDiamond () {
     // 'TrainFacet',
     // 'EquipFacet',
     // 'ArenaFacet',
-    // 'ExchangeFacet'
+    'ExchangeFacet',
+    'ScriptFacet'
   ]
   // The `facetCuts` variable is the FacetCut[] that contains the functions to add during diamond deployment
   const facetCuts = []
@@ -44,7 +45,7 @@ async function deployDiamond () {
       functionSelectors: getSelectors(facet)
     })
 
-    //await verifyContract(facet, FacetName);
+    await verifyContract(facet, FacetName);
   }
 
   // Creating a function call
