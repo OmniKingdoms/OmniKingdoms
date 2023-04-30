@@ -102,10 +102,11 @@ library ExchangeStorageLib {
         e.listingsMap[_id] = PlayerListing(payable(msg.sender), _id, _price, e.listingsArray.length); //create the listing and map
         e.listingsArray.push(_id); //add new value of the listing array
         uint256 balances = s.balances[msg.sender];
-        for (uint256 i; i < balances; ++i) {
+        for (uint256 i; i < balances; i++) {
             if (s.addressToPlayers[msg.sender][i] == _id) {
                 delete s.owners[_id];
-                delete s.addressToPlayers[msg.sender][i];
+                s.addressToPlayers[msg.sender][i] = s.addressToPlayers[msg.sender][s.addressToPlayers[msg.sender].length-1];
+                s.addressToPlayers[msg.sender].pop();
                 break;
             }
         }

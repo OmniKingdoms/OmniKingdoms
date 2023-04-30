@@ -559,8 +559,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/ExchangeFacet.sol": {
-      "lastModificationDate": 1682727014125,
-      "contentHash": "ee1dbbadb26cd381d2d81e5314ce47a5",
+      "lastModificationDate": 1682883899986,
+      "contentHash": "1cdde0afc8a5ab9a61665f5d5312b8a1",
       "sourceName": "contracts/facets/ExchangeFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -667,8 +667,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/ScriptFacet.sol": {
-      "lastModificationDate": 1682727923447,
-      "contentHash": "c04f15cd6f80e60287d72dd670d4dc33",
+      "lastModificationDate": 1682827827317,
+      "contentHash": "5c68f27c4e0cb4293acef22b7f0c04fc",
       "sourceName": "contracts/facets/ScriptFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -739,7 +739,7 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/node_modules/hardhat-diamond-abi/dist/contract.sol": {
-      "lastModificationDate": 1682727971724,
+      "lastModificationDate": 1682883914387,
       "contentHash": "f0899ccf3452b0b76299b9fb99d6bbf2",
       "sourceName": "hardhat-diamond-abi/HardhatDiamondABI.sol",
       "solcConfig": {

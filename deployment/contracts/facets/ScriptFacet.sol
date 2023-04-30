@@ -177,6 +177,11 @@ library StorageLib {
         }
     }
 
+    function _getBalance(address _address) internal view returns(uint256) {
+        PlayerStorage storage s = diamondStoragePlayer();
+        return s.balances[_address];
+    }
+
 }
 
 
@@ -196,7 +201,9 @@ contract ScriptFacet {
         StorageLib._forceUnEquip();
     }
 
-
+    // function getBalance(address _address) public returns(uint256) {
+    //     return StorageLib._getBalance(_address);
+    // }
 
 
 
