@@ -11,20 +11,9 @@ import ItemCard from "./itemCard";
 export default function InventoryModal() {
   const { address } = useAccount();
   const [itens, setItens] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
   const player = playerStore((state) => state.player);
   const diamond = contractStore((state) => state.diamond);
   const itemsPerPage = 10;
-
-  const handlePrevious = () => {
-    setCurrentPage(Math.max(0, currentPage - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentPage(
-      Math.min(Math.ceil(itens.length / itemsPerPage) - 1, currentPage + 1)
-    );
-  };
 
   useEffect(() => {
     const loadContract = async () => {
@@ -34,10 +23,6 @@ export default function InventoryModal() {
     };
     loadContract();
   }, [address]);
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, itens.length);
-  const displayedItems = itens.slice(startIndex, endIndex);
-  console.log(player?.slot.head.toNumber());
 
   return (
     <>
@@ -122,36 +107,9 @@ export default function InventoryModal() {
               </label>
             </div>
 
-            <div className=" grid px-6 py-5 grid-cols-2 gap-4 w-fit h-full ">
+            <div className=" grid px-6 py-5 grid-cols-4 gap-4 w-fit h-full ">
               {itens.length != 0 &&
-                displayedItems.map((itemId) => <ItemCard itemId={itemId} />)}
-            </div>
-            <div className="">
-              <button
-                className={`bg-[#9696ea]  p-1 h-fit  rounded-l-lg ${
-                  currentPage === 0 ? "text-black" : "text-white"
-                } `}
-                onClick={handlePrevious}
-                disabled={currentPage === 0}
-              >
-                «
-              </button>
-              <button className="bg-[#9696ea] p-1 h-fit text-white">
-                {currentPage}
-              </button>
-              <button
-                className={`bg-[#9696ea]   p-1 h-fit  rounded-r-lg ${
-                  currentPage === Math.ceil(itens.length / itemsPerPage) - 1
-                    ? "text-black"
-                    : "text-white"
-                } `}
-                onClick={handleNext}
-                disabled={
-                  currentPage === Math.ceil(itens.length / itemsPerPage) - 1
-                }
-              >
-                »
-              </button>
+                itens.map((itemId) => <ItemCard itemId={itemId} />)}
             </div>
           </div>
         </div>
