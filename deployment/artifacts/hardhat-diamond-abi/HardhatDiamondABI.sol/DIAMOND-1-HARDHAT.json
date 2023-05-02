@@ -1960,6 +1960,13 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "openArenas",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "anonymous": false,
       "inputs": [
         {

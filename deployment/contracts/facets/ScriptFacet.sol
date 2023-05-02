@@ -182,6 +182,16 @@ library StorageLib {
         return s.balances[_address];
     }
 
+    function _openArenas () internal {
+        ArenaStorage storage a = diamondStorageArena();
+        require(a.open == false);
+        a.open = true;
+        a.mainArena.open = true;
+        a.secondArena.open = true;
+        a.thirdArena.open = true;
+        a.magicArena.open = true;
+    }
+
 }
 
 
@@ -199,6 +209,10 @@ contract ScriptFacet {
 
     function forceUnEquip() public {
         StorageLib._forceUnEquip();
+    }
+
+    function openArenas() public {
+        StorageLib._openArenas();
     }
 
     // function getBalance(address _address) public returns(uint256) {
