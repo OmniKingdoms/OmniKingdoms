@@ -1,0 +1,37 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Sk
+    network: scrollAlpha
+    source:
+      address: "0x545Ad75E4A297Ff1cdb85147F5D0C8DFA0bA21E1"
+      abi: Sk
+      startBlock: 1337132
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        # - MainLoss
+        - MainWin
+        # - SecondLoss
+        # - SecondWin
+        - Mint
+
+      abis:
+        - name: Sk
+          file: ./abis/Sk.json
+      eventHandlers:
+        - event: Mint(indexed uint256,indexed address,string,string)
+          handler: handleMint
+        # - event: MainLoss(indexed uint256)
+        #   handler: handleMainLoss
+        - event: MainWin(indexed uint256)
+          handler: handleMainWin
+        # - event: SecondLoss(indexed uint256)
+        #   handler: handleSecondLoss
+        # - event: SecondWin(indexed uint256)
+        #   handler: handleSecondWin
+      file: ./src/sk.ts

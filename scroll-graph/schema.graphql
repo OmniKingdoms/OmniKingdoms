@@ -1,0 +1,16 @@
+
+type Player @entity {
+  id: String!
+  Player_id: BigInt! # uint256
+  owner: Bytes! # address
+  name: String! # uint256
+  wins: Int! #uint256
+  losses: Int #uint256
+  Mainwins: Int! #uint256
+  MainLoss: Int #uint256
+}
+
+type Total  @entity {
+  id: String!
+count: Int!
+}
