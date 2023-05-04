@@ -33,19 +33,26 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     // set contract object in store
     if (address) {
+      console.log(chain);
+      let diamondAddress;
+      if (chain?.id === 5001) {
+        diamondAddress = process.env.NEXT_PUBLIC_DIAMOND_ADDRESS_MANTLE;
+      } else if (chain?.id === 534353) {
+        diamondAddress = process.env.NEXT_PUBLIC_DIAMOND_ADDRESS;
+      }
       const provider = new ethers.providers.Web3Provider(
         window.ethereum as any
       );
       const signer = provider.getSigner();
       const contract = new ethers.Contract(
-        process.env.NEXT_PUBLIC_DIAMOND_ADDRESS as string,
+        diamondAddress as string,
         Diamond.abi,
         signer
       ) as DIAMOND1HARDHAT;
       store.setDiamond(contract);
     }
     setMounted(true);
-  }, [address]);
+  }, [address, chain]);
   return (
     <>
       <WagmiProvider>

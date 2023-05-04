@@ -48,7 +48,8 @@ type Tcontract = {
 
 export const contractStore = create<Tcontract>((set) => ({
   diamond: null,
-  setDiamond: (diamond: DIAMOND1HARDHAT) => set(() => ({ diamond: diamond })),
+  setDiamond: async (diamond: DIAMOND1HARDHAT) =>
+    set(() => ({ diamond: diamond })),
 }));
 
 export default create(playerStore);

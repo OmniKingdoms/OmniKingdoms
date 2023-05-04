@@ -1,7 +1,7 @@
 import Image from "next/image";
 import minimap from "../../../public/images/minimapv2.png";
 import { useAccount, useNetwork } from "wagmi";
-import contractStore from "@/store/contractStore";
+import playerStore, { contractStore } from "@/store/contractStore";
 import { useEffect, useState } from "react";
 import Mint from "@/components/mint";
 import { HiLocationMarker } from "react-icons/hi";
@@ -11,25 +11,17 @@ import { ethers } from "ethers";
 import Diamond from "@/contracts/data/diamond.json";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 export default function Play() {
-  const store = contractStore();
+  const store = playerStore();
   const { address } = useAccount();
   const { chain } = useNetwork();
+  const diamond = contractStore((state) => state.diamond);
 
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
     const loadContract = async () => {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      // Get signer
-      const signer = provider.getSigner();
-      const contract = await new ethers.Contract(
-        process.env.NEXT_PUBLIC_DIAMOND_ADDRESS,
-        Diamond.abi,
-        signer
-      );
-
       if (address) {
-        const response = await contract.getPlayers(address);
+        const response = await diamond.getPlayers(address);
         const players = await response.map((val) => val.toNumber());
         store.setPlayers(await players);
         setPlayers(players);
@@ -37,7 +29,7 @@ export default function Play() {
     };
     loadContract();
   }, [address]);
-  if (!address || chain?.id !== 534353) {
+  if (!address || (chain?.id === 534353 && chain?.id === 5001)) {
     return (
       <div className="relative min-h-[85vh] min-w-full flex flex-col items-center justify-center">
         <h2 className="font-bold text-white m-4">Connect to play</h2>
@@ -46,6 +38,22 @@ export default function Play() {
     );
   }
 
+  if (players.length === 0 && chain?.id === 5001) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="relative w-fit mb-auto min-h-fit flex flex-col items-center justify-center mx-auto  h-[78vh]"
+      >
+        {" "}
+        {/* <div>
+          <span className="inline-flex h-6 w-6 animate-spin rounded-full border-4 border-dotted border-purple-800"></span>
+        </div> */}
+        <Mint />
+      </motion.div>
+    );
+  }
   if (players.length === 0 && chain?.id === 534353) {
     return (
       <motion.div
@@ -62,6 +70,7 @@ export default function Play() {
       </motion.div>
     );
   }
+
   return (
     <>
       <motion.div
