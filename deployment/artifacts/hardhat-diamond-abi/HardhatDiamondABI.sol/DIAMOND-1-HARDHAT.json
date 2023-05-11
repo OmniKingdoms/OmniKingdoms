@@ -1778,6 +1778,19 @@
       "inputs": [
         {
           "indexed": true,
+          "internalType": "uint256",
+          "name": "_playerId",
+          "type": "uint256"
+        }
+      ],
+      "name": "DragonQuest",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
           "internalType": "address",
           "name": "_playerAddress",
           "type": "address"
@@ -1804,7 +1817,7 @@
       "outputs": [
         {
           "internalType": "bool",
-          "name": "",
+          "name": "result",
           "type": "bool"
         }
       ],

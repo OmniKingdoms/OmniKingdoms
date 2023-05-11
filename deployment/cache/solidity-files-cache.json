@@ -80,6 +80,41 @@
         "LibDiamond"
       ]
     },
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamondLoupe.sol": {
+      "lastModificationDate": 1679806917526,
+      "contentHash": "a471cd6a18e337530aa0fb37a1dd2294",
+      "sourceName": "contracts/interfaces/IDiamondLoupe.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IDiamondLoupe"
+      ]
+    },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamondCut.sol": {
       "lastModificationDate": 1679806917526,
       "contentHash": "74d1e316ccff781e1e23bcfed30d7a05",
@@ -117,10 +152,10 @@
         "IDiamondCut"
       ]
     },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamondLoupe.sol": {
-      "lastModificationDate": 1679806917526,
-      "contentHash": "a471cd6a18e337530aa0fb37a1dd2294",
-      "sourceName": "contracts/interfaces/IDiamondLoupe.sol",
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IERC165.sol": {
+      "lastModificationDate": 1679806917527,
+      "contentHash": "f8f9ee2c76e1678bfead7a3fad131934",
+      "sourceName": "contracts/interfaces/IERC165.sol",
       "solcConfig": {
         "version": "0.8.17",
         "settings": {
@@ -149,7 +184,7 @@
         "^0.8.0"
       ],
       "artifacts": [
-        "IDiamondLoupe"
+        "IERC165"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IERC173.sol": {
@@ -185,41 +220,6 @@
       ],
       "artifacts": [
         "IERC173"
-      ]
-    },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IERC165.sol": {
-      "lastModificationDate": 1679806917527,
-      "contentHash": "f8f9ee2c76e1678bfead7a3fad131934",
-      "sourceName": "contracts/interfaces/IERC165.sol",
-      "solcConfig": {
-        "version": "0.8.17",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC165"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/interfaces/IDiamond.sol": {
@@ -298,10 +298,10 @@
         "DiamondInit"
       ]
     },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/OwnershipFacet.sol": {
-      "lastModificationDate": 1679806917523,
-      "contentHash": "3ecfa87738e59d567e6c44c1708b9a7d",
-      "sourceName": "contracts/facets/OwnershipFacet.sol",
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/DiamondLoupeFacet.sol": {
+      "lastModificationDate": 1679806917524,
+      "contentHash": "62eeb4e3b43c94cc8e30c718dee3ce49",
+      "sourceName": "contracts/facets/DiamondLoupeFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
         "settings": {
@@ -327,13 +327,14 @@
       },
       "imports": [
         "../libraries/LibDiamond.sol",
-        "../interfaces/IERC173.sol"
+        "../interfaces/IDiamondLoupe.sol",
+        "../interfaces/IERC165.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "OwnershipFacet"
+        "DiamondLoupeFacet"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/upgradeInitializers/DiamondMultiInit.sol": {
@@ -411,10 +412,10 @@
         "DiamondCutFacet"
       ]
     },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/DiamondLoupeFacet.sol": {
-      "lastModificationDate": 1679806917524,
-      "contentHash": "62eeb4e3b43c94cc8e30c718dee3ce49",
-      "sourceName": "contracts/facets/DiamondLoupeFacet.sol",
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/OwnershipFacet.sol": {
+      "lastModificationDate": 1679806917523,
+      "contentHash": "3ecfa87738e59d567e6c44c1708b9a7d",
+      "sourceName": "contracts/facets/OwnershipFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
         "settings": {
@@ -440,14 +441,13 @@
       },
       "imports": [
         "../libraries/LibDiamond.sol",
-        "../interfaces/IDiamondLoupe.sol",
-        "../interfaces/IERC165.sol"
+        "../interfaces/IERC173.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "DiamondLoupeFacet"
+        "OwnershipFacet"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/ArenaFacet.sol": {
@@ -631,8 +631,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/QuestFacet.sol": {
-      "lastModificationDate": 1683773308714,
-      "contentHash": "e4ccb7ece457a80ac29fa2e66653967a",
+      "lastModificationDate": 1683840874721,
+      "contentHash": "e69d93232cc5783422dda458b64f38b0",
       "sourceName": "contracts/facets/QuestFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -770,7 +770,7 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/node_modules/hardhat-diamond-abi/dist/contract.sol": {
-      "lastModificationDate": 1683773492552,
+      "lastModificationDate": 1683840906030,
       "contentHash": "f0899ccf3452b0b76299b9fb99d6bbf2",
       "sourceName": "hardhat-diamond-abi/HardhatDiamondABI.sol",
       "solcConfig": {

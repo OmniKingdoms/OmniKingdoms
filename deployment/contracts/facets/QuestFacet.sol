@@ -216,10 +216,10 @@ library StorageLib {
         TreasureStorage storage t = diamondStorageTreasure();
         require(s.players[_playerId].status == 0); //make sure player is idle
         require(s.owners[_playerId] == msg.sender); //ownerOf
-        require(block.timestamp >= q.cooldowns[_playerId] + 43200); //make sure that they have waited 12 hours since last quest;
+        require(block.timestamp >= q.cooldowns[_playerId] + 60); //make sure that they have waited 12 hours since last quest (43200 seconds);
         require(keccak256(abi.encodePacked(i.items[s.players[_playerId].slot.head].name)) == keccak256(abi.encodePacked("WizHat")),"not wearing hat"); // must have wizard hat on
         q.cooldowns[_playerId] = block.timestamp; //reset cooldown
-        if (_random(_playerId) % 20 >= 19) { //5%
+        if (_random(_playerId) % 20 >= 9) { //5%
             t.treasureCount++;
             t.treasures[t.treasureCount] = Treasure(t.treasureCount, 1, t.playerToTreasure[_playerId].length, "Dscale"); //create treasure and add it main map
             t.playerToTreasure[_playerId].push(t.treasureCount); //push 
@@ -278,6 +278,7 @@ contract QuestFacet {
 
     event BeginQuesting(address indexed _playerAddress, uint256 _id);
     event EndQuesting(address indexed _playerAddress, uint256 _id);
+    event DragonQuest(uint256 indexed _playerId);
 
     function startQuestGold(uint256 _tokenId) external {
         StorageLib._startQuestGold(_tokenId);
@@ -302,8 +303,10 @@ contract QuestFacet {
         emit EndQuesting(msg.sender, _tokenId);
     }
 
-    function dragonQuest(uint256 _playerId) external returns (bool) {
-        return StorageLib._dragonQuest(_playerId);
+    function dragonQuest(uint256 _playerId) external returns (bool result) {
+        result = StorageLib._dragonQuest(_playerId);
+        if (result) emit DragonQuest(_playerId);
+        return result;
     }
 
     function getGemBalance(address _address) public view returns (uint256) {
