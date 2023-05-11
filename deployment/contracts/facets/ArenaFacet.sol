@@ -444,21 +444,24 @@ library StorageLib {
     function _leaveMainArena(uint256 _hostId) internal {
         ArenaStorage storage a = diamondStorageArena();
         PlayerStorage storage s = diamondStoragePlayer();
+        CoinStorage storage c = diamondStorageCoin();
         require(a.mainArena.hostId == _hostId, "you are not the host"); //plerys is the current host
         require(s.players[_hostId].status == 4, "you are not in the arena"); //check if they are in arena
         a.mainArena.hostId = 0; //reset the id of arena
+        a.mainArena.open = true; //reopen the arena
         s.players[_hostId].status = 0; //set satus og host back to idle
+        c.goldBalance[msg.sender] += 1; //increase gold
     }
 
 
     function _openArenas () internal {
         ArenaStorage storage a = diamondStorageArena();
-        require(a.open == false);
-        a.open = true;
+        // require(a.open == false);
+        // a.open = true;
         a.mainArena.open = true;
-        a.secondArena.open = true;
-        a.thirdArena.open = true;
-        a.magicArena.open = true;
+        // a.secondArena.open = true;
+        // a.thirdArena.open = true;
+        // a.magicArena.open = true;
     }
 
 }

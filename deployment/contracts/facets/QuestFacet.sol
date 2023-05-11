@@ -48,11 +48,41 @@ struct Slot {
 //     5: gemQuest;
 // }
 
+struct Item {
+    uint256 slot;
+    uint256 rank;
+    uint256 value;
+    uint256 stat;
+    string name;
+    address owner;
+    bool isEquiped;
+}
+
+// stat {
+//     0: strength;
+//     1: health;
+//     2: agility;
+//     3: magic;
+//     4: defense;
+//     5: luck;
+// }
+
+struct Treasure {
+    uint256 id;
+    uint256 rank;
+    uint256 pointer;
+    string name;
+}
+
+
 library StorageLib {
 
     bytes32 constant PLAYER_STORAGE_POSITION = keccak256("player.test.storage.a");
     bytes32 constant QUEST_STORAGE_POSITION = keccak256("quest.test.storage.a");
     bytes32 constant COIN_STORAGE_POSITION = keccak256("coin.test.storage.a");
+    bytes32 constant ITEM_STORAGE_POSITION = keccak256("item.test.storage.a");
+    bytes32 constant TREASURE_STORAGE_POSITION = keccak256("treasure.test.storage.a");
+    
 
     struct PlayerStorage {
         uint256 totalSupply;
@@ -66,6 +96,7 @@ library StorageLib {
     }
 
     struct QuestStorage {
+        uint256 questCounter;
         mapping(uint256 => uint256) goldQuest;
         mapping(uint256 => uint256) gemQuest;
         mapping(uint256 => uint256) totemQuest;
@@ -80,6 +111,20 @@ library StorageLib {
         mapping(address => uint256) diamondBalance;
     }
 
+    struct ItemStorage {
+        uint256 itemCount;
+        mapping(uint256 => address) owners;
+        mapping(uint256 => Item) items;
+        mapping(address => uint256[]) addressToItems;
+        mapping(uint256 => uint256) cooldown;
+    }
+
+    struct TreasureStorage {
+        uint256 treasureCount;
+        mapping(uint256 => address) owners;
+        mapping(uint256 => Treasure) treasures;
+        mapping(uint256 => uint256[]) playerToTreasure;
+    }
 
     function diamondStoragePlayer() internal pure returns (PlayerStorage storage ds) {
         bytes32 position = PLAYER_STORAGE_POSITION;
@@ -95,6 +140,18 @@ library StorageLib {
     }
     function diamondStorageCoin() internal pure returns (CoinStorage storage ds) {
         bytes32 position = COIN_STORAGE_POSITION;
+        assembly {
+            ds.slot := position
+        }
+    }
+    function diamondStorageItem() internal pure returns (ItemStorage storage ds) {
+        bytes32 position = ITEM_STORAGE_POSITION;
+        assembly {
+            ds.slot := position
+        }
+    }
+    function diamondStorageTreasure() internal pure returns (TreasureStorage storage ds) {
+        bytes32 position = TREASURE_STORAGE_POSITION;
         assembly {
             ds.slot := position
         }
@@ -152,6 +209,34 @@ library StorageLib {
         q.cooldowns[_tokenId] = block.timestamp;
     }
 
+    function _dragonQuest(uint256 _playerId) internal returns(bool) {
+        PlayerStorage storage s = diamondStoragePlayer();
+        QuestStorage storage q = diamondStorageQuest();
+        ItemStorage storage i = diamondStorageItem();
+        TreasureStorage storage t = diamondStorageTreasure();
+        require(s.players[_playerId].status == 0); //make sure player is idle
+        require(s.owners[_playerId] == msg.sender); //ownerOf
+        require(block.timestamp >= q.cooldowns[_playerId] + 43200); //make sure that they have waited 12 hours since last quest;
+        require(keccak256(abi.encodePacked(i.items[s.players[_playerId].slot.head].name)) == keccak256(abi.encodePacked("WizHat")),"not wearing hat"); // must have wizard hat on
+        q.cooldowns[_playerId] = block.timestamp; //reset cooldown
+        if (_random(_playerId) % 20 >= 19) { //5%
+            t.treasureCount++;
+            t.treasures[t.treasureCount] = Treasure(t.treasureCount, 1, t.playerToTreasure[_playerId].length, "Dscale"); //create treasure and add it main map
+            t.playerToTreasure[_playerId].push(t.treasureCount); //push 
+            t.owners[t.treasureCount] = msg.sender; //set the user as the owner of the item;
+            s.players[_playerId].xp++; //increment xp
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function _random(uint256 nonce) internal returns(uint256) {
+        QuestStorage storage q = diamondStorageQuest();
+        q.questCounter++;
+        return uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, nonce, q.questCounter)));
+    }
+
 
     function _getGoldBalance(address _address) internal view returns (uint256) {
         CoinStorage storage c = diamondStorageCoin();
@@ -175,6 +260,15 @@ library StorageLib {
         return q.cooldowns[_playerId];
     }
 
+    function _getTreasures(uint256 _playerId) internal view returns(uint256[] memory) {
+        TreasureStorage storage t = diamondStorageTreasure();
+        return t.playerToTreasure[_playerId];
+    }
+
+    function _getTreasure(uint256 _treasureId) internal view returns(Treasure memory) {
+        TreasureStorage storage t = diamondStorageTreasure();
+        return t.treasures[_treasureId];
+    }
 
 }
 
@@ -208,6 +302,10 @@ contract QuestFacet {
         emit EndQuesting(msg.sender, _tokenId);
     }
 
+    function dragonQuest(uint256 _playerId) external returns (bool) {
+        return StorageLib._dragonQuest(_playerId);
+    }
+
     function getGemBalance(address _address) public view returns (uint256) {
         return StorageLib._getGemBalance(_address);
     }
@@ -220,6 +318,14 @@ contract QuestFacet {
     }
     function getCooldown(uint256 _playerId) external view returns(uint256) {
         return StorageLib._getCooldown(_playerId);
+    }
+
+    function getTreasures(uint256 _playerId) external view returns(uint256[] memory) {
+        return StorageLib._getTreasures(_playerId);
+    }
+
+    function getTreasure(uint256 _treasureId) external view returns(Treasure memory) {
+        return StorageLib._getTreasure(_treasureId);
     }
 
 

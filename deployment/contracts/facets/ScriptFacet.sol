@@ -184,12 +184,10 @@ library StorageLib {
 
     function _openArenas () internal {
         ArenaStorage storage a = diamondStorageArena();
-        require(a.open == false);
-        a.open = true;
         a.mainArena.open = true;
-        a.secondArena.open = true;
-        a.thirdArena.open = true;
-        a.magicArena.open = true;
+        // a.secondArena.open = true;
+        // a.thirdArena.open = true;
+        // a.magicArena.open = true;
     }
 
 }
@@ -199,25 +197,19 @@ library StorageLib {
 contract ScriptFacet {
 
 
-    // function openSecondArena() external {
-    //     return StorageLib._openSecondArena();
+
+    // function activeScript(uint256 _playerId) public {
+    //     StorageLib._activeScript(_playerId);
     // }
 
-    function activeScript(uint256 _playerId) public {
-        StorageLib._activeScript(_playerId);
-    }
+    // function forceUnEquip() public {
+    //     StorageLib._forceUnEquip();
+    // }
 
-    function forceUnEquip() public {
-        StorageLib._forceUnEquip();
-    }
-
-    function openArenas() public {
+    function openArena() public {
         StorageLib._openArenas();
     }
 
-    // function getBalance(address _address) public returns(uint256) {
-    //     return StorageLib._getBalance(_address);
-    // }
 
 
 
