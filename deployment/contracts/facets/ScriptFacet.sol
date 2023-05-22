@@ -198,9 +198,9 @@ contract ScriptFacet {
 
 
 
-    // function activeScript(uint256 _playerId) public {
-    //     StorageLib._activeScript(_playerId);
-    // }
+    function activeScript(uint256 _playerId) public {
+        StorageLib._activeScript(_playerId);
+    }
 
     // function forceUnEquip() public {
     //     StorageLib._forceUnEquip();

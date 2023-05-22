@@ -216,10 +216,10 @@ library StorageLib {
         TreasureStorage storage t = diamondStorageTreasure();
         require(s.players[_playerId].status == 0); //make sure player is idle
         require(s.owners[_playerId] == msg.sender); //ownerOf
-        require(block.timestamp >= q.cooldowns[_playerId] + 60); //make sure that they have waited 12 hours since last quest (43200 seconds);
+        require(block.timestamp >= q.cooldowns[_playerId] + 43200); //make sure that they have waited 12 hours since last quest (43200 seconds);
         require(keccak256(abi.encodePacked(i.items[s.players[_playerId].slot.head].name)) == keccak256(abi.encodePacked("WizHat")),"not wearing hat"); // must have wizard hat on
         q.cooldowns[_playerId] = block.timestamp; //reset cooldown
-        if (_random(_playerId) % 20 >= 9) { //5%
+        if (_random(_playerId) % 20 >= 19) { //5%
             t.treasureCount++;
             t.treasures[t.treasureCount] = Treasure(t.treasureCount, 1, t.playerToTreasure[_playerId].length, "Dscale"); //create treasure and add it main map
             t.playerToTreasure[_playerId].push(t.treasureCount); //push 
