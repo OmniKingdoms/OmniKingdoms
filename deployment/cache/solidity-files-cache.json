@@ -298,10 +298,10 @@
         "DiamondInit"
       ]
     },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/DiamondLoupeFacet.sol": {
-      "lastModificationDate": 1679806917524,
-      "contentHash": "62eeb4e3b43c94cc8e30c718dee3ce49",
-      "sourceName": "contracts/facets/DiamondLoupeFacet.sol",
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/OwnershipFacet.sol": {
+      "lastModificationDate": 1679806917523,
+      "contentHash": "3ecfa87738e59d567e6c44c1708b9a7d",
+      "sourceName": "contracts/facets/OwnershipFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
         "settings": {
@@ -327,14 +327,13 @@
       },
       "imports": [
         "../libraries/LibDiamond.sol",
-        "../interfaces/IDiamondLoupe.sol",
-        "../interfaces/IERC165.sol"
+        "../interfaces/IERC173.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "DiamondLoupeFacet"
+        "OwnershipFacet"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/upgradeInitializers/DiamondMultiInit.sol": {
@@ -412,10 +411,10 @@
         "DiamondCutFacet"
       ]
     },
-    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/OwnershipFacet.sol": {
-      "lastModificationDate": 1679806917523,
-      "contentHash": "3ecfa87738e59d567e6c44c1708b9a7d",
-      "sourceName": "contracts/facets/OwnershipFacet.sol",
+    "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/DiamondLoupeFacet.sol": {
+      "lastModificationDate": 1679806917524,
+      "contentHash": "62eeb4e3b43c94cc8e30c718dee3ce49",
+      "sourceName": "contracts/facets/DiamondLoupeFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
         "settings": {
@@ -441,13 +440,14 @@
       },
       "imports": [
         "../libraries/LibDiamond.sol",
-        "../interfaces/IERC173.sol"
+        "../interfaces/IDiamondLoupe.sol",
+        "../interfaces/IERC165.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "OwnershipFacet"
+        "DiamondLoupeFacet"
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/ArenaFacet.sol": {
@@ -770,8 +770,8 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/contracts/facets/TreasureDropFacet.sol": {
-      "lastModificationDate": 1684788360377,
-      "contentHash": "577f03ca8523c31719eaeff0f4a59994",
+      "lastModificationDate": 1684796060692,
+      "contentHash": "dfcc183ae13ff4ff834c34a90823fbe9",
       "sourceName": "contracts/facets/TreasureDropFacet.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -843,7 +843,7 @@
       ]
     },
     "/Users/kylekoshiyama/Desktop/daap-practice/scale/deployment/node_modules/hardhat-diamond-abi/dist/contract.sol": {
-      "lastModificationDate": 1684788949545,
+      "lastModificationDate": 1684796402876,
       "contentHash": "f0899ccf3452b0b76299b9fb99d6bbf2",
       "sourceName": "hardhat-diamond-abi/HardhatDiamondABI.sol",
       "solcConfig": {
