@@ -1,58 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-struct Player {
-    uint256 level;
-    uint256 xp;
-    uint256 status;
-    uint256 strength;
-    uint256 health;
-    uint256 magic;
-    uint256 mana;
-    uint256 agility;
-    uint256 luck;
-    uint256 wisdom;
-    uint256 haki;
-    uint256 perception;
-    uint256 defense;
-    string name;
-    string uri;
-    bool male;
-    Slot slot;
-}
-
-struct Slot {
-    uint256 head;
-    uint256 body;
-    uint256 leftHand;
-    uint256 rightHand;
-    uint256 pants;
-    uint256 feet;
-}
-
-// slots {
-//     0: head;
-//     1: body;
-//     2: lefthand;
-//     3: rightHand;
-//     4: pants;
-//     5: feet;
-// }
+import "../libraries/PlayerSlotLib.sol";
 
 library PlayerStorageLib {
-
     bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("player.test.storage.a");
+
+    using PlayerSlotLib for PlayerSlotLib.Player;
+    using PlayerSlotLib for PlayerSlotLib.Slot;
 
     struct PlayerStorage {
         uint256 totalSupply;
         uint256 playerCount;
         mapping(uint256 => address) owners;
-        mapping(uint256 => Player) players;
+        mapping(uint256 => PlayerSlotLib.Player) players;
         mapping(address => uint256) balances;
         mapping(address => mapping(address => uint256)) allowances;
         mapping(string => bool) usedNames;
         mapping(address => uint256[]) addressToPlayers;
-        mapping(uint256 => Slot) slots;
+        mapping(uint256 => PlayerSlotLib.Slot) slots;
     }
 
     function diamondStorage() internal pure returns (PlayerStorage storage ds) {
@@ -68,15 +34,17 @@ library PlayerStorageLib {
         require(bytes(_name).length <= 10);
         require(bytes(_name).length >= 3);
         s.playerCount++;
-        s.players[s.playerCount] = Player(1,0,0,1,10,1,1,1,1,1,1,1, 1,_name, _uri, _isMale, Slot(0,0,0,0,0,0));
-        s.slots[s.playerCount] = Slot(0,0,0,0,0,0);
+        s.players[s.playerCount] = PlayerSlotLib.Player(
+            1, 0, 0, 1, 10, 1, 1, 1, 1, 1, 1, 1, 1, _name, _uri, _isMale, PlayerSlotLib.Slot(0, 0, 0, 0, 0, 0)
+        );
+        s.slots[s.playerCount] = PlayerSlotLib.Slot(0, 0, 0, 0, 0, 0);
         s.usedNames[_name] = true;
         s.owners[s.playerCount] = msg.sender;
         s.addressToPlayers[msg.sender].push(s.playerCount);
         s.balances[msg.sender]++;
     }
 
-    function _playerCount() internal view returns(uint256) {
+    function _playerCount() internal view returns (uint256) {
         PlayerStorage storage s = diamondStorage();
         return s.playerCount;
     }
@@ -100,12 +68,12 @@ library PlayerStorageLib {
         s.usedNames[_newName] = true;
     }
 
-    function _getPlayer(uint256 _id) internal view returns(Player memory player) {
+    function _getPlayer(uint256 _id) internal view returns (PlayerSlotLib.Player memory player) {
         PlayerStorage storage s = diamondStorage();
         player = s.players[_id];
     }
 
-    function _ownerOf(uint256 _id) internal view returns(address owner) {
+    function _ownerOf(uint256 _id) internal view returns (address owner) {
         PlayerStorage storage s = diamondStorage();
         owner = s.owners[_id];
     }
@@ -113,7 +81,7 @@ library PlayerStorageLib {
     function _transfer(address _to, uint256 _id) internal {
         PlayerStorage storage s = diamondStorage();
         require(s.owners[_id] == msg.sender);
-        require(_to != address(0), "_to cannot be zero address");    
+        require(_to != address(0), "_to cannot be zero address");
         s.owners[_id] = _to;
         for (uint256 i = 0; i < s.balances[msg.sender]; i++) {
             if (s.addressToPlayers[msg.sender][i] == _id) {
@@ -129,17 +97,13 @@ library PlayerStorageLib {
         PlayerStorage storage s = diamondStorage();
         return s.addressToPlayers[_address];
     }
-
-
 }
 
 contract PlayerFacet {
-
     event Mint(uint256 indexed id, address indexed owner, string name, string uri);
     event NameChange(address indexed owner, uint256 indexed id, string indexed newName);
 
-
-    function playerCount() public view returns(uint256) {
+    function playerCount() public view returns (uint256) {
         return PlayerStorageLib._playerCount();
     }
 
@@ -154,7 +118,7 @@ contract PlayerFacet {
         emit NameChange(msg.sender, _id, _newName);
     }
 
-    function getPlayer(uint256 _playerId) external view returns(Player memory player) {
+    function getPlayer(uint256 _playerId) external view returns (PlayerSlotLib.Player memory player) {
         player = PlayerStorageLib._getPlayer(_playerId);
     }
 
@@ -170,10 +134,9 @@ contract PlayerFacet {
         return PlayerStorageLib._getPlayers(_address);
     }
 
-    function getBlocktime() external view  returns (uint256) {
+    function getBlocktime() external view returns (uint256) {
         return (block.timestamp);
     }
-
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 }
