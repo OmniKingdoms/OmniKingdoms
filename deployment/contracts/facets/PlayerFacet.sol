@@ -3,12 +3,15 @@ pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
 
+/// @title Player Storage Library
+/// @dev Library for managing storage of player data
 library PlayerStorageLib {
     bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("player.test.storage.a");
 
     using PlayerSlotLib for PlayerSlotLib.Player;
     using PlayerSlotLib for PlayerSlotLib.Slot;
 
+    /// @dev Struct defining player storage
     struct PlayerStorage {
         uint256 totalSupply;
         uint256 playerCount;
@@ -21,6 +24,7 @@ library PlayerStorageLib {
         mapping(uint256 => PlayerSlotLib.Slot) slots;
     }
 
+    /// @dev Function to retrieve diamond storage slot for player data. Returns a reference.
     function diamondStorage() internal pure returns (PlayerStorage storage ds) {
         bytes32 position = DIAMOND_STORAGE_POSITION;
         assembly {
@@ -28,6 +32,10 @@ library PlayerStorageLib {
         }
     }
 
+    /// @notice Mints a new player
+    /// @param _name The name of the player
+    /// @param _uri The IPFS URI of the player metadata
+    /// @param _isMale The gender of the player
     function _mint(string memory _name, string memory _uri, bool _isMale) internal {
         PlayerStorage storage s = diamondStorage();
         require(!s.usedNames[_name], "name is taken");
@@ -54,6 +62,9 @@ library PlayerStorageLib {
         return s.usedNames[_name];
     }
 
+    /// @notice Changes the name of a player
+    /// @param _id The id of the player
+    /// @param _newName The new name of the player
     function _changeName(uint256 _id, string memory _newName) internal {
         PlayerStorage storage s = diamondStorage();
         require(s.owners[_id] == msg.sender);
@@ -78,6 +89,9 @@ library PlayerStorageLib {
         owner = s.owners[_id];
     }
 
+    /// @notice Transfer the player to someone else
+    /// @param _to Address of the account where the caller wants to transfer the player
+    /// @param _id ID of the player to transfer
     function _transfer(address _to, uint256 _id) internal {
         PlayerStorage storage s = diamondStorage();
         require(s.owners[_id] == msg.sender);
@@ -99,6 +113,8 @@ library PlayerStorageLib {
     }
 }
 
+/// @title Player Facet
+/// @dev Contract managing interaction with player data
 contract PlayerFacet {
     event Mint(uint256 indexed id, address indexed owner, string name, string uri);
     event NameChange(address indexed owner, uint256 indexed id, string indexed newName);
@@ -107,17 +123,30 @@ contract PlayerFacet {
         return PlayerStorageLib._playerCount();
     }
 
+    /// @notice Mints a new player
+    /// @dev Emits a Mint event
+    /// @dev Calls the _mint function from the PlayerStorageLib
+    /// @param _name The name of the player
+    /// @param _uri The IPFS URI of the player metadata
+    /// @param _isMale The gender of the player
     function mint(string memory _name, string memory _uri, bool _isMale) external {
         PlayerStorageLib._mint(_name, _uri, _isMale);
         uint256 count = playerCount();
         emit Mint(count, msg.sender, _name, _uri);
     }
 
+    /// @notice Changes the name of a player
+    /// @dev Emits a NameChange event
+    /// @param _id The id of the player
+    /// @param _newName The new name of the player
     function changeName(uint256 _id, string memory _newName) external {
         PlayerStorageLib._changeName(_id, _newName);
         emit NameChange(msg.sender, _id, _newName);
     }
 
+    /// @notice Retrieves a player
+    /// @param _playerId The id of the player
+    /// @return player The player data
     function getPlayer(uint256 _playerId) external view returns (PlayerSlotLib.Player memory player) {
         player = PlayerStorageLib._getPlayer(_playerId);
     }
@@ -130,10 +159,15 @@ contract PlayerFacet {
         owner = PlayerStorageLib._ownerOf(_id);
     }
 
+    /// @notice Retrieves the players owned by an address
+    /// @param _address The owner address
+    /// @return An array of player ids
     function getPlayers(address _address) external view returns (uint256[] memory) {
         return PlayerStorageLib._getPlayers(_address);
     }
 
+    /// @notice Retrieves the current block timestamp
+    /// @return The current block timestamp
     function getBlocktime() external view returns (uint256) {
         return (block.timestamp);
     }
