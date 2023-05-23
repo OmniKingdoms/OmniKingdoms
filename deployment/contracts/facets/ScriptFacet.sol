@@ -1,34 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-
-struct Player {
-    uint256 level;
-    uint256 xp;
-    uint256 status;
-    uint256 strength;
-    uint256 health;
-    uint256 magic;
-    uint256 mana;
-    uint256 agility;
-    uint256 luck;
-    uint256 wisdom;
-    uint256 haki;
-    uint256 perception;
-    uint256 defense;
-    string name;
-    string uri;
-    bool male;
-    Slot slot;
-}
-
-// status {
-//     0: idle;
-//     1: training;
-//     2: quest;
-//     3: crafting;
-//     4: arena;
-// }
+import "../libraries/PlayerSlotLib.sol";
 
 struct Item {
     uint256 slot;
@@ -49,40 +22,25 @@ struct Item {
 //     5: luck;
 // }
 
-struct Slot {
-    uint256 head;
-    uint256 body;
-    uint256 leftHand;
-    uint256 rightHand;
-    uint256 feet;
-}
-
-// slots {
-//     0: head;
-//     1: body;
-//     2: hand;
-//     3: pants;
-//     4: feet;
-// }
-
-
 library StorageLib {
-
     bytes32 constant PLAYER_STORAGE_POSITION = keccak256("player.test.storage.a");
     bytes32 constant COIN_STORAGE_POSITION = keccak256("coin.test.storage.a");
     bytes32 constant ARENA_STORAGE_POSITION = keccak256("Arena.test.storage.a");
     bytes32 constant ITEM_STORAGE_POSITION = keccak256("item.test.storage.a");
 
+    using PlayerSlotLib for PlayerSlotLib.Player;
+    using PlayerSlotLib for PlayerSlotLib.Slot;
+
     struct PlayerStorage {
         uint256 totalSupply;
         uint256 playerCount;
         mapping(uint256 => address) owners;
-        mapping(uint256 => Player) players;
+        mapping(uint256 => PlayerSlotLib.Player) players;
         mapping(address => uint256) balances;
         mapping(address => mapping(address => uint256)) allowances;
         mapping(string => bool) usedNames;
         mapping(address => uint256[]) addressToPlayers;
-        mapping(uint256 => Slot) slots;
+        mapping(uint256 => PlayerSlotLib.Slot) slots;
     }
 
     struct CoinStorage {
@@ -116,7 +74,7 @@ library StorageLib {
         mapping(uint256 => uint256) magicArenaWins;
         mapping(uint256 => uint256) magicArenaLosses;
         mapping(uint256 => uint256) totalArenaWins;
-        mapping(uint256 => uint256) totalArenaLosses;   
+        mapping(uint256 => uint256) totalArenaLosses;
     }
 
     struct Arena {
@@ -126,19 +84,20 @@ library StorageLib {
         address payable hostAddress;
     }
 
-
     function diamondStoragePlayer() internal pure returns (PlayerStorage storage ds) {
         bytes32 position = PLAYER_STORAGE_POSITION;
         assembly {
             ds.slot := position
         }
     }
+
     function diamondStorageCoin() internal pure returns (CoinStorage storage ds) {
         bytes32 position = COIN_STORAGE_POSITION;
         assembly {
             ds.slot := position
         }
     }
+
     function diamondStorageArena() internal pure returns (ArenaStorage storage ds) {
         bytes32 position = ARENA_STORAGE_POSITION;
         assembly {
@@ -161,15 +120,13 @@ library StorageLib {
         c.goldBalance[msg.sender] += 500;
     }
 
-
-
-    function _openSecondArena () internal {
+    function _openSecondArena() internal {
         ArenaStorage storage a = diamondStorageArena();
         a.secondArena.open = true;
     }
 
     function _forceUnEquip() internal {
-        ItemStorage storage i = diamondStorageItem();   
+        ItemStorage storage i = diamondStorageItem();
         for (uint256 j = 0; j < i.itemCount; j++) {
             if (i.items[j].slot == 0) {
                 i.items[j].isEquiped = false;
@@ -177,27 +134,21 @@ library StorageLib {
         }
     }
 
-    function _getBalance(address _address) internal view returns(uint256) {
+    function _getBalance(address _address) internal view returns (uint256) {
         PlayerStorage storage s = diamondStoragePlayer();
         return s.balances[_address];
     }
 
-    function _openArenas () internal {
+    function _openArenas() internal {
         ArenaStorage storage a = diamondStorageArena();
         a.mainArena.open = true;
         // a.secondArena.open = true;
         // a.thirdArena.open = true;
         // a.magicArena.open = true;
     }
-
 }
 
-
-
 contract ScriptFacet {
-
-
-
     // function activeScript(uint256 _playerId) public {
     //     StorageLib._activeScript(_playerId);
     // }
@@ -209,9 +160,6 @@ contract ScriptFacet {
     function openArena() public {
         StorageLib._openArenas();
     }
-
-
-
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 }

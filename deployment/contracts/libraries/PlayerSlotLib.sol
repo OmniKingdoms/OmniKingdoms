@@ -22,6 +22,24 @@ library PlayerSlotLib {
         Slot slot;
     }
 
+    // slots {
+    //     0: head;
+    //     1: body;
+    //     2: lefthand;
+    //     3: rightHand;
+    //     4: pants;
+    //     5: feet;
+    // }
+
+    // StatusCodes {
+    //     0: idle;
+    //     1: combatTrain;
+    //     2: goldQuest;
+    //     3: manaTrain;
+    //     4: Arena;
+    //     5: gemQuest;
+    // }
+
     struct Slot {
         uint256 head;
         uint256 body;
@@ -31,12 +49,3 @@ library PlayerSlotLib {
         uint256 feet;
     }
 }
-
-// slots {
-//     0: head;
-//     1: body;
-//     2: lefthand;
-//     3: rightHand;
-//     4: pants;
-//     5: feet;
-// }
