@@ -125,3 +125,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Remix files
+deployment/contracts/facets/artifacts/
+deployment/contracts/libraries/artifacts/
+deployment/artifacts/
+deployment/cache/
+deployment/compiler_config.json
