@@ -111,6 +111,7 @@ library StorageLib {
         uint256 treasureDropCount;
         mapping(uint256 => TreasureDrop) treasureDrops;
         mapping(uint256 => mapping(address => bool)) claimed;
+        mapping(address => uint256[]) addressToDrops; 
     }
 
     function diamondStoragePlayer() internal pure returns (PlayerStorage storage ds) {
@@ -165,6 +166,10 @@ library StorageLib {
         return td.claimed[_treasureDropId][_address];
     }
 
+    function _getTreasureDropMerkleRoot(uint256 _treasureDropId) internal view returns (bytes32) {
+        TreasureDropStorage storage td = diamondStorageTreasureDrop();
+        return td.treasureDrops[_treasureDropId].merkleRoot;
+    }
 
 
 }
@@ -191,6 +196,12 @@ contract TreasureDropFacet {
     function claimedStatus(uint256 _treasureDropId, address _address) public view returns (bool) {
         return StorageLib._claimedStatus(_treasureDropId, _address);
     }
+
+    function getTreasureDropMerkleRoot(uint256 _treasureDropId) external view returns (bytes32) {
+        return StorageLib._getTreasureDropMerkleRoot(_treasureDropId);
+    }
+
+
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 }
