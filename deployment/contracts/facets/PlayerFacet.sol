@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
+import "./ERC1155Facet.sol";
 
 /// @title Player Storage Library
 /// @dev Library for managing storage of player data
@@ -10,6 +11,7 @@ library PlayerStorageLib {
 
     using PlayerSlotLib for PlayerSlotLib.Player;
     using PlayerSlotLib for PlayerSlotLib.Slot;
+    using PlayerSlotLib for PlayerSlotLib.TokenTypes;
 
     /// @dev Struct defining player storage
     struct PlayerStorage {
@@ -115,7 +117,7 @@ library PlayerStorageLib {
 
 /// @title Player Facet
 /// @dev Contract managing interaction with player data
-contract PlayerFacet {
+contract PlayerFacet is ERC1155Facet {
     event Mint(uint256 indexed id, address indexed owner, string name, string uri);
     event NameChange(address indexed owner, uint256 indexed id, string indexed newName);
 
@@ -133,6 +135,11 @@ contract PlayerFacet {
         PlayerStorageLib._mint(_name, _uri, _isMale);
         uint256 count = playerCount();
         emit Mint(count, msg.sender, _name, _uri);
+
+        // This is for minting the ERC1155 token from the parent contract ERC1155Facet
+        _isMale
+            ? _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerMale), 1, "")
+            : _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerFemale), 1, "");
     }
 
     /// @notice Changes the name of a player

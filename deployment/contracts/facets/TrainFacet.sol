@@ -1,45 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-
-struct Player {
-    uint256 level;
-    uint256 xp;
-    uint256 status;
-    uint256 strength;
-    uint256 health;
-    uint256 magic;
-    uint256 mana;
-    uint256 agility;
-    uint256 luck;
-    uint256 wisdom;
-    uint256 haki;
-    uint256 perception;
-    uint256 defense;
-    string name;
-    string uri;
-    bool male;
-    Slot slot;
-}
-
-struct Slot {
-    uint256 head;
-    uint256 body;
-    uint256 leftHand;
-    uint256 rightHand;
-    uint256 pants;
-    uint256 feet;
-}
-
-// slots {
-//     0: head;
-//     1: body;
-//     2: lefthand;
-//     3: rightHand;
-//     4: pants;
-//     5: feet;
-// }
-
+import "../libraries/PlayerSlotLib.sol";
 
 // StatusCodes {
 //     0: idle;
@@ -50,17 +12,18 @@ struct Slot {
 //     5: gemQuest;
 // }
 
-
 library StorageLib {
-
     bytes32 constant PLAYER_STORAGE_POSITION = keccak256("player.test.storage.a");
     bytes32 constant TRAIN_STORAGE_POSITION = keccak256("train.test.storage.a");
+
+    using PlayerSlotLib for PlayerSlotLib.Player;
+    using PlayerSlotLib for PlayerSlotLib.Slot;
 
     struct PlayerStorage {
         uint256 totalSupply;
         uint256 playerCount;
         mapping(uint256 => address) owners;
-        mapping(uint256 => Player) players;
+        mapping(uint256 => PlayerSlotLib.Player) players;
         mapping(address => uint256) balances;
         mapping(address => mapping(address => uint256)) allowances;
         mapping(string => bool) usedNames;
@@ -81,6 +44,7 @@ library StorageLib {
             ds.slot := position
         }
     }
+
     function diamondStorageTrain() internal pure returns (TrainStorage storage ds) {
         bytes32 position = TRAIN_STORAGE_POSITION;
         assembly {
@@ -105,13 +69,10 @@ library StorageLib {
         require(s.owners[_tokenId] == msg.sender);
         require(tx.origin == msg.sender);
         require(s.players[_tokenId].status == 1);
-        require(
-            block.timestamp >= t.combat[_tokenId] + 120,
-            "it's too early to pull out"
-        );
+        require(block.timestamp >= t.combat[_tokenId] + 120, "it's too early to pull out");
         s.players[_tokenId].status = 0;
-        delete t.combat[_tokenId]; 
-        s.players[_tokenId].strength++; 
+        delete t.combat[_tokenId];
+        s.players[_tokenId].strength++;
     }
 
     function _startTrainingMana(uint256 _tokenId) internal {
@@ -131,13 +92,10 @@ library StorageLib {
         TrainStorage storage t = diamondStorageTrain();
         require(s.owners[_tokenId] == msg.sender);
         require(s.players[_tokenId].status == 3); //require that they are training mana
-        require(
-            block.timestamp >= t.mana[_tokenId] + 300,
-            "it's too early to pull out"
-        );
+        require(block.timestamp >= t.mana[_tokenId] + 300, "it's too early to pull out");
         s.players[_tokenId].status = 0;
-        delete t.mana[_tokenId]; 
-        s.players[_tokenId].mana++; 
+        delete t.mana[_tokenId];
+        s.players[_tokenId].mana++;
         t.cooldown[_tokenId] = block.timestamp; //reset the cool down
     }
 
@@ -152,22 +110,18 @@ library StorageLib {
         delete t.cooldown[_tokenId];
     }
 
-    function _getCombatStart(uint256 _playerId) internal view returns(uint256) {
+    function _getCombatStart(uint256 _playerId) internal view returns (uint256) {
         TrainStorage storage t = diamondStorageTrain();
         return t.combat[_playerId];
     }
-    function _getManaStart(uint256 _playerId) internal view returns(uint256) {
+
+    function _getManaStart(uint256 _playerId) internal view returns (uint256) {
         TrainStorage storage t = diamondStorageTrain();
         return t.mana[_playerId];
     }
-
-
 }
 
-
-
 contract TrainFacet {
-
     event BeginTrainingCombat(address indexed _playerAddress, uint256 indexed _id);
     event EndTrainingCombat(address indexed _playerAddress, uint256 indexed _id);
     event BeginTrainingMana(address indexed _playerAddress, uint256 indexed _id);
@@ -182,6 +136,7 @@ contract TrainFacet {
         StorageLib._endTrainingCombat(_tokenId);
         emit EndTrainingCombat(msg.sender, _tokenId);
     }
+
     function startTrainingMana(uint256 _tokenId) external {
         StorageLib._startTrainingMana(_tokenId);
         emit BeginTrainingMana(msg.sender, _tokenId);
@@ -192,10 +147,11 @@ contract TrainFacet {
         emit EndTrainingMana(msg.sender, _tokenId);
     }
 
-    function getCombatStart(uint256 _playerId) external view returns(uint256) {
+    function getCombatStart(uint256 _playerId) external view returns (uint256) {
         return StorageLib._getCombatStart(_playerId);
     }
-    function getManaStart(uint256 _playerId) external view returns(uint256) {
+
+    function getManaStart(uint256 _playerId) external view returns (uint256) {
         return StorageLib._getManaStart(_playerId);
     }
 
