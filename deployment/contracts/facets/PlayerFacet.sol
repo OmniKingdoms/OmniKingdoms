@@ -184,24 +184,29 @@ contract PlayerFacet is ERC1155Facet {
     /// @notice Mints corresponding ERC1155 tokens for a player
     /// @dev this function is for backwards compatibility so that the playerIDs match the number of ERC1155 tokens held by this account
     function historicalERC1155Mint() external {
-        uint256[] memory playerIDArr = PlayerStorageLib._getPlayers(msg.sender);
+        uint256[] memory playerIDs = PlayerStorageLib._getPlayers(msg.sender);
+        (uint256 maleCount, uint256 femaleCount) = getPlayerGenderCounts(playerIDs);
 
-        uint256 countMalePlayers;
-        uint256 countFemalePlayers;
+        mintBasedOnGenderCount(maleCount, uint256(PlayerSlotLib.TokenTypes.PlayerMale));
+        mintBasedOnGenderCount(femaleCount, uint256(PlayerSlotLib.TokenTypes.PlayerFemale));
+    }
 
-        for (uint256 i = 0; i < playerIDArr.length; i++) {
-            PlayerSlotLib.Player memory player = PlayerStorageLib._getPlayer(playerIDArr[i]);
-            player.male ? countMalePlayers++ : countFemalePlayers++;
+    function getPlayerGenderCounts(uint256[] memory playerIDs)
+        internal
+        view
+        returns (uint256 maleCount, uint256 femaleCount)
+    {
+        for (uint256 i = 0; i < playerIDs.length; i++) {
+            PlayerSlotLib.Player memory player = PlayerStorageLib._getPlayer(playerIDs[i]);
+            player.male ? maleCount++ : femaleCount++;
         }
+    }
 
-        uint256 ERC1155MaleTokens = balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerMale));
-        uint256 ERC1155FemaleTokens = balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerFemale));
-
-        require(
-            (countMalePlayers > ERC1155MaleTokens) || (countFemalePlayers > ERC1155FemaleTokens),
-            "You don't need to mint historically"
-        );
-
-        //TODO = Mint historically based on which tokens are less.
+    function mintBasedOnGenderCount(uint256 genderCount, uint256 tokenType) internal {
+        uint256 currentBalance = balanceOf(msg.sender, tokenType);
+        if (genderCount > currentBalance) {
+            uint256 amountToMint = genderCount - currentBalance;
+            _mint(msg.sender, tokenType, amountToMint, "");
+        }
     }
 }
