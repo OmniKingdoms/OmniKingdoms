@@ -1,8 +1,10 @@
 # OmniKingdoms - Game and Deployment Overview
 
-### Contract Address - Scroll Alpha
+### Contract Addresses
 
-[0x545Ad75E4A297Ff1cdb85147F5D0C8DFA0bA21E1](https://blockscout.scroll.io/address/0x545Ad75E4A297Ff1cdb85147F5D0C8DFA0bA21E1)
+Scroll Alpha: 0x545Ad75E4A297Ff1cdb85147F5D0C8DFA0bA21E1 
+(https://blockscout.scroll.io/address/0x545Ad75E4A297Ff1cdb85147F5D0C8DFA0bA21E1)
+Mantle Test: 0x5517607D21409833917F48b0826F9793a354f68F (https://explorer.testnet.mantle.xyz/address/0x5517607D21409833917F48b0826F9793a354f68F)
 
 ### Live preview 
 https://clientpv2.vercel.app/
