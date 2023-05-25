@@ -1,4 +1,4 @@
-# Scroll Kingdoms - Scaling Eth Hackathon Overview
+# OmniKingdoms - Game and Deployment Overview
 
 ### Contract Address - Scroll Alpha
 
