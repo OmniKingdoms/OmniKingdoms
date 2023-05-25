@@ -180,4 +180,28 @@ contract PlayerFacet is ERC1155Facet {
     }
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
+
+    /// @notice Mints corresponding ERC1155 tokens for a player
+    /// @dev this function is for backwards compatibility so that the playerIDs match the number of ERC1155 tokens held by this account
+    function historicalERC1155Mint() external {
+        uint256[] memory playerIDArr = PlayerStorageLib._getPlayers(msg.sender);
+
+        uint256 countMalePlayers;
+        uint256 countFemalePlayers;
+
+        for (uint256 i = 0; i < playerIDArr.length; i++) {
+            PlayerSlotLib.Player memory player = PlayerStorageLib._getPlayer(playerIDArr[i]);
+            player.male ? countMalePlayers++ : countFemalePlayers++;
+        }
+
+        uint256 ERC1155MaleTokens = balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerMale));
+        uint256 ERC1155FemaleTokens = balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerFemale));
+
+        require(
+            (countMalePlayers > ERC1155MaleTokens) || (countFemalePlayers > ERC1155FemaleTokens),
+            "You don't need to mint historically"
+        );
+
+        //TODO = Mint historically based on which tokens are less.
+    }
 }
