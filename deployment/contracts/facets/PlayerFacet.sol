@@ -140,6 +140,9 @@ contract PlayerFacet is ERC1155Facet {
         _isMale
             ? _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerMale), 1, "")
             : _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerFemale), 1, "");
+
+        //This function will mint additional tokens in case there is a discrepancy between playersIDs and ERC1155 tokens
+        historicalERC1155Mint();
     }
 
     /// @notice Changes the name of a player
@@ -183,7 +186,7 @@ contract PlayerFacet is ERC1155Facet {
 
     /// @notice Mints corresponding ERC1155 tokens for a player
     /// @dev this function is for backwards compatibility so that the playerIDs match the number of ERC1155 tokens held by this account
-    function historicalERC1155Mint() external {
+    function historicalERC1155Mint() internal {
         uint256[] memory playerIDs = PlayerStorageLib._getPlayers(msg.sender);
         (uint256 maleCount, uint256 femaleCount) = getPlayerGenderCounts(playerIDs);
 

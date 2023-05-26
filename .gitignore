@@ -132,3 +132,4 @@ deployment/contracts/libraries/artifacts/
 deployment/artifacts/
 deployment/cache/
 deployment/compiler_config.json
+deployment/bin

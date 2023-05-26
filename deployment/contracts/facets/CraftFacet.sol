@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
+import "./ERC1155.sol";
 
 struct Item {
     uint256 slot;
@@ -226,7 +227,7 @@ library StorageLib {
     // }
 }
 
-contract CraftFacet {
+contract CraftFacet is ERC1155Facet {
     event ItemCrafted(address indexed _owner, uint256 _player);
 
     function craftSword(uint256 _tokenId) external {
@@ -237,26 +238,36 @@ contract CraftFacet {
     function craftGuitar(uint256 _tokenId) external {
         StorageLib._craftGuitar(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
+
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Guitar), 1, "")
     }
 
     function craftArmor(uint256 _tokenId) external {
         StorageLib._craftArmor(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
+
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Armor), 1, "")
     }
 
     function craftHelmet(uint256 _tokenId) external {
         StorageLib._craftHelmet(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
+
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Helmet), 1, "")
     }
 
     function craftSorcerShoes(uint256 _tokenId) external {
         StorageLib._craftSorcerShoes(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
+
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.SorcererShoes), 1, "")
     }
 
     function craftWizardHat(uint256 _tokenId) external {
         StorageLib._craftWizardHat(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
+
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.WizardHat), 1, "")
     }
 
     function getItems(address _address) public view returns (uint256[] memory items) {
@@ -272,4 +283,9 @@ contract CraftFacet {
     }
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
+
+    // TODO - Add implementation logic for this function based on which item tokens are lower
+    function historicalERC1155Mint() internal {
+        
+    }
 }
