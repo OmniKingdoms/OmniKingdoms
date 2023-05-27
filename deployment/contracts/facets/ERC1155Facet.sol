@@ -108,8 +108,7 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
         bytes memory data
     ) public virtual override {
         require(
-            from == _msgSender() || isApprovedForAll(from, _msgSender()),
-            "ERC1155: caller is not token owner or approved"
+            from == msg.sender || isApprovedForAll(from, msg.sender), "ERC1155: caller is not token owner or approved"
         );
         _safeBatchTransferFrom(from, to, ids, amounts, data);
     }
@@ -144,7 +143,7 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
 
             uint256 fromBalance = ERC1155Storage.layout()._balances[id][from];
             require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
-            
+
             // TODO - check whether this is indeed safe
             unchecked {
                 ERC1155Storage.layout()._balances[id][from] = fromBalance - amount;
@@ -218,7 +217,7 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * @dev See {IERC1155-setApprovalForAll}.
      */
     function setApprovalForAll(address operator, bool approved) public virtual override {
-        _setApprovalForAll(_msgSender(), operator, approved);
+        _setApprovalForAll(msg.sender, operator, approved);
     }
 
     /**
