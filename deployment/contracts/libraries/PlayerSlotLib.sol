@@ -49,15 +49,15 @@ library PlayerSlotLib {
         uint256 feet;
     }
 
-    enum TokenTypes{
+    enum TokenTypes {
         PlayerMale,
         PlayerFemale,
         Guitar,
         Sword,
         Armor,
         Helmet,
-        WizardHat,
-        SorcererShoes,
+        WizHat,
+        SorcShoes,
         GemSword
     }
 }

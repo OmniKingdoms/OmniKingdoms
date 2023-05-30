@@ -234,42 +234,42 @@ contract CraftFacet is ERC1155Facet {
         StorageLib._craftSword(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
 
-        historicalERC1155Mint(uint256(PlayerSlotLib.TokenTypes.Sword));
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Sword), 1, "");
     }
 
     function craftGuitar(uint256 _tokenId) external {
         StorageLib._craftGuitar(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
 
-        historicalERC1155Mint(uint256(PlayerSlotLib.TokenTypes.Guitar));
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Guitar), 1, "");
     }
 
     function craftArmor(uint256 _tokenId) external {
         StorageLib._craftArmor(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
 
-        historicalERC1155Mint(uint256(PlayerSlotLib.TokenTypes.Armor));
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Armor), 1, "");
     }
 
     function craftHelmet(uint256 _tokenId) external {
         StorageLib._craftHelmet(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
 
-        historicalERC1155Mint(uint256(PlayerSlotLib.TokenTypes.Helmet));
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Helmet), 1, "");
     }
 
     function craftSorcerShoes(uint256 _tokenId) external {
         StorageLib._craftSorcerShoes(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
 
-        historicalERC1155Mint(uint256(PlayerSlotLib.TokenTypes.SorcererShoes));
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.SorcShoes), 1, "");
     }
 
     function craftWizardHat(uint256 _tokenId) external {
         StorageLib._craftWizardHat(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
 
-        historicalERC1155Mint(uint256(PlayerSlotLib.TokenTypes.WizardHat));
+        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.WizHat), 1, "");
     }
 
     function getItems(address _address) public view returns (uint256[] memory items) {
@@ -286,11 +286,55 @@ contract CraftFacet is ERC1155Facet {
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 
-    // TODO - Add implementation logic for this function based on which item tokens are lower
-    function historicalERC1155Mint(uint256 _tokenId) internal {
+    function mintERC1155Item(uint256 _tokenId, uint256 v2Balance) internal {
         uint256 currentBalance = balanceOf(msg.sender, _tokenId);
-        if (currentBalance == 0) {
-            _mint(msg.sender, _tokenId, 1, "");
+        if (currentBalance < v2Balance) {
+            _mint(msg.sender, _tokenId, v2Balance - currentBalance, "");
+        }
+    }
+
+    function historicalERC1155Mint(address playerAddress) public {
+        uint256[] memory items = StorageLib._getItems(playerAddress);
+
+        uint256 swordCount = 0;
+        uint256 guitarCount = 0;
+        uint256 armorCount = 0;
+        uint256 helmetCount = 0;
+        uint256 wizHatCount = 0;
+        uint256 sorcShoesCount = 0;
+
+        for (uint256 i = 0; i < items.length; i++) {
+            string memory name = StorageLib._getItem(items[i]).name;
+            if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Sword"))) {
+                swordCount++;
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Guitar"))) {
+                guitarCount++;
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Armor"))) {
+                armorCount++;
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Helmet"))) {
+                helmetCount++;
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("WizHat"))) {
+                wizHatCount++;
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("SorcShoes"))) {
+                sorcShoesCount++;
+            }
+        }
+
+        for (uint256 i = 0; i < items.length; i++) {
+            string memory name = StorageLib._getItem(items[i]).name;
+            if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Sword"))) {
+                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.Sword), swordCount);
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Guitar"))) {
+                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.Guitar), guitarCount);
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Armor"))) {
+                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.Armor), armorCount);
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Helmet"))) {
+                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.Helmet), helmetCount);
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("WizHat"))) {
+                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.WizHat), wizHatCount);
+            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("SorcShoes"))) {
+                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.SorcShoes), sorcShoesCount);
+            }
         }
     }
 }
