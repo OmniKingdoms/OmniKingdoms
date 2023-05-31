@@ -225,6 +225,18 @@ library StorageLib {
     //     c.diamondBalance[msg.sender] += 100; //mint one gold
     //     c.totemBalance[msg.sender] += 100; //mint one gold
     // }
+
+    function _getCoinBalances(address _player)
+        internal
+        view
+        returns (uint256 goldBalance, uint256 gemBalance, uint256 totemBalance, uint256 diamondBalance)
+    {
+        CoinStorage storage c = diamondStorageCoin();
+        goldBalance = c.goldBalance[_player];
+        gemBalance = c.gemBalance[_player];
+        totemBalance = c.totemBalance[_player];
+        diamondBalance = c.diamondBalance[_player];
+    }
 }
 
 contract CraftFacet is ERC1155Facet {
@@ -307,8 +319,8 @@ contract CraftFacet is ERC1155Facet {
         }
     }
 
-    function historicalERC1155Mint(address playerAddress) public {
-        uint256[] memory items = StorageLib._getItems(playerAddress);
+    function historicalERC1155Mint() public {
+        uint256[] memory items = StorageLib._getItems(msg.sender);
 
         uint256 swordCount = 0;
         uint256 guitarCount = 0;
@@ -350,5 +362,23 @@ contract CraftFacet is ERC1155Facet {
                 mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.SorcShoes), sorcShoesCount);
             }
         }
+    }
+
+    function historicalCoinMint() public {
+        (uint256 goldBalance, uint256 gemBalance, uint256 totemBalance, uint256 diamondBalance) =
+            StorageLib._getCoinBalances(msg.sender);
+        uint256[] memory ids = new uint256[](4);
+        ids[0] = uint256(PlayerSlotLib.TokenTypes.GoldCoin);
+        ids[1] = uint256(PlayerSlotLib.TokenTypes.GemCoin);
+        ids[2] = uint256(PlayerSlotLib.TokenTypes.TotemCoin);
+        ids[3] = uint256(PlayerSlotLib.TokenTypes.DiamondCoin);
+
+        uint256[] memory amounts = new uint256[](4);
+        amounts[0] = goldBalance - balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin));
+        amounts[1] = gemBalance - balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.GemCoin));
+        amounts[2] = totemBalance - balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.TotemCoin));
+        amounts[3] = diamondBalance - balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.DiamondCoin));
+
+        _mintBatch(msg.sender, ids, amounts, "");
     }
 }
