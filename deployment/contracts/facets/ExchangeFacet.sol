@@ -83,17 +83,21 @@ library ExchangeStorageLib {
         s.balances[msg.sender]--;
     }
 
-    function _purchasePlayer(uint256 _listingId) internal returns (bool isMale) {
+    function _purchasePlayer(uint256 _listingId) internal returns (bool isMale, uint256 price, address seller) {
         PlayerStorage storage s = diamondStoragePlayer();
         ExStorage storage e = diamondStorageEx();
         CoinStorage storage c = diamondStorageCoin();
-        require(c.goldBalance[msg.sender] >= e.listingsMap[_listingId].price, "Insufficient funds"); //check if buyer has enough value
+        price = e.listingsMap[_listingId].price;
+        require(c.goldBalance[msg.sender] >= price, "Insufficient funds"); //check if buyer has enough value
         uint256 playerId = e.listingsMap[_listingId].playerId;
         s.owners[playerId] = msg.sender; //transfer ownership
         isMale = s.players[playerId].male;
         s.addressToPlayers[msg.sender].push(e.listingsMap[_listingId].playerId); //add id to players array
-        c.goldBalance[msg.sender] -= e.listingsMap[_listingId].price; //deduct balance from buys
-        c.goldBalance[e.listingsMap[_listingId].seller] += e.listingsMap[_listingId].price; //increase balance from buys
+
+        seller = e.listingsMap[_listingId].seller;
+        c.goldBalance[msg.sender] -= price; //deduct balance from buyer
+        c.goldBalance[seller] += price; //increase balance for seller
+
         uint256 rowToDelete = e.listingsMap[_listingId].pointer;
         uint256 keyToMove = e.listingsArray[e.listingsArray.length - 1];
         e.listingsArray[rowToDelete] = keyToMove;
@@ -136,12 +140,15 @@ contract ExchangeFacet is ERC1155Facet {
     }
 
     function purchasePlayer(uint256 _listingId) public {
-        bool isMale = ExchangeStorageLib._purchasePlayer(_listingId);
+        (bool isMale, uint256 price, address seller) = ExchangeStorageLib._purchasePlayer(_listingId);
         emit Purchase(msg.sender, _listingId);
 
         isMale
             ? safeTransferFrom(address(this), msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerMale), 1, "")
             : safeTransferFrom(address(this), msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerFemale), 1, "");
+
+        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), price);
+        _mint(seller, uint256(PlayerSlotLib.TokenTypes.GoldCoin), price, "");
     }
 
     function getListings(address _address) public view returns (uint256[] memory) {

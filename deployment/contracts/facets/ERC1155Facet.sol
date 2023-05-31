@@ -36,6 +36,7 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * Clients calling this function must replace the `\{id\}` substring with the
      * actual token type ID.
      */
+    //  TODO - return the on-chain JSON data as the URI
     function uri(uint256) public view virtual override returns (string memory) {
         return ERC1155Storage.layout()._uri;
     }
@@ -265,6 +266,105 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
         _afterTokenTransfer(operator, address(0), to, ids, amounts, data);
 
         // _doSafeTransferAcceptanceCheck(operator, address(0), to, id, amount, data);
+    }
+
+    /**
+     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {_mint}.
+     *
+     * Emits a {TransferBatch} event.
+     *
+     * Requirements:
+     *
+     * - `ids` and `amounts` must have the same length.
+     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
+     * acceptance magic value.
+     */
+    function _mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
+        internal
+        virtual
+    {
+        require(to != address(0), "ERC1155: mint to the zero address");
+        require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
+
+        address operator = _msgSender();
+
+        _beforeTokenTransfer(operator, address(0), to, ids, amounts, data);
+
+        for (uint256 i = 0; i < ids.length; i++) {
+            ERC1155Storage.layout()._balances[ids[i]][to] += amounts[i];
+        }
+
+        emit TransferBatch(operator, address(0), to, ids, amounts);
+
+        _afterTokenTransfer(operator, address(0), to, ids, amounts, data);
+
+        _doSafeBatchTransferAcceptanceCheck(operator, address(0), to, ids, amounts, data);
+    }
+
+    /**
+     * @dev Destroys `amount` tokens of token type `id` from `from`
+     *
+     * Emits a {TransferSingle} event.
+     *
+     * Requirements:
+     *
+     * - `from` cannot be the zero address.
+     * - `from` must have at least `amount` tokens of token type `id`.
+     */
+    function _burn(address from, uint256 id, uint256 amount) internal virtual {
+        require(from != address(0), "ERC1155: burn from the zero address");
+
+        address operator = msg.sender;
+        uint256[] memory ids = new uint256[](1);
+        ids[0] = id;
+
+        uint256[] memory amounts = new uint256[](1);
+        amounts[0] = amount;
+
+        _beforeTokenTransfer(operator, from, address(0), ids, amounts, "");
+
+        uint256 fromBalance = ERC1155Storage.layout()._balances[id][from];
+        require(fromBalance >= amount, "ERC1155: burn amount exceeds balance");
+        unchecked {
+            ERC1155Storage.layout()._balances[id][from] = fromBalance - amount;
+        }
+
+        emit TransferSingle(operator, from, address(0), id, amount);
+
+        _afterTokenTransfer(operator, from, address(0), ids, amounts, "");
+    }
+
+    /**
+     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {_burn}.
+     *
+     * Emits a {TransferBatch} event.
+     *
+     * Requirements:
+     *
+     * - `ids` and `amounts` must have the same length.
+     */
+    function _burnBatch(address from, uint256[] memory ids, uint256[] memory amounts) internal virtual {
+        require(from != address(0), "ERC1155: burn from the zero address");
+        require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
+
+        address operator = _msgSender();
+
+        _beforeTokenTransfer(operator, from, address(0), ids, amounts, "");
+
+        for (uint256 i = 0; i < ids.length; i++) {
+            uint256 id = ids[i];
+            uint256 amount = amounts[i];
+
+            uint256 fromBalance = ERC1155Storage.layout()._balances[id][from];
+            require(fromBalance >= amount, "ERC1155: burn amount exceeds balance");
+            unchecked {
+                ERC1155Storage.layout()._balances[id][from] = fromBalance - amount;
+            }
+        }
+
+        emit TransferBatch(operator, from, address(0), ids, amounts);
+
+        _afterTokenTransfer(operator, from, address(0), ids, amounts, "");
     }
 
     /**

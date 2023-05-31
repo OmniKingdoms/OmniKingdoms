@@ -58,6 +58,10 @@ library PlayerSlotLib {
         Helmet,
         WizHat,
         SorcShoes,
-        GemSword
+        GemSword,
+        GoldCoin,
+        GemCoin,
+        TotemCoin,
+        DiamondCoin
     }
 }

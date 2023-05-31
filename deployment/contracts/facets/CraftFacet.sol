@@ -235,6 +235,7 @@ contract CraftFacet is ERC1155Facet {
         emit ItemCrafted(msg.sender, _tokenId);
 
         _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Sword), 1, "");
+        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 5);
     }
 
     function craftGuitar(uint256 _tokenId) external {
@@ -242,6 +243,7 @@ contract CraftFacet is ERC1155Facet {
         emit ItemCrafted(msg.sender, _tokenId);
 
         _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Guitar), 1, "");
+        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 10);
     }
 
     function craftArmor(uint256 _tokenId) external {
@@ -249,6 +251,7 @@ contract CraftFacet is ERC1155Facet {
         emit ItemCrafted(msg.sender, _tokenId);
 
         _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Armor), 1, "");
+        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 3);
     }
 
     function craftHelmet(uint256 _tokenId) external {
@@ -256,6 +259,7 @@ contract CraftFacet is ERC1155Facet {
         emit ItemCrafted(msg.sender, _tokenId);
 
         _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Helmet), 1, "");
+        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 4);
     }
 
     function craftSorcerShoes(uint256 _tokenId) external {
@@ -263,6 +267,15 @@ contract CraftFacet is ERC1155Facet {
         emit ItemCrafted(msg.sender, _tokenId);
 
         _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.SorcShoes), 1, "");
+        uint256[] memory ids = new uint256[](2);
+        ids[0] = uint256(PlayerSlotLib.TokenTypes.GoldCoin);
+        ids[1] = uint256(PlayerSlotLib.TokenTypes.GemCoin);
+
+        uint256[] memory amounts = new uint256[](2);
+        amounts[0] = 3;
+        amounts[1] = 1;
+
+        _burnBatch(msg.sender, ids, amounts);
     }
 
     function craftWizardHat(uint256 _tokenId) external {
@@ -270,6 +283,7 @@ contract CraftFacet is ERC1155Facet {
         emit ItemCrafted(msg.sender, _tokenId);
 
         _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.WizHat), 1, "");
+        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GemCoin), 10);
     }
 
     function getItems(address _address) public view returns (uint256[] memory items) {
