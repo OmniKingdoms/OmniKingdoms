@@ -10,9 +10,25 @@ import "../utils/Context.sol";
 import "../utils/ERC165.sol";
 import "../interfaces/IERC1155Receiver.sol";
 import "../utils/Address.sol";
+import "../libraries/PlayerSlotLib.sol";
 
 contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
     using Address for address;
+    using PlayerSlotLib for PlayerSlotLib.Player;
+
+    /// @dev Struct defining player storage
+    struct PlayerStorage {
+        uint256 totalSupply;
+        uint256 playerCount;
+        mapping(uint256 => address) owners;
+        mapping(uint256 => PlayerSlotLib.Player) players;
+        mapping(address => uint256) balances;
+        mapping(address => mapping(address => uint256)) allowances;
+        mapping(string => bool) usedNames;
+        mapping(address => uint256[]) addressToPlayers;
+        mapping(uint256 => PlayerSlotLib.Slot) slots;
+    }
+
     /**
      * @dev See {IERC1155-balanceOf}.
      *
@@ -24,6 +40,31 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
     function balanceOf(address account, uint256 id) public view virtual override returns (uint256) {
         require(account != address(0), "ERC1155: address zero is not a valid owner");
         return ERC1155Storage.layout()._balances[id][account];
+    }
+
+    /**
+     * @dev See {IERC1155-balanceOfBatch}.
+     *
+     * Requirements:
+     *
+     * - `accounts` and `ids` must have the same length.
+     */
+    function balanceOfBatch(address[] memory accounts, uint256[] memory ids)
+        public
+        view
+        virtual
+        override
+        returns (uint256[] memory)
+    {
+        require(accounts.length == ids.length, "ERC1155: accounts and ids length mismatch");
+
+        uint256[] memory batchBalances = new uint256[](accounts.length);
+
+        for (uint256 i = 0; i < accounts.length; ++i) {
+            batchBalances[i] = balanceOf(accounts[i], ids[i]);
+        }
+
+        return batchBalances;
     }
 
     /**
@@ -39,6 +80,7 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
     //  TODO - return the on-chain JSON data as the URI
     function uri(uint256) public view virtual override returns (string memory) {
         return ERC1155Storage.layout()._uri;
+        // return string(abi.encodePacked(ERC1155.uri(tokenId), tokenId.toString()));
     }
 
     /**
@@ -53,6 +95,30 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
             from == msg.sender || isApprovedForAll(from, msg.sender), "ERC1155: caller is not token owner or approved"
         );
         _safeTransferFrom(from, to, id, amount, data);
+    }
+
+    function _isTransferAllowed(address from, uint256 id, uint256 amount) internal returns (bool) {
+        PlayerStorage storage s = ERC1155Storage.diamondStoragePlayer();
+        uint256[] players = s.addressToPlayers[from];
+
+        bool playerIdle = true;
+        // Loop through all the users's players and make sure that they are idle
+        for (uint256 i = 0; i < players.length; i++) {
+            if (id == 0) {
+                //make sure player is idle - only for male players
+                PlayerSlotLib.Player player = s.players[players[i]]
+                if (player.male && player.status != 0) {
+                    playerIdle = false;
+                }
+            } else if (id == 1){
+                //make sure player is idle - only for female players
+                PlayerSlotLib.Player player = s.players[players[i]]
+                if (!player.male && player.status != 0) {
+                    playerIdle = false;
+                }
+            }
+        }
+        return playerIdle;
     }
 
     /**
@@ -72,6 +138,7 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
         virtual
     {
         require(to != address(0), "ERC1155: transfer to the zero address");
+        require(_isTransferAllowed(from, id, amount), "Cannot transfer the player right now");
 
         address operator = msg.sender;
         uint256[] memory ids = new uint256[](1);
@@ -85,6 +152,8 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
         uint256 fromBalance = ERC1155Storage.layout()._balances[id][from];
         require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
 
+        // TODO - If the token ID is 0 or 1, check the Player storage to ascertain the status of the players
+
         // TODO - make sure this is safe
         unchecked {
             ERC1155Storage.layout()._balances[id][from] = fromBalance - amount;
@@ -95,7 +164,7 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
 
         _afterTokenTransfer(operator, from, to, ids, amounts, data);
 
-        // _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
+        _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
     }
 
     /**
@@ -157,31 +226,6 @@ contract ERC1155Facet is Context, ERC165, IERC1155, IERC1155MetadataURI {
         _afterTokenTransfer(operator, from, to, ids, amounts, data);
 
         _doSafeBatchTransferAcceptanceCheck(operator, from, to, ids, amounts, data);
-    }
-
-    /**
-     * @dev See {IERC1155-balanceOfBatch}.
-     *
-     * Requirements:
-     *
-     * - `accounts` and `ids` must have the same length.
-     */
-    function balanceOfBatch(address[] memory accounts, uint256[] memory ids)
-        public
-        view
-        virtual
-        override
-        returns (uint256[] memory)
-    {
-        require(accounts.length == ids.length, "ERC1155: accounts and ids length mismatch");
-
-        uint256[] memory batchBalances = new uint256[](accounts.length);
-
-        for (uint256 i = 0; i < accounts.length; ++i) {
-            batchBalances[i] = balanceOf(accounts[i], ids[i]);
-        }
-
-        return batchBalances;
     }
 
     /**
