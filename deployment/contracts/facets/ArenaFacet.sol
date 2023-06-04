@@ -484,8 +484,6 @@ contract ArenaFacet is ERC1155Facet {
     function enterMainArena(uint256 _playerId) public {
         StorageLib._enterMainArena(_playerId);
         emit EnterMain(_playerId);
-
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 1);
     }
 
     function fightMainArena(uint256 _challengerId) public {
@@ -494,15 +492,11 @@ contract ArenaFacet is ERC1155Facet {
         (_winner, _loser) = StorageLib._fightMainArena(_challengerId);
         emit MainWin(_winner);
         emit MainLoss(_loser);
-
-        _handleWinsAndLosses(_winner, _challengerId);
     }
 
     function enterSecondArena(uint256 _playerId) public {
         StorageLib._enterSecondArena(_playerId);
         emit EnterSecond(_playerId);
-
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 1);
     }
 
     function fightSecondArena(uint256 _challengerId) public {
@@ -511,15 +505,11 @@ contract ArenaFacet is ERC1155Facet {
         (_winner, _loser) = StorageLib._fightSecondArena(_challengerId);
         emit SecondWin(_winner);
         emit SecondLoss(_loser);
-
-        _handleWinsAndLosses(_winner, _challengerId);
     }
 
     function enterMagicArena(uint256 _playerId) public {
         StorageLib._enterMagicArena(_playerId);
         emit EnterMagic(_playerId);
-
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 1);
     }
 
     function fightMagicArena(uint256 _challengerId) public {
@@ -528,13 +518,10 @@ contract ArenaFacet is ERC1155Facet {
         (_winner, _loser) = StorageLib._fightMagicArena(_challengerId);
         emit MagicWin(_winner);
         emit MagicLoss(_loser);
-
-        _handleWinsAndLosses(_winner, _challengerId);
     }
 
     function leaveMainArena(uint256 _playerId) public {
         StorageLib._leaveMainArena(_playerId);
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 1, "");
     }
 
     function getTotalWins(uint256 _playerId) public view returns (uint256) {
@@ -559,19 +546,6 @@ contract ArenaFacet is ERC1155Facet {
 
     function getMainArenaLosses(uint256 _playerId) public view returns (uint256) {
         return StorageLib._getMainArenaLosses(_playerId);
-    }
-
-    function _handleWinsAndLosses(uint256 _winner, uint256 _challengerId) internal {
-        if (_winner == _challengerId) {
-            // Means the challenger won
-            _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 1, "");
-        } else {
-            // Means the host won
-            (, uint256 mainArenaHost) = StorageLib._getMainArena();
-            address hostPlayer = StorageLib._getPlayerAddress(mainArenaHost);
-            _mint(hostPlayer, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 1, "");
-            _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 1);
-        }
     }
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}

@@ -257,8 +257,6 @@ contract QuestFacet is ERC1155Facet {
     function endQuestGold(uint256 _tokenId) external {
         StorageLib._endQuestGold(_tokenId);
         emit EndQuesting(msg.sender, _tokenId);
-
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 1, "");
     }
 
     function getGoldBalance(address _address) public view returns (uint256) {
@@ -273,8 +271,6 @@ contract QuestFacet is ERC1155Facet {
     function endQuestGem(uint256 _tokenId) external {
         StorageLib._endQuestGem(_tokenId);
         emit EndQuesting(msg.sender, _tokenId);
-
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.GemCoin), 1, "");
     }
 
     function dragonQuest(uint256 _playerId) external returns (bool result) {
