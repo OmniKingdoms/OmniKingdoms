@@ -231,14 +231,14 @@ library StorageLib {
 }
 
 contract CraftFacet is ERC1155Facet {
-    event ItemCrafted(address indexed _owner, uint256 _player);
+    event EquipmentCrafted(address indexed _owner, uint256 _player);
 
-    function craftSword(uint256 _tokenId) external {
-        StorageLib._craftSword(_tokenId);
-        emit ItemCrafted(msg.sender, _tokenId);
+    function craftSword(uint256 _playerId, string memory _uri) external {
+        StorageLib._craftSword(_playerId, _uri);
+        emit EquipmentCrafted(msg.sender, _playerId);
 
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Sword), 1, "");
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 5);
+        // _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Sword), 1, "");
+        // _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 5);
     }
 
     function craftGuitar(uint256 _tokenId) external {
