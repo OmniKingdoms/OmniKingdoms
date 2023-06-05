@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
-import "./ERC1155Facet.sol";
 
 struct Item {
     uint256 slot;
@@ -450,7 +449,7 @@ library StorageLib {
     }
 }
 
-contract ArenaFacet is ERC1155Facet {
+contract ArenaFacet {
     event MainWin(uint256 indexed _playerId);
     event SecondWin(uint256 indexed _playerId);
     event MagicWin(uint256 indexed _playerId);

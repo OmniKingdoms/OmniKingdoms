@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
-import "./ERC1155Facet.sol";
 
 struct PlayerListing {
     address payable seller;
@@ -128,7 +127,7 @@ library ExchangeStorageLib {
     }
 }
 
-contract ExchangeFacet is ERC1155Facet {
+contract ExchangeFacet {
     event List(address indexed _from, uint256 indexed _playerId, uint256 _price);
     event Purchase(address indexed _to, uint256 _id);
 

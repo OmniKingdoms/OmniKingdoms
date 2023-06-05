@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
-import "./ERC1155Facet.sol";
 
 // StatusCodes {
 //     0: idle;
@@ -244,7 +243,7 @@ library StorageLib {
     }
 }
 
-contract QuestFacet is ERC1155Facet {
+contract QuestFacet {
     event BeginQuesting(address indexed _playerAddress, uint256 _id);
     event EndQuesting(address indexed _playerAddress, uint256 _id);
     event DragonQuest(uint256 indexed _playerId);

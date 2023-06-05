@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
-import "./ERC1155Facet.sol";
 
 struct Item {
     uint256 slot;
@@ -239,7 +238,7 @@ library StorageLib {
     }
 }
 
-contract CraftFacet is ERC1155Facet {
+contract CraftFacet {
     event ItemCrafted(address indexed _owner, uint256 _player);
 
     function craftSword(uint256 _tokenId) external {
