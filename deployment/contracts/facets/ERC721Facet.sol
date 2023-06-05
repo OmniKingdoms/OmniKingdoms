@@ -13,7 +13,7 @@ import "../utils/Address.sol";
 import "../utils/Strings.sol";
 import "../ERC721Storage.sol";
 
-contract ERC721Facet is Context, ERC165, IERC721, IERC721Metadata {
+abstract contract ERC721Facet is Context, ERC165, IERC721, IERC721Metadata {
     using Address for address;
     using Strings for uint256;
     /**
@@ -48,15 +48,15 @@ contract ERC721Facet is Context, ERC165, IERC721, IERC721Metadata {
         return ERC721Storage.layout()._symbol;
     }
 
-    /**
-     * @dev See {IERC721Metadata-tokenURI}.
-     */
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        _requireMinted(tokenId);
+    // /**
+    //  * @dev See {IERC721Metadata-tokenURI}.
+    //  */
+    // function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+    //     _requireMinted(tokenId);
 
-        string memory baseURI = _baseURI();
-        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : "";
-    }
+    //     string memory baseURI = _baseURI();
+    //     return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : "";
+    // }
 
     /**
      * @dev See {IERC721-approve}.

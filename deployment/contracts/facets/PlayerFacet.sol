@@ -3,6 +3,9 @@ pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
 import "./ERC721Facet.sol";
+import "../utils/Strings.sol";
+import "../utils/Base64.sol";
+import "../ERC721Storage.sol";
 
 /// @title Player Storage Library
 /// @dev Library for managing storage of player data
@@ -118,6 +121,8 @@ library PlayerStorageLib {
 /// @title Player Facet
 /// @dev Contract managing interaction with player data
 contract PlayerFacet is ERC721Facet {
+    using Strings for uint256;
+
     event Mint(uint256 indexed id, address indexed owner, string name, string uri);
     event NameChange(address indexed owner, uint256 indexed id, string indexed newName);
 
@@ -174,6 +179,57 @@ contract PlayerFacet is ERC721Facet {
     /// @return The current block timestamp
     function getBlocktime() external view returns (uint256) {
         return (block.timestamp);
+    }
+
+    function constructAttributes(PlayerSlotLib.Player memory player) internal pure returns (string memory attributes) {
+        attributes = string(
+            abi.encodePacked(
+                '[{"trait_type":"Name","value":',
+                player.name,
+                '},{"trait_type":"Level","value":',
+                player.level.toString(),
+                '},{"trait_type":"XP","value":',
+                player.xp.toString(),
+                '},{"trait_type":"Status","value":',
+                player.status.toString(),
+                '},{"trait_type":"Gender","value":',
+                player.male ? "Male" : "Female",
+                '},{"trait_type":"Strength","value":',
+                player.strength.toString(),
+                '},{"trait_type":"Health","value":',
+                player.health.toString(),
+                "}]"
+            )
+        );
+    }
+
+    /**
+     * @dev See {IERC721Metadata-tokenURI}.
+     */
+    // Bypass for a `--via-ir` bug (https://github.com/chiru-labs/ERC721A/pull/364).
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        _requireMinted(tokenId);
+
+        PlayerSlotLib.Player memory player = PlayerStorageLib._getPlayer(tokenId);
+        string memory attributes = constructAttributes(player);
+
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name":"',
+                        player.name,
+                        '","description":"Player NFT from OmniKingdoms","image":"',
+                        player.male ? ERC721Storage.layout()._maleImage : ERC721Storage.layout()._femaleImage,
+                        '","attributes":',
+                        attributes,
+                        "}"
+                    )
+                )
+            )
+        );
+
+        return string(abi.encodePacked("data:application/json;base64,", json));
     }
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}

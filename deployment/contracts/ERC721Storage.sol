@@ -34,6 +34,8 @@ library ERC721Storage {
         mapping(address => uint256) _balances;
         // Mapping from token ID to approved address
         mapping(uint256 => address) _tokenApprovals;
+        string _maleImage;
+        string _femaleImage;
     }
 
     bytes32 internal constant STORAGE_SLOT = keccak256("ERC721A.contracts.storage.ERC721A");
