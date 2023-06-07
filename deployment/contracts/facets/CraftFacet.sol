@@ -4,13 +4,16 @@ pragma solidity ^0.8.0;
 import "../libraries/PlayerSlotLib.sol";
 import "./ERC1155Facet.sol";
 
-struct Item {
+struct Equipment {
+    uint256 id;
+    uint256 pointer;
     uint256 slot;
     uint256 rank;
     uint256 value;
     uint256 stat;
+    uint256 owner;
     string name;
-    address owner;
+    string uri;
     bool isEquiped;
 }
 
@@ -25,7 +28,7 @@ struct Item {
 
 library StorageLib {
     bytes32 constant PLAYER_STORAGE_POSITION = keccak256("player.test.storage.a");
-    bytes32 constant ITEM_STORAGE_POSITION = keccak256("item.test.storage.a");
+    bytes32 constant EQUIPMENT_STORAGE_POSITION = keccak256("equipment.test.storage.a");
     bytes32 constant POTION_STORAGE_POSITION = keccak256("potion.test.storage.a");
     bytes32 constant COIN_STORAGE_POSITION = keccak256("coin.test.storage.a");
 
@@ -43,11 +46,11 @@ library StorageLib {
         mapping(address => uint256[]) addressToPlayers;
     }
 
-    struct ItemStorage {
-        uint256 itemCount;
-        mapping(uint256 => address) owners;
-        mapping(uint256 => Item) items;
-        mapping(address => uint256[]) addressToItems;
+    struct EquipmentStorage {
+        uint256 equipmentCount;
+        mapping(uint256 => uint256) owners; //maps equipment id to player id
+        mapping(uint256 => Equipment) equipment;
+        mapping(uint256 => uint256[]) playerToItems;
         mapping(uint256 => uint256) cooldown;
     }
 
@@ -70,8 +73,8 @@ library StorageLib {
         }
     }
 
-    function diamondStorageItem() internal pure returns (ItemStorage storage ds) {
-        bytes32 position = ITEM_STORAGE_POSITION;
+    function diamondStorageItem() internal pure returns (EquipmentStorage storage ds) {
+        bytes32 position = EQUIPMENT_STORAGE_POSITION;
         assembly {
             ds.slot := position
         }
@@ -84,18 +87,18 @@ library StorageLib {
         }
     }
 
-    function _craftSword(uint256 _tokenId) internal {
+    function _craftSword(uint256 _playerId, string memory _uri) internal {
         PlayerStorage storage s = diamondStoragePlayer();
-        ItemStorage storage i = diamondStorageItem();
+        EquipmentStorage storage e = diamondStorageItem();
         CoinStorage storage c = diamondStorageCoin();
-        require(s.players[_tokenId].status == 0); //make sure player is idle
-        require(s.owners[_tokenId] == msg.sender); //ownerOf
+        require(s.players[_playerId].status == 0); //make sure player is idle
+        require(s.owners[_playerId] == msg.sender); //ownerOf
         require(c.goldBalance[msg.sender] >= 5); //check user has enough gold
         c.goldBalance[msg.sender] -= 5; //deduct 5 gold from the address' balance
-        i.itemCount++;
-        i.owners[i.itemCount] = msg.sender;
-        i.items[i.itemCount] = Item(2, 1, 1, 0, "Sword", msg.sender, false); // slot, rank, value, stat
-        i.addressToItems[msg.sender].push(i.itemCount);
+        e.equipmentCount++; //increment equipmentCount 
+        e.owners[e.equipmentCount] = _playerId; //set owner to playerId
+        e.equipment[e.equipmentCount] = Equipment(e.equipmentCount, e.playerToItems[_playerId].length, 2, 1, 1, 0, _playerId, "Sword", _uri, false); 
+        e.playerToItems[_playerId].push(e.equipmentCount);
     }
 
     function _craftGuitar(uint256 _tokenId) internal {
@@ -240,14 +243,14 @@ library StorageLib {
 }
 
 contract CraftFacet is ERC1155Facet {
-    event ItemCrafted(address indexed _owner, uint256 _player);
+    event EquipmentCrafted(address indexed _owner, uint256 _player);
 
-    function craftSword(uint256 _tokenId) external {
-        StorageLib._craftSword(_tokenId);
-        emit ItemCrafted(msg.sender, _tokenId);
+    function craftSword(uint256 _playerId, string memory _uri) external {
+        StorageLib._craftSword(_playerId, _uri);
+        emit EquipmentCrafted(msg.sender, _playerId);
 
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Sword), 1, "");
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 5);
+        // _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Sword), 1, "");
+        // _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 5);
     }
 
     function craftGuitar(uint256 _tokenId) external {
