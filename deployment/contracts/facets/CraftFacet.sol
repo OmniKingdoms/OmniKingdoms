@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
-import "./ERC1155Facet.sol";
 
 struct Equipment {
     uint256 id;
@@ -95,9 +94,10 @@ library StorageLib {
         require(s.owners[_playerId] == msg.sender); //ownerOf
         require(c.goldBalance[msg.sender] >= 5); //check user has enough gold
         c.goldBalance[msg.sender] -= 5; //deduct 5 gold from the address' balance
-        e.equipmentCount++; //increment equipmentCount 
+        e.equipmentCount++; //increment equipmentCount
         e.owners[e.equipmentCount] = _playerId; //set owner to playerId
-        e.equipment[e.equipmentCount] = Equipment(e.equipmentCount, e.playerToItems[_playerId].length, 2, 1, 1, 0, _playerId, "Sword", _uri, false); 
+        e.equipment[e.equipmentCount] =
+            Equipment(e.equipmentCount, e.playerToItems[_playerId].length, 2, 1, 1, 0, _playerId, "Sword", _uri, false);
         e.playerToItems[_playerId].push(e.equipmentCount);
     }
 
@@ -242,63 +242,37 @@ library StorageLib {
     }
 }
 
-contract CraftFacet is ERC1155Facet {
-    event EquipmentCrafted(address indexed _owner, uint256 _player);
+contract CraftFacet {
+    event ItemCrafted(address indexed _owner, uint256 _player);
 
-    function craftSword(uint256 _playerId, string memory _uri) external {
-        StorageLib._craftSword(_playerId, _uri);
-        emit EquipmentCrafted(msg.sender, _playerId);
-
-        // _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Sword), 1, "");
-        // _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 5);
+    function craftSword(uint256 _tokenId) external {
+        StorageLib._craftSword(_tokenId);
+        emit ItemCrafted(msg.sender, _tokenId);
     }
 
     function craftGuitar(uint256 _tokenId) external {
         StorageLib._craftGuitar(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
-
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Guitar), 1, "");
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 10);
     }
 
     function craftArmor(uint256 _tokenId) external {
         StorageLib._craftArmor(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
-
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Armor), 1, "");
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 3);
     }
 
     function craftHelmet(uint256 _tokenId) external {
         StorageLib._craftHelmet(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
-
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.Helmet), 1, "");
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 4);
     }
 
     function craftSorcerShoes(uint256 _tokenId) external {
         StorageLib._craftSorcerShoes(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
-
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.SorcShoes), 1, "");
-        uint256[] memory ids = new uint256[](2);
-        ids[0] = uint256(PlayerSlotLib.TokenTypes.GoldCoin);
-        ids[1] = uint256(PlayerSlotLib.TokenTypes.GemCoin);
-
-        uint256[] memory amounts = new uint256[](2);
-        amounts[0] = 3;
-        amounts[1] = 1;
-
-        _burnBatch(msg.sender, ids, amounts);
     }
 
     function craftWizardHat(uint256 _tokenId) external {
         StorageLib._craftWizardHat(_tokenId);
         emit ItemCrafted(msg.sender, _tokenId);
-
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.WizHat), 1, "");
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GemCoin), 10);
     }
 
     function getItems(address _address) public view returns (uint256[] memory items) {
@@ -314,74 +288,4 @@ contract CraftFacet is ERC1155Facet {
     }
 
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
-
-    function mintERC1155Item(uint256 _tokenId, uint256 v2Balance) internal {
-        uint256 currentBalance = balanceOf(msg.sender, _tokenId);
-        if (currentBalance < v2Balance) {
-            _mint(msg.sender, _tokenId, v2Balance - currentBalance, "");
-        }
-    }
-
-    function historicalERC1155Mint() public {
-        uint256[] memory items = StorageLib._getItems(msg.sender);
-
-        uint256 swordCount = 0;
-        uint256 guitarCount = 0;
-        uint256 armorCount = 0;
-        uint256 helmetCount = 0;
-        uint256 wizHatCount = 0;
-        uint256 sorcShoesCount = 0;
-
-        for (uint256 i = 0; i < items.length; i++) {
-            string memory name = StorageLib._getItem(items[i]).name;
-            if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Sword"))) {
-                swordCount++;
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Guitar"))) {
-                guitarCount++;
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Armor"))) {
-                armorCount++;
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Helmet"))) {
-                helmetCount++;
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("WizHat"))) {
-                wizHatCount++;
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("SorcShoes"))) {
-                sorcShoesCount++;
-            }
-        }
-
-        for (uint256 i = 0; i < items.length; i++) {
-            string memory name = StorageLib._getItem(items[i]).name;
-            if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Sword"))) {
-                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.Sword), swordCount);
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Guitar"))) {
-                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.Guitar), guitarCount);
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Armor"))) {
-                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.Armor), armorCount);
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("Helmet"))) {
-                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.Helmet), helmetCount);
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("WizHat"))) {
-                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.WizHat), wizHatCount);
-            } else if (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked("SorcShoes"))) {
-                mintERC1155Item(uint256(PlayerSlotLib.TokenTypes.SorcShoes), sorcShoesCount);
-            }
-        }
-    }
-
-    function historicalCoinMint() public {
-        (uint256 goldBalance, uint256 gemBalance, uint256 totemBalance, uint256 diamondBalance) =
-            StorageLib._getCoinBalances(msg.sender);
-        uint256[] memory ids = new uint256[](4);
-        ids[0] = uint256(PlayerSlotLib.TokenTypes.GoldCoin);
-        ids[1] = uint256(PlayerSlotLib.TokenTypes.GemCoin);
-        ids[2] = uint256(PlayerSlotLib.TokenTypes.TotemCoin);
-        ids[3] = uint256(PlayerSlotLib.TokenTypes.DiamondCoin);
-
-        uint256[] memory amounts = new uint256[](4);
-        amounts[0] = goldBalance - balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin));
-        amounts[1] = gemBalance - balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.GemCoin));
-        amounts[2] = totemBalance - balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.TotemCoin));
-        amounts[3] = diamondBalance - balanceOf(msg.sender, uint256(PlayerSlotLib.TokenTypes.DiamondCoin));
-
-        _mintBatch(msg.sender, ids, amounts, "");
-    }
 }

@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
-import "./ERC1155Facet.sol";
 
 // StatusCodes {
 //     0: idle;
@@ -244,7 +243,7 @@ library StorageLib {
     }
 }
 
-contract QuestFacet is ERC1155Facet {
+contract QuestFacet {
     event BeginQuesting(address indexed _playerAddress, uint256 _id);
     event EndQuesting(address indexed _playerAddress, uint256 _id);
     event DragonQuest(uint256 indexed _playerId);
@@ -257,8 +256,6 @@ contract QuestFacet is ERC1155Facet {
     function endQuestGold(uint256 _tokenId) external {
         StorageLib._endQuestGold(_tokenId);
         emit EndQuesting(msg.sender, _tokenId);
-
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), 1, "");
     }
 
     function getGoldBalance(address _address) public view returns (uint256) {
@@ -273,8 +270,6 @@ contract QuestFacet is ERC1155Facet {
     function endQuestGem(uint256 _tokenId) external {
         StorageLib._endQuestGem(_tokenId);
         emit EndQuesting(msg.sender, _tokenId);
-
-        _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.GemCoin), 1, "");
     }
 
     function dragonQuest(uint256 _playerId) external returns (bool result) {

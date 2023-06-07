@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
-import "./ERC1155Facet.sol";
 
 struct PlayerListing {
     address payable seller;
@@ -83,18 +82,18 @@ library ExchangeStorageLib {
         s.balances[msg.sender]--;
     }
 
-    function _purchasePlayer(uint256 _listingId) internal returns (bool isMale, uint256 price, address seller) {
+    function _purchasePlayer(uint256 _listingId) internal {
         PlayerStorage storage s = diamondStoragePlayer();
         ExStorage storage e = diamondStorageEx();
         CoinStorage storage c = diamondStorageCoin();
-        price = e.listingsMap[_listingId].price;
+        uint256 price = e.listingsMap[_listingId].price;
         require(c.goldBalance[msg.sender] >= price, "Insufficient funds"); //check if buyer has enough value
         uint256 playerId = e.listingsMap[_listingId].playerId;
         s.owners[playerId] = msg.sender; //transfer ownership
-        isMale = s.players[playerId].male;
+
         s.addressToPlayers[msg.sender].push(e.listingsMap[_listingId].playerId); //add id to players array
 
-        seller = e.listingsMap[_listingId].seller;
+        address seller = e.listingsMap[_listingId].seller;
         c.goldBalance[msg.sender] -= price; //deduct balance from buyer
         c.goldBalance[seller] += price; //increase balance for seller
 
@@ -128,27 +127,18 @@ library ExchangeStorageLib {
     }
 }
 
-contract ExchangeFacet is ERC1155Facet {
+contract ExchangeFacet {
     event List(address indexed _from, uint256 indexed _playerId, uint256 _price);
     event Purchase(address indexed _to, uint256 _id);
 
     function crateListing(uint256 _id, uint256 _price) public {
         ExchangeStorageLib._createListing(_id, _price);
         emit List(msg.sender, _id, _price);
-
-        _setApprovalForAll(msg.sender, address(this), true);
     }
 
     function purchasePlayer(uint256 _listingId) public {
-        (bool isMale, uint256 price, address seller) = ExchangeStorageLib._purchasePlayer(_listingId);
+        ExchangeStorageLib._purchasePlayer(_listingId);
         emit Purchase(msg.sender, _listingId);
-
-        isMale
-            ? safeTransferFrom(address(this), msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerMale), 1, "")
-            : safeTransferFrom(address(this), msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerFemale), 1, "");
-
-        _burn(msg.sender, uint256(PlayerSlotLib.TokenTypes.GoldCoin), price);
-        _mint(seller, uint256(PlayerSlotLib.TokenTypes.GoldCoin), price, "");
     }
 
     function getListings(address _address) public view returns (uint256[] memory) {

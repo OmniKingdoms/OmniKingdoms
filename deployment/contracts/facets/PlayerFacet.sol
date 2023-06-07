@@ -2,7 +2,10 @@
 pragma solidity ^0.8.0;
 
 import "../libraries/PlayerSlotLib.sol";
-import "./ERC1155Facet.sol";
+import "./ERC721Facet.sol";
+import "../utils/Strings.sol";
+import "../utils/Base64.sol";
+import "../ERC721Storage.sol";
 
 /// @title Player Storage Library
 /// @dev Library for managing storage of player data
@@ -117,7 +120,9 @@ library PlayerStorageLib {
 
 /// @title Player Facet
 /// @dev Contract managing interaction with player data
-contract PlayerFacet is ERC1155Facet {
+contract PlayerFacet is ERC721Facet {
+    using Strings for uint256;
+
     event Mint(uint256 indexed id, address indexed owner, string name, string uri);
     event NameChange(address indexed owner, uint256 indexed id, string indexed newName);
 
@@ -136,13 +141,7 @@ contract PlayerFacet is ERC1155Facet {
         uint256 count = playerCount();
         emit Mint(count, msg.sender, _name, _uri);
 
-        // This is for minting the ERC1155 token from the parent contract ERC1155Facet
-        _isMale
-            ? _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerMale), 1, "")
-            : _mint(msg.sender, uint256(PlayerSlotLib.TokenTypes.PlayerFemale), 1, "");
-
-        //This function will mint additional tokens in case there is a discrepancy between playersIDs and ERC1155 tokens
-        historicalERC1155Mint();
+        _safeMint(msg.sender, count);
     }
 
     /// @notice Changes the name of a player
@@ -165,8 +164,8 @@ contract PlayerFacet is ERC1155Facet {
         available = PlayerStorageLib._nameAvailable(_name);
     }
 
-    function ownerOf(uint256 _id) external view returns (address owner) {
-        owner = PlayerStorageLib._ownerOf(_id);
+    function ownerOfPlayer(uint256 _playerId) external view returns (address owner) {
+        owner = PlayerStorageLib._ownerOf(_playerId);
     }
 
     /// @notice Retrieves the players owned by an address
@@ -182,34 +181,68 @@ contract PlayerFacet is ERC1155Facet {
         return (block.timestamp);
     }
 
+    function constructAttributes(PlayerSlotLib.Player memory player) internal pure returns (string memory attributes) {
+        attributes = string(
+            abi.encodePacked(
+                '[{"trait_type":"Name","value":',
+                player.name,
+                '},{"trait_type":"Level","value":',
+                player.level.toString(),
+                '},{"trait_type":"XP","value":',
+                player.xp.toString(),
+                '},{"trait_type":"Status","value":',
+                player.status.toString(),
+                '},{"trait_type":"Gender","value":',
+                player.male ? "Male" : "Female",
+                '},{"trait_type":"Strength","value":',
+                player.strength.toString(),
+                '},{"trait_type":"Health","value":',
+                player.health.toString(),
+                "}]"
+            )
+        );
+    }
+
+    /**
+     * @dev See {IERC721Metadata-tokenURI}.
+     */
+    // Bypass for a `--via-ir` bug (https://github.com/chiru-labs/ERC721A/pull/364).
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        _requireMinted(tokenId);
+
+        PlayerSlotLib.Player memory player = PlayerStorageLib._getPlayer(tokenId);
+        string memory attributes = constructAttributes(player);
+
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name":"',
+                        player.name,
+                        '","description":"Player NFT from OmniKingdoms","image":"',
+                        player.male ? ERC721Storage.layout()._maleImage : ERC721Storage.layout()._femaleImage,
+                        '","attributes":',
+                        attributes,
+                        "}"
+                    )
+                )
+            )
+        );
+
+        return string(abi.encodePacked("data:application/json;base64,", json));
+    }
+
     //function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 
     /// @notice Mints corresponding ERC1155 tokens for a player
-    /// @dev this function is for backwards compatibility so that the playerIDs match the number of ERC1155 tokens held by this account
-    function historicalERC1155Mint() internal {
+    /// @dev this function is for backwards compatibility so that the playerIDs match the number of ERC721 tokens held by this account
+    function historicalERC721Mint() public {
         uint256[] memory playerIDs = PlayerStorageLib._getPlayers(msg.sender);
-        (uint256 maleCount, uint256 femaleCount) = getPlayerGenderCounts(playerIDs);
 
-        mintBasedOnGenderCount(maleCount, uint256(PlayerSlotLib.TokenTypes.PlayerMale));
-        mintBasedOnGenderCount(femaleCount, uint256(PlayerSlotLib.TokenTypes.PlayerFemale));
-    }
-
-    function getPlayerGenderCounts(uint256[] memory playerIDs)
-        internal
-        view
-        returns (uint256 maleCount, uint256 femaleCount)
-    {
         for (uint256 i = 0; i < playerIDs.length; i++) {
-            PlayerSlotLib.Player memory player = PlayerStorageLib._getPlayer(playerIDs[i]);
-            player.male ? maleCount++ : femaleCount++;
-        }
-    }
-
-    function mintBasedOnGenderCount(uint256 genderCount, uint256 tokenType) internal {
-        uint256 currentBalance = balanceOf(msg.sender, tokenType);
-        if (genderCount > currentBalance) {
-            uint256 amountToMint = genderCount - currentBalance;
-            _mint(msg.sender, tokenType, amountToMint, "");
+            if (!_exists(playerIDs[i])) {
+                _safeMint(msg.sender, playerIDs[i]);
+            }
         }
     }
 }
